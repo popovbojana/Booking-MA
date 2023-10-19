@@ -3,6 +3,7 @@ package com.example.booking.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @ToString
 @Entity
+@Table(name = "owners")
 public class Owner extends User{
 
     @OneToMany(cascade = {CascadeType.ALL})
