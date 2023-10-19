@@ -2,12 +2,14 @@ package com.example.booking_ma;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,19 +17,45 @@ import androidx.appcompat.widget.Toolbar;
 public class AccountScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private Button buttonEditPassword;
-    private Dialog dialogEditPassword;
+    private Button buttonCancelDialog, buttonSaveDialog;
+    private Button buttonEditName, buttonEditSurname, buttonEditPhoneNumber, buttonEditEmail, buttonEditPassword;
+    private Button buttonSaveName, buttonSaveSurname, buttonSavePhoneNumber, buttonSaveEmail;
+    private Button buttonLogOut;
+    private Button buttonDeleteAccount;
     private EditText editTextCurrentPassword, editTextNewPassword, editTextConfirmPassword;
+    private EditText editTextName, editTextSurname, editTextPhoneNumber, editTextEmail, editTextPassword;
+    private TextView textViewError;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_account_screen);
-        setSupportActionBar(toolbar);
 
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("FAB Car");
+
+        editTextName = findViewById(R.id.editTextName);
+        editTextSurname = findViewById(R.id.editTextSurname);
+        editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+
+        buttonEditName = findViewById(R.id.buttonEditName);
+        buttonEditSurname = findViewById(R.id.buttonEditSurname);
+        buttonEditPhoneNumber = findViewById(R.id.buttonEditPhoneNumber);
+        buttonEditEmail = findViewById(R.id.buttonEditEmail);
         buttonEditPassword = findViewById(R.id.buttonEditPassword);
+
+        buttonSaveName = findViewById(R.id.buttonSaveName);
+        buttonSaveSurname = findViewById(R.id.buttonSaveSurname);
+        buttonSavePhoneNumber = findViewById(R.id.buttonSavePhoneNumber);
+        buttonSaveEmail = findViewById(R.id.buttonSaveEmail);
+
+        buttonLogOut = findViewById(R.id.buttonLogOut);
+        buttonDeleteAccount = findViewById(R.id.buttonDeleteAccount);
 
     }
 
@@ -35,12 +63,90 @@ public class AccountScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        setDataToEditText();
+        setEditTextsToFalse();
+
+        buttonEditName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextName.setEnabled(true);
+            }
+        });
+
+        buttonEditSurname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextSurname.setEnabled(true);
+            }
+        });
+
+        buttonEditPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextPhoneNumber.setEnabled(true);
+            }
+        });
+
+        buttonEditEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextEmail.setEnabled(true);
+            }
+        });
+
         buttonEditPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPasswordEditDialog();
             }
         });
+
+        buttonSaveName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextName.setEnabled(false);
+
+            }
+        });
+
+        buttonSaveSurname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextSurname.setEnabled(false);
+
+            }
+        });
+
+        buttonSavePhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextPhoneNumber.setEnabled(false);
+
+            }
+        });
+
+        buttonSavePhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextEmail.setEnabled(false);
+
+            }
+        });
+
+        buttonLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        buttonDeleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+
     }
 
     @Override
@@ -62,32 +168,60 @@ public class AccountScreen extends AppCompatActivity {
         editTextCurrentPassword = dialog.findViewById(R.id.editTextCurrentPassword);
         editTextNewPassword = dialog.findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = dialog.findViewById(R.id.editTextConfirmPassword);
-        Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
-        Button buttonSave = dialog.findViewById(R.id.buttonSave);
+        buttonCancelDialog = dialog.findViewById(R.id.buttonCancel);
+        buttonSaveDialog = dialog.findViewById(R.id.buttonSave);
+        textViewError = dialog.findViewById(R.id.textViewError);
 
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
+        buttonCancelDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
+        buttonSaveDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the password change here
+                textViewError.setText("");
                 String currentPassword = editTextCurrentPassword.getText().toString();
                 String newPassword = editTextNewPassword.getText().toString();
                 String confirmPassword = editTextConfirmPassword.getText().toString();
 
-                // Perform password change validation and processing
-                // ...
+                Log.i("EditText password", editTextPassword.getText().toString());
+                Log.i("Current password", currentPassword);
 
-                // Dismiss the dialog
-                dialog.dismiss();
+                if(!(editTextPassword.getText().toString()).equals(currentPassword)){
+                    Log.i("Error", "Wrong password");
+                    textViewError.setText("Wrong password");
+                }
+                else if(!newPassword.equals(confirmPassword)){
+                    Log.i("Error", "Bad password confirm");
+                    textViewError.setText("Bad password confirm");
+                }
+                else{
+                    Log.i("Success", "Good password");
+                    editTextPassword.setText(newPassword);
+                    dialog.dismiss();
+                }
             }
         });
 
         dialog.show();
+    }
+
+    private void setDataToEditText(){
+        editTextName.setText("Name");
+        editTextSurname.setText("Surname");
+        editTextPhoneNumber.setText("Phone number");
+        editTextEmail.setText("Email");
+        editTextPassword.setText("Password");
+    }
+
+    private void setEditTextsToFalse(){
+        editTextName.setEnabled(false);
+        editTextSurname.setEnabled(false);
+        editTextPhoneNumber.setEnabled(false);
+        editTextEmail.setEnabled(false);
+        editTextPassword.setEnabled(false);
     }
 }

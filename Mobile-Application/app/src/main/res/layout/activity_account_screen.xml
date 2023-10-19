@@ -131,7 +131,7 @@
                 android:id="@+id/buttonSavePhoneNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Email"
+                android:text="Save"
                 android:background="@color/green"
                 android:textColor="#FFF" />
 
@@ -202,7 +202,7 @@
             android:layout_marginBottom="10dp">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buttonUpdate"
+                android:id="@+id/buttonLogOut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LOG OUT"
