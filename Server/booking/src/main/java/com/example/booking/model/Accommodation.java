@@ -42,4 +42,18 @@ public class Accommodation {
     private double pricePerNight;
 
     private boolean approved;
+
+    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, String availableFrom, String availableUntil, double pricePerNight){
+        this.owner = owner;
+        this.name = name;
+        this.description = description;
+        this.amenities = amenities;
+        this.minGuests = minGuests;
+        this.maxGuests = maxGuests;
+        this.type = type;
+        this.availableFrom = availableFrom;
+        this.availableUntil = availableUntil;
+        this.pricePerNight = pricePerNight;
+        this.approved = false;
+    }
 }
