@@ -28,9 +28,24 @@ public class User {
 
     private String address;
 
-    private String phone_number;
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User(String email, String password, String name, String surname, String address, String phoneNumber, String role){
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        if(role.equals("Guest")){
+            this.role = Role.GUEST;
+        }
+        if(role.equals("Owner")){
+            this.role = Role.OWNER;
+        }
+    }
 
 }

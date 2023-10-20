@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/accommodation/")
 public class AccommodationController {
 
-    private IAccommodationService accommodationService;
+    private final IAccommodationService accommodationService;
 
     public AccommodationController(IAccommodationService accommodationService){
         this.accommodationService = accommodationService;
