@@ -17,7 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 public class AccountScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private Button buttonCancelDialog, buttonSaveDialog;
+    private Button buttonCancel, buttonSave, buttonNo, buttonYes;
     private Button buttonEditName, buttonEditSurname, buttonEditPhoneNumber, buttonEditEmail, buttonEditPassword;
     private Button buttonSaveName, buttonSaveSurname, buttonSavePhoneNumber, buttonSaveEmail;
     private Button buttonLogOut;
@@ -125,7 +125,7 @@ public class AccountScreen extends AppCompatActivity {
             }
         });
 
-        buttonSavePhoneNumber.setOnClickListener(new View.OnClickListener() {
+        buttonSaveEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editTextEmail.setEnabled(false);
@@ -143,6 +143,7 @@ public class AccountScreen extends AppCompatActivity {
         buttonDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showDeleteAccountDialog();
             }
         });
 
@@ -168,18 +169,18 @@ public class AccountScreen extends AppCompatActivity {
         editTextCurrentPassword = dialog.findViewById(R.id.editTextCurrentPassword);
         editTextNewPassword = dialog.findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = dialog.findViewById(R.id.editTextConfirmPassword);
-        buttonCancelDialog = dialog.findViewById(R.id.buttonCancel);
-        buttonSaveDialog = dialog.findViewById(R.id.buttonSave);
+        buttonCancel = dialog.findViewById(R.id.buttonCancel);
+        buttonSave = dialog.findViewById(R.id.buttonSave);
         textViewError = dialog.findViewById(R.id.textViewError);
 
-        buttonCancelDialog.setOnClickListener(new View.OnClickListener() {
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        buttonSaveDialog.setOnClickListener(new View.OnClickListener() {
+        buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textViewError.setText("");
@@ -208,6 +209,32 @@ public class AccountScreen extends AppCompatActivity {
 
         dialog.show();
     }
+
+    private void showDeleteAccountDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_are_you_shore);
+
+        buttonNo = dialog.findViewById(R.id.buttonNo);
+        buttonYes = dialog.findViewById(R.id.buttonYes);
+
+        buttonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        buttonYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Account:", "DELETED");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 
     private void setDataToEditText(){
         editTextName.setText("Name");
