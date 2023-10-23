@@ -1,5 +1,6 @@
 package com.example.booking.dto;
 
+import com.example.booking.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ public class NewUserDTO {
     private String surname;
     private String address;
     private String phoneNumber;
-    private String role;
+    private Role role;
 
 }

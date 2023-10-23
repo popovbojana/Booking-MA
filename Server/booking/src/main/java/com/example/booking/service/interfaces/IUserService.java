@@ -4,6 +4,6 @@ import com.example.booking.dto.NewUserDTO;
 
 public interface IUserService {
 
-    public void addNewUser(NewUserDTO newUserDTO);
+    public boolean addNewUser(NewUserDTO newUserDTO);
 
 }

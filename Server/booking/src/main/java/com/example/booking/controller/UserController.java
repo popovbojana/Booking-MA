@@ -22,7 +22,9 @@ public class UserController {
 
     @PostMapping(value = "registration", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerNewUser(@RequestBody NewUserDTO newUser){
-        this.userService.addNewUser(newUser);
-        return new ResponseEntity<>("Successfully registered!", HttpStatus.OK);
+        if(this.userService.addNewUser(newUser)){
+            return new ResponseEntity<>("Successfully registered!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unsuccessful registration! Account with this email already exists.", HttpStatus.OK);
     }
 }
