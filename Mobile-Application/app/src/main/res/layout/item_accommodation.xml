@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Image (Assuming an ImageView) -->
+    <ImageView
+        android:id="@+id/accommodationImage"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/item" />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/accommodationName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accommodation Name"
+        android:textSize="16sp"
+        android:paddingTop="8dp"
+        android:textStyle="bold" />
+
+    <!-- Price -->
+    <TextView
+        android:id="@+id/accommodationPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price: $100 per night"
+        android:textSize="14sp"
+        android:paddingTop="4dp" />
+
+    <!-- Stars (Assuming using RatingBar) -->
+    <RatingBar
+        android:id="@+id/accommodationStars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:numStars="5"
+        android:rating="4.5"
+        android:stepSize="0.1"
+        android:paddingTop="4dp" />
+</LinearLayout>
