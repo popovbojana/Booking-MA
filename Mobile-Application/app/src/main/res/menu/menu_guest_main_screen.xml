@@ -22,4 +22,9 @@
         android:title="Notifications"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/itemLogOut"
+        android:title="Log Out"
+        app:showAsAction="never" />
+
 </menu>

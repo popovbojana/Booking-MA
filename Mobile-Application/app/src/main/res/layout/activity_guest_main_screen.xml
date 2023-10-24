@@ -14,38 +14,60 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-        <!-- A View with a height of 1dp (optional separator) -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#CCCCCC" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Search Bar (Centered) -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchBar"
+    <LinearLayout
+        android:id="@+id/searchBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appbar"
-        android:layout_marginTop="15dp">
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp">
 
-        <EditText
-            android:id="@+id/searchBarEditText"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchBar"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:hint="Search..."
-            android:gravity="center"
-            android:layout_margin="16dp"
-            android:background="@android:color/white"
-            android:padding="8dp"
-            android:drawableStart="@android:drawable/ic_menu_search" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_below="@id/appbar">
 
-    <!-- Accommodations List (RecyclerView) -->
+            <EditText
+                android:id="@+id/editTextSearchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search..."
+                android:gravity="center"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/white"
+                android:padding="8dp"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:inputType="text"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/filterIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="11dp"
+            android:src="@drawable/filter_icon"
+            android:contentDescription="Filter" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/accommodationsList"
+        android:id="@+id/recyclerViewAccommodations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/searchBar"
+        android:layout_below="@+id/searchBarLayout"
         android:padding="16dp" />
 </RelativeLayout>
