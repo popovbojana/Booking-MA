@@ -4,6 +4,8 @@ import com.example.booking.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -33,6 +35,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private boolean activated;
+
+    private LocalDateTime activationLinkSent;
+
     public User(String email, String password, String name, String surname, String address, String phoneNumber, Role role){
         this.email = email;
         this.password = password;
@@ -41,6 +47,8 @@ public class User {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.role = role;
+        this.activated = false;
+        this.activationLinkSent = LocalDateTime.now();
     }
 
 }

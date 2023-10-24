@@ -1,13 +1,13 @@
 --admin
-insert into USERS(address, email, name, password, phone_number, role, surname) values ('Bulevar oslobodjenja 12, Novi Sad', 'marko.markovic@gmail.com', 'Marko','marko123', '0654598561', 'ADMIN', 'Markovic')
+insert into USERS(activated, address, email, name, password, phone_number, role, surname) values (true, 'Bulevar oslobodjenja 12, Novi Sad', 'marko.markovic@gmail.com', 'Marko','marko123', '0654598561', 'ADMIN', 'Markovic')
 insert into ADMIN(id) values (1)
 
 --guests
-insert into USERS(address, email, name, password, phone_number, role, surname) values ('Nikole Tesle 123, Novi Sad', 'jovan.jovanovic@gmail.com', 'Jovan','jovan123', '0654578561', 'GUEST', 'Jovanovic')
+insert into USERS(activated, address, email, name, password, phone_number, role, surname) values (true, 'Nikole Tesle 123, Novi Sad', 'jovan.jovanovic@gmail.com', 'Jovan','jovan123', '0654578561', 'GUEST', 'Jovanovic')
 insert into GUESTS(id) values (2)
 
 --owners
-insert into USERS(address, email, name, password, phone_number, role, surname) values ('Milosa Crnjanskog 45, Novi Sad', 'pera.peric@gmail.com', 'Pera','pera123', '0638451268', 'OWNER', 'Peric')
+insert into USERS(activated, address, email, name, password, phone_number, role, surname) values (true, 'Milosa Crnjanskog 45, Novi Sad', 'pera.peric@gmail.com', 'Pera','pera123', '0638451268', 'OWNER', 'Peric')
 insert into OWNERS(id) values (3)
 
 --accommodations
