@@ -146,8 +146,6 @@ public class AccountScreen extends AppCompatActivity {
                 showDeleteAccountDialog();
             }
         });
-
-
     }
 
     @Override

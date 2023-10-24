@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
