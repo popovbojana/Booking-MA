@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "owners")
 public class Owner extends User{
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "owner")
     private List<Accommodation> accommodations;
 
 }

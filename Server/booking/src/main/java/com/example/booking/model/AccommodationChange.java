@@ -1,11 +1,14 @@
 package com.example.booking.model;
 
 import com.example.booking.dto.AccommodationChangeDisplayDTO;
+import com.example.booking.model.enums.PriceType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -32,13 +35,24 @@ public class AccommodationChange {
 
     private int maxGuests;
 
-    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests){
+    @Enumerated(EnumType.STRING)
+    private PriceType priceType;
+
+    @OneToMany(mappedBy = "accommodationChange")
+    private List<AvailabilityPrice> availabilities;
+
+    private int cancellationDeadlineInDays;
+
+    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays){
         this.accommodation = accommodation;
         this.name = name;
         this.description = description;
         this.amenities = amenities;
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
+        this.priceType = priceType;
+        this.availabilities = availabilities;
+        this.cancellationDeadlineInDays = cancellationDeadlineInDays;
     }
 
     public AccommodationChangeDisplayDTO parseToDisplay() {

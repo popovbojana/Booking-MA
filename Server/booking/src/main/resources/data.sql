@@ -11,8 +11,9 @@ insert into USERS(activated, address, email, name, password, phone_number, role,
 insert into OWNERS(id) values (3)
 
 --accommodations
-insert into ACCOMMODATIONS(approved, has_changes, max_guests, min_guests, price_per_night, owner_id, amenities, available_from, available_until, description, name, type) values (true, false, 2, 4, 35, 3, 'Wifi, parking', '10.19.2023.', '31.12.2023.', 'Opis', 'Najbolji hotel na svetu', 'Hotel')
-insert into OWNERS_ACCOMMODATIONS(accommodations_id, owner_id) values (1, 3)
+insert into ACCOMMODATIONS(approved, cancellation_deadline_in_days, has_changes, max_guests, min_guests, price_type, change_id, owner_id, amenities, description, name, type) values (true, 5, false, 4, 2, 'PER_GUEST', null, 3, 'Wifi, parking', 'Opis', 'Najbolji hotel na svetu', 'Hotel')
+insert into AVAILABILITY_PRICES(amount, accommodation_id, date_from, date_until) values (20, 1, '2023-10-20T00:00:00', '2023-10-21T00:00:00')
 
-insert into ACCOMMODATIONS(approved, has_changes, max_guests, min_guests, price_per_night, owner_id, amenities, available_from, available_until, description, name, type) values (true, false, 2, 3, 50, 3, 'Wifi', '10.19.2023.', '31.12.2023.', 'Opis', 'Najbolji motel na svetu', 'Motel')
-insert into OWNERS_ACCOMMODATIONS(accommodations_id, owner_id) values (2, 3)
+insert into ACCOMMODATIONS(approved, cancellation_deadline_in_days, has_changes, max_guests, min_guests, price_type, change_id, owner_id, amenities, description, name, type) values (true, 3, false, 5, 3, 'PER_UNIT', null, 3, 'Wifi', 'Opis', 'Najbolji motel na svetu', 'Motel')
+insert into AVAILABILITY_PRICES(amount, accommodation_id, date_from, date_until) values (30, 2, '2023-10-20T00:00:00', '2023-10-31T00:00:00')
+insert into AVAILABILITY_PRICES(amount, accommodation_id, date_from, date_until) values (20, 2, '2023-10-31T00:00:00', '2023-11-15T00:00:00')

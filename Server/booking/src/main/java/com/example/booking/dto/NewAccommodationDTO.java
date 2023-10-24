@@ -1,6 +1,9 @@
 package com.example.booking.dto;
 
+import com.example.booking.model.enums.PriceType;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +17,8 @@ public class NewAccommodationDTO {
     private int minGuests;
     private int maxGuests;
     private String type;
-    private String availableFrom;
-    private String availableUntil;
-    private double pricePerNight;
+    private PriceType priceType;
+    private List<NewAvailabilityPriceDTO> availability;
+    private int cancellationDeadlineInDays;
 
 }

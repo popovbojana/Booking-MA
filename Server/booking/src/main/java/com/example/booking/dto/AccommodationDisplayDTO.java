@@ -16,9 +16,6 @@ public class AccommodationDisplayDTO {
     private String amenities;
     private int minGuests;
     private int maxGuests;
-    private String availableFrom;
-    private String availableUntil;
-    private double pricePerNight;
     private boolean approved;
     private boolean hasChanges;
 }

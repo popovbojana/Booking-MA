@@ -1,11 +1,14 @@
 package com.example.booking.model;
 
 import com.example.booking.dto.AccommodationDisplayDTO;
+import com.example.booking.model.enums.PriceType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -19,7 +22,8 @@ public class Accommodation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private Owner owner;
 
     private String name;
@@ -34,11 +38,13 @@ public class Accommodation {
 
     private String type;
 
-    private String availableFrom;
+    @Enumerated(EnumType.STRING)
+    private PriceType priceType;
 
-    private String availableUntil;
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY)
+    private List<AvailabilityPrice> availabilities;
 
-    private double pricePerNight;
+    private int cancellationDeadlineInDays;
 
     private boolean approved;
 
@@ -49,7 +55,7 @@ public class Accommodation {
     private AccommodationChange accommodationChange;
 
 
-    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, String availableFrom, String availableUntil, double pricePerNight){
+    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays){
         this.owner = owner;
         this.name = name;
         this.description = description;
@@ -57,15 +63,15 @@ public class Accommodation {
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
         this.type = type;
-        this.availableFrom = availableFrom;
-        this.availableUntil = availableUntil;
-        this.pricePerNight = pricePerNight;
+        this.priceType = priceType;
+        this.availabilities = availabilities;
+        this.cancellationDeadlineInDays = cancellationDeadlineInDays;
         this.approved = false;
         this.hasChanges = false;
         this.accommodationChange = null;
     }
 
     public AccommodationDisplayDTO parseToDisplay() {
-        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, availableFrom, availableUntil, pricePerNight, approved, hasChanges);
+        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, approved, hasChanges);
     }
 }

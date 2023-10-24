@@ -1,16 +1,20 @@
 package com.example.booking.service;
 
 import com.example.booking.dto.NewAccommodationDTO;
+import com.example.booking.dto.NewAvailabilityPriceDTO;
 import com.example.booking.model.Accommodation;
 import com.example.booking.model.AccommodationChange;
+import com.example.booking.model.AvailabilityPrice;
 import com.example.booking.model.Owner;
 import com.example.booking.repository.AccommodationChangeRepository;
 import com.example.booking.repository.AccommodationRepository;
+import com.example.booking.repository.AvailabilityPriceRepository;
 import com.example.booking.repository.UserRepository;
 import com.example.booking.service.interfaces.IAccommodationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,19 +23,31 @@ public class AccommodationService implements IAccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
     private final AccommodationChangeRepository accommodationChangeRepository;
+    private final AvailabilityPriceRepository availabilityPriceRepository;
 
     @Autowired
-    public AccommodationService(AccommodationRepository accommodationRepository, UserRepository userRepository, AccommodationChangeRepository accommodationChangeRepository) {
+    public AccommodationService(AccommodationRepository accommodationRepository, UserRepository userRepository, AccommodationChangeRepository accommodationChangeRepository, AvailabilityPriceRepository availabilityPriceRepository) {
         this.accommodationRepository = accommodationRepository;
         this.userRepository = userRepository;
         this.accommodationChangeRepository = accommodationChangeRepository;
+        this.availabilityPriceRepository = availabilityPriceRepository;
     }
 
     @Override
     public void addNewAccommodation(Long ownersId, NewAccommodationDTO newAccommodationDTO) {
         Owner owner = (Owner) this.userRepository.findById(ownersId).get();
 
-        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getAvailableFrom(), newAccommodationDTO.getAvailableUntil(), newAccommodationDTO.getPricePerNight());
+        List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
+
+        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays());
+        this.accommodationRepository.save(accommodation);
+
+        for (NewAvailabilityPriceDTO ap : newAccommodationDTO.getAvailability()){
+            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, null, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
+            availabilityPrices.add(availabilityPrice);
+            this.availabilityPriceRepository.save(availabilityPrice);
+        }
+        accommodation.setAvailabilities(availabilityPrices);
         this.accommodationRepository.save(accommodation);
 
         owner.getAccommodations().add(accommodation);
@@ -92,20 +108,36 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getMaxGuests() != -1){
                     accommodation.setMaxGuests(changes.getMaxGuests());
                 }
+                if (changes.getPriceType() != null){
+                    accommodation.setPriceType(changes.getPriceType());
+                }
+                if (changes.getAvailabilities().size() != 0){
+                    accommodation.setAvailabilities(changes.getAvailabilities());
+                    for (AvailabilityPrice ap : changes.getAvailabilities()){
+                        ap.setAccommodationChange(null);
+                        this.availabilityPriceRepository.save(ap);
+                    }
+                }
+                if (changes.getCancellationDeadlineInDays() != -1){
+                    accommodation.setCancellationDeadlineInDays(changes.getCancellationDeadlineInDays());
+                }
                 accommodation.setAccommodationChange(null);
                 accommodation.setHasChanges(false);
                 this.accommodationRepository.save(accommodation);
                 this.accommodationChangeRepository.delete(changes);
                 return true;
             }
-            AccommodationChange accommodationChange = accommodationChangeRepository.findById(accommodation.getAccommodationChange().getId()).orElse(null);
+            AccommodationChange accommodationChange = this.accommodationChangeRepository.findById(accommodation.getAccommodationChange().getId()).orElse(null);
             if (accommodationChange != null) {
-                List<Accommodation> accommodationsWithChange = accommodationRepository.findByAccommodationChange(accommodationChange);
+                List<Accommodation> accommodationsWithChange = this.accommodationRepository.findByAccommodationChange(accommodationChange);
                 for (Accommodation a : accommodationsWithChange) {
                     a.setAccommodationChange(null);
                     a.setHasChanges(false);
+
+                    this.availabilityPriceRepository.deleteAll(a.getAvailabilities());
                 }
-                accommodationChangeRepository.delete(accommodationChange);
+                this.accommodationChangeRepository.delete(accommodationChange);
+
             }
         }
         return false;

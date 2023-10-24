@@ -2,8 +2,6 @@ package com.example.booking.repository;
 
 import com.example.booking.model.Accommodation;
 import com.example.booking.model.AccommodationChange;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
