@@ -21,10 +21,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.booking_ma.adapters.AccommodationAdapter;
+import com.example.booking_ma.fragments.AccommodationsFragment;
 import com.example.booking_ma.model.Accommodation;
 
 import java.text.SimpleDateFormat;
@@ -38,16 +40,11 @@ import java.util.Locale;
 public class GuestMainScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private RecyclerView recyclerViewAccommodations;
-    private LinearLayoutManager layoutManager;
-    private AccommodationAdapter adapter;
-    private List<Accommodation> allAccomodations;
     private ImageView filterIcon;
     private Button buttonCancel, buttonConfirm;
     private Button buttonSearchDialogCancel, buttonSearchDialogSearch;
     private RadioButton group1Radio1, group1Radio2, group1Radio3, group2Radio1, group2Radio2, group2Radio3, group3Radio1, group3Radio2, group3Radio3;
     private TextView textViewSearchBar;
-    private FrameLayout frameLayoutAccomodation;
     private ImageView imageViewCheckIn, imageViewCheckOut;
     private EditText editTextLocation, editTextGuests, editTextCheckIn, editTextCheckOut;
     private TextView textViewSearchError;
@@ -63,15 +60,15 @@ public class GuestMainScreen extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("FAB Car");
 
-        recyclerViewAccommodations = findViewById(R.id.recyclerViewAccommodations);
         filterIcon = findViewById(R.id.filterIcon);
         textViewSearchBar = findViewById(R.id.textViewSearchBar);
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerViewAccommodations.setLayoutManager(layoutManager);
-        allAccomodations = getAllAccommodations();
-        adapter = new AccommodationAdapter(this, allAccomodations);
-        recyclerViewAccommodations.setAdapter(adapter);
+        if (savedInstanceState == null) {
+            AccommodationsFragment fragment = new AccommodationsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.commit();
+        }
     }
 
     @Override
@@ -301,7 +298,6 @@ public class GuestMainScreen extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-
     private void showFilterDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup_filter_by);
@@ -346,11 +342,4 @@ public class GuestMainScreen extends AppCompatActivity {
         spEditor.clear().commit();
     }
 
-    public List<Accommodation> getAllAccommodations() {
-        List<Accommodation> accommodationList = new ArrayList<>();
-        accommodationList.add(new Accommodation(R.drawable.item, "Accommodation 1", "$100 per night", 4.5f));
-        accommodationList.add(new Accommodation(R.drawable.item, "Accommodation 1", "$100 per night", 4.5f));
-        accommodationList.add(new Accommodation(R.drawable.item, "Accommodation 1", "$100 per night", 4.5f));
-        return accommodationList;
-    }
 }

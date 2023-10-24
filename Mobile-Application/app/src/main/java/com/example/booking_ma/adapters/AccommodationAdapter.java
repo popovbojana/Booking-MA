@@ -1,5 +1,4 @@
 package com.example.booking_ma.adapters;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,9 +9,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.booking_ma.AccountScreen;
 import com.example.booking_ma.R;
 import com.example.booking_ma.model.Accommodation;
-import com.example.booking_ma.AccountScreen;
 
 import java.util.List;
 
@@ -45,6 +44,7 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AccountScreen.class);
+                intent.putExtra("accommodation_id", item.getId());
                 context.startActivity(intent);
             }
         });

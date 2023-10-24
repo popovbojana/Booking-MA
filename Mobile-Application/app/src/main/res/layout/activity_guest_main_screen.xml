@@ -64,10 +64,9 @@
             android:contentDescription="Filter" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAccommodations"
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchBarLayout"
-        android:padding="16dp" />
+        android:layout_below="@+id/searchBarLayout" />
 </RelativeLayout>
