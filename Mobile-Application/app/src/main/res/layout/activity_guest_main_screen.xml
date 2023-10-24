@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/searchBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchBar"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appbar">
+
+            <TextView
+                android:id="@+id/textViewSearchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search..."
+                android:gravity="center"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/white"
+                android:padding="8dp"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:inputType="text"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/filterIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/filter_icon"
+            android:contentDescription="Filter" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchBarLayout" />
+</RelativeLayout>
