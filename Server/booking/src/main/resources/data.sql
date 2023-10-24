@@ -11,5 +11,8 @@ insert into USERS(activated, address, email, name, password, phone_number, role,
 insert into OWNERS(id) values (3)
 
 --accommodations
-insert into ACCOMMODATIONS(approved, max_guests, min_guests, price_per_night, owner_id, amenities, available_from, available_until, description, name, type) values (true, 2, 4, 35, 3, 'Wifi, parking', '10.19.2023.', '31.12.2023.', 'Opis', 'Najbolji hotel na svetu', 'Hotel')
+insert into ACCOMMODATIONS(approved, has_changes, max_guests, min_guests, price_per_night, owner_id, amenities, available_from, available_until, description, name, type) values (true, false, 2, 4, 35, 3, 'Wifi, parking', '10.19.2023.', '31.12.2023.', 'Opis', 'Najbolji hotel na svetu', 'Hotel')
 insert into OWNERS_ACCOMMODATIONS(accommodations_id, owner_id) values (1, 3)
+
+insert into ACCOMMODATIONS(approved, has_changes, max_guests, min_guests, price_per_night, owner_id, amenities, available_from, available_until, description, name, type) values (true, false, 2, 3, 50, 3, 'Wifi', '10.19.2023.', '31.12.2023.', 'Opis', 'Najbolji motel na svetu', 'Motel')
+insert into OWNERS_ACCOMMODATIONS(accommodations_id, owner_id) values (2, 3)
