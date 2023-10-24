@@ -11,12 +11,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,12 +46,15 @@ public class GuestMainScreen extends AppCompatActivity {
     private ImageView filterIcon;
     private Button buttonCancel, buttonConfirm;
     private Button buttonSearchDialogCancel, buttonSearchDialogSearch;
-    private RadioButton group1Radio1, group1Radio2, group1Radio3, group2Radio1, group2Radio2, group2Radio3, group3Radio1, group3Radio2, group3Radio3;
+    private Spinner spinnerBenefits, spinnerTypes;
+    private EditText editTextMinPrice, editTextMaxPrice;
     private TextView textViewSearchBar;
     private ImageView imageViewCheckIn, imageViewCheckOut;
     private EditText editTextLocation, editTextGuests, editTextCheckIn, editTextCheckOut;
     private TextView textViewSearchError;
     private LocalDate checkInDate, checkOutDate;
+    private String selectedBenefit, selectedType;
+    private TextView textViewFilterError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,21 +308,45 @@ public class GuestMainScreen extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup_filter_by);
 
-        group1Radio1 = dialog.findViewById(R.id.group1Radio1);
-        group1Radio2 = dialog.findViewById(R.id.group1Radio2);
-        group1Radio3 = dialog.findViewById(R.id.group1Radio3);
-        group2Radio1 = dialog.findViewById(R.id.group2Radio1);
-        group2Radio2 = dialog.findViewById(R.id.group2Radio2);
-        group2Radio3 = dialog.findViewById(R.id.group2Radio3);
-        group3Radio1 = dialog.findViewById(R.id.group3Radio1);
-        group3Radio2 = dialog.findViewById(R.id.group3Radio2);
-        group3Radio3 = dialog.findViewById(R.id.group3Radio3);
         buttonCancel = dialog.findViewById(R.id.buttonCancel);
         buttonConfirm = dialog.findViewById(R.id.buttonConfirm);
+        spinnerBenefits = dialog.findViewById(R.id.spinnerBenefits);
+        spinnerTypes = dialog.findViewById(R.id.spinnerTypes);
+        editTextMinPrice = dialog.findViewById(R.id.editTextMinPrice);
+        editTextMaxPrice = dialog.findViewById(R.id.editTextMaxPrice);
+        textViewFilterError = dialog.findViewById(R.id.textViewFilterError);
 
-        group1Radio1.setChecked(true);
-        group2Radio1.setChecked(true);
-        group3Radio1.setChecked(true);
+        String[] benefitsOptions = {"-","Option 1", "Option 2", "Option 3"};
+        ArrayAdapter<String> adapterBenefits = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, benefitsOptions);
+        adapterBenefits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerBenefits.setAdapter(adapterBenefits);
+
+        String[] typesOptions = {"-", "Option 1", "Option 2", "Option 3"};
+        ArrayAdapter<String> adapterTypes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typesOptions);
+        adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTypes.setAdapter(adapterBenefits);
+
+        spinnerBenefits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedBenefit = (String) spinnerBenefits.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
+
+        spinnerTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedType = (String) spinnerTypes.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
 
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,12 +358,36 @@ public class GuestMainScreen extends AppCompatActivity {
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Confirmed:", "TRUE");
-                dialog.dismiss();
+                filtering(dialog);
             }
         });
 
         dialog.show();
+    }
+
+    private void filtering(Dialog dialog)
+    {
+        String minPriceText = editTextMinPrice.getText().toString();
+        String maxPriceText = editTextMaxPrice.getText().toString();
+
+        if (!minPriceText.isEmpty() && !maxPriceText.isEmpty() && selectedBenefit != "-" && selectedType != "-") {
+            int minPrice = Integer.parseInt(minPriceText);
+            int maxPrice = Integer.parseInt(maxPriceText);
+
+            if (maxPrice >= minPrice) {
+                Log.i("Selected benefit:", selectedBenefit);
+                Log.i("Selected type:", selectedType);
+                Log.i("Min cost:", minPriceText);
+                Log.i("Max cost:", maxPriceText);
+                dialog.dismiss();
+            } else {
+                Log.e("Error:", "Max and min");
+                textViewFilterError.setText("Invalid max or min");
+            }
+        } else {
+            Log.e("Error:", "Fill out the filter");
+            textViewFilterError.setText("Fill you the filter");
+        }
     }
 
     private void deletePreferences(){
