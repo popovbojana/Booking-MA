@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/appbar">
 
-            <EditText
-                android:id="@+id/editTextSearchBar"
+            <TextView
+                android:id="@+id/textViewSearchBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Search..."
@@ -55,11 +55,11 @@
 
         <ImageView
             android:id="@+id/filterIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/filter_icon"
             android:contentDescription="Filter" />
     </LinearLayout>
