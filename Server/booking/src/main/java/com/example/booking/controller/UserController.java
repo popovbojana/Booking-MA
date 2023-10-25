@@ -1,13 +1,14 @@
 package com.example.booking.controller;
 
+import com.example.booking.dto.LoginDTO;
 import com.example.booking.dto.NewUserDTO;
 import com.example.booking.service.interfaces.IUserService;
-import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
 @RestController
@@ -34,5 +35,14 @@ public class UserController {
             return new ResponseEntity<>("Successfully activated account!", HttpStatus.OK);
         }
         return new ResponseEntity<>("Unsuccessful activation! Activation link has expired (you will get new one now) or account already activated.", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
+        try{
+            return new ResponseEntity<>(this.userService.loginUser(login), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
