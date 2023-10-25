@@ -24,7 +24,7 @@ public class AvailabilityPrice {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "change_id")
     private AccommodationChange accommodationChange;
 

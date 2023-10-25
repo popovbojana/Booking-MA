@@ -111,12 +111,16 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getPriceType() != null){
                     accommodation.setPriceType(changes.getPriceType());
                 }
-                if (changes.getAvailabilities().size() != 0){
-                    accommodation.setAvailabilities(changes.getAvailabilities());
+                if (changes.getAvailabilities() != null && !changes.getAvailabilities().isEmpty()){
+                    this.availabilityPriceRepository.deleteAll(accommodation.getAvailabilities());
+                    List<AvailabilityPrice> newAvailabilityPrices = new ArrayList<>();
                     for (AvailabilityPrice ap : changes.getAvailabilities()){
-                        ap.setAccommodationChange(null);
-                        this.availabilityPriceRepository.save(ap);
+                        this.availabilityPriceRepository.delete(ap);
+                        AvailabilityPrice newAp = new AvailabilityPrice(ap.getAccommodation(), null, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
+                        newAvailabilityPrices.add(newAp);
                     }
+                    accommodation.setAvailabilities(newAvailabilityPrices);
+                    this.availabilityPriceRepository.saveAll(newAvailabilityPrices);
                 }
                 if (changes.getCancellationDeadlineInDays() != -1){
                     accommodation.setCancellationDeadlineInDays(changes.getCancellationDeadlineInDays());
