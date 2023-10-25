@@ -33,7 +33,7 @@ public class AccommodationChangeService implements IAccommodationChangeService {
     public void addAccommodationChange(Long id, AccommodationChangesDTO changes) {
         Accommodation accommodation = this.accommodationRepository.findById(id).get();
         List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
-        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getPriceType(), availabilityPrices, changes.getCancellationDeadlineInDays());
+        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), availabilityPrices, changes.getCancellationDeadlineInDays());
         this.accommodationChangeRepository.save(accommodationChange);
         for (NewAvailabilityPriceDTO dto : changes.getAvailabilities()){
             AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, accommodationChange, dto.getAmount(), dto.getDateFrom(), dto.getDateUntil());

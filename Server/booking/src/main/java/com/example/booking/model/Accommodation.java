@@ -1,6 +1,7 @@
 package com.example.booking.model;
 
 import com.example.booking.dto.AccommodationDisplayDTO;
+import com.example.booking.dto.AvailabilityDisplayDTO;
 import com.example.booking.model.enums.PriceType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -72,6 +74,10 @@ public class Accommodation {
     }
 
     public AccommodationDisplayDTO parseToDisplay() {
-        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, approved, hasChanges);
+        List<AvailabilityDisplayDTO> availabilityDisplayDTOS = new ArrayList<>();
+        for (AvailabilityPrice ap : availabilities){
+            availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
+        }
+        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges);
     }
 }

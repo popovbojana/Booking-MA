@@ -18,6 +18,7 @@ public class AccommodationChangesDTO {
     private String amenities;
     private int minGuests;
     private int maxGuests;
+    private String type;
     private PriceType priceType;
     private List<NewAvailabilityPriceDTO> availabilities;
     private int cancellationDeadlineInDays;

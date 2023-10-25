@@ -81,6 +81,7 @@ public class AccommodationService implements IAccommodationService {
             Owner owner = (Owner) this.userRepository.findById(accommodation.getOwner().getId()).get();
             owner.getAccommodations().remove(accommodation);
             this.userRepository.save(owner);
+            this.availabilityPriceRepository.deleteAll(accommodation.getAvailabilities());
             this.accommodationRepository.delete(accommodation);
             return true;
         }
@@ -107,6 +108,9 @@ public class AccommodationService implements IAccommodationService {
                 }
                 if (changes.getMaxGuests() != -1){
                     accommodation.setMaxGuests(changes.getMaxGuests());
+                }
+                if (changes.getType() != null){
+                    accommodation.setType(changes.getType());
                 }
                 if (changes.getPriceType() != null){
                     accommodation.setPriceType(changes.getPriceType());
@@ -141,7 +145,7 @@ public class AccommodationService implements IAccommodationService {
                     this.availabilityPriceRepository.deleteAll(a.getAvailabilities());
                 }
                 this.accommodationChangeRepository.delete(accommodationChange);
-
+            return true;
             }
         }
         return false;
