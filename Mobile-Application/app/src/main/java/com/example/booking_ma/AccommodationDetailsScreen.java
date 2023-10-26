@@ -15,9 +15,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private FragmentManager supportFragmentManager = getSupportFragmentManager();
     private FragmentTransaction fragmentTransition = supportFragmentManager.beginTransaction();
     private MapFragment mapFragment;
-
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
