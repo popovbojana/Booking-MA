@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -59,6 +60,7 @@ public class LoginScreen extends AppCompatActivity {
                 } else {
                     //TODO: povezati sa serverom
                     Log.i("Success", "Logged in!");
+                    Toast.makeText(LoginScreen.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

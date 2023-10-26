@@ -36,6 +36,7 @@ public class RegisterScreen extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
+        editTextName = findViewById(R.id.editTextName);
         editTextSurname = findViewById(R.id.editTextSurname);
         editTextAddress = findViewById(R.id.editTextAddress);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
@@ -67,13 +68,13 @@ public class RegisterScreen extends AppCompatActivity {
                 String surname = editTextSurname.getText().toString();
                 String address = editTextAddress.getText().toString();
                 String phoneNumber = editTextPhoneNumber.getText().toString();
-                String role = "";
+//                String role = "";
 
                 spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                         String selectedRole = parentView.getItemAtPosition(position).toString();
-//                        Toast.makeText(RegisterScreen.this, "Role: " + selectedRole, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterScreen.this, "Role: " + selectedRole, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -92,7 +93,7 @@ public class RegisterScreen extends AppCompatActivity {
                 } else if (confirmPassword.equals("")) {
                     Log.i("Error", "Confirm password empty");
                     textViewError.setText("Confirming password is required!");
-                } else if (password.equals(confirmPassword)) {
+                } else if (!password.equals(confirmPassword)) {
                     Log.i("Error", "Passwords aren't matching");
                     textViewError.setText("Passwords aren't matching!");
                 } else if(name.equals("")) {
@@ -110,7 +111,7 @@ public class RegisterScreen extends AppCompatActivity {
                 } else {
                     //TODO: povezati sa serverom
                     Log.i("Success", "Successfully registered!");
-//                    Toast.makeText(RegisterScreen.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterScreen.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                 }
 
             }
