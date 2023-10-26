@@ -1,5 +1,6 @@
 package com.example.booking_ma;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -68,19 +69,19 @@ public class RegisterScreen extends AppCompatActivity {
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 String role = "";
 
-//                spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                        String selectedRole = parentView.getItemAtPosition(position).toString();
-////                        Toast.makeText(RegisterScreen.this, "Role: " + selectedRole, Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> parentView) {
-//                        Log.i("Error", "Role empty");
-//                        textViewError.setText("Role is required!");
-//                    }
-//                });
+                spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        String selectedRole = parentView.getItemAtPosition(position).toString();
+//                        Toast.makeText(RegisterScreen.this, "Role: " + selectedRole, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        Log.i("Error", "Role empty");
+                        textViewError.setText("Role is required!");
+                    }
+                });
 
                 if (email.equals("")){
                     Log.i("Error", "Email empty");
@@ -118,7 +119,8 @@ public class RegisterScreen extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: prebaciti na LoginScreen
+                Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+                startActivity(intent);
             }
         });
     }

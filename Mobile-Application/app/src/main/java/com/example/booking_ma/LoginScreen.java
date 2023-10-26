@@ -1,6 +1,7 @@
 package com.example.booking_ma;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -65,7 +66,8 @@ public class LoginScreen extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: proslediti na RegisterScreen
+                Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
+                startActivity(intent);
             }
         });
     }
