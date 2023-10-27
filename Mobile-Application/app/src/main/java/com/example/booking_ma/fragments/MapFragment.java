@@ -62,6 +62,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+
+        LatLng destinationLocation = new LatLng(46.869107, -18.766947);
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .title("ASD")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                .position(destinationLocation));
+        marker.setFlat(true);
+        markers.add(marker);
     }
 
     public void addAccommodationMarker(LatLng loc) {
