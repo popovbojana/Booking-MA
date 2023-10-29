@@ -1,6 +1,8 @@
 package com.example.booking_ma.model;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable {
 
     private Long id;
     private Accommodation accommodation;

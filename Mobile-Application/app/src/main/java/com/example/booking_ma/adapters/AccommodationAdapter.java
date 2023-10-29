@@ -2,6 +2,7 @@ package com.example.booking_ma.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.booking_ma.R;
 import com.example.booking_ma.model.Accommodation;
 import com.example.booking_ma.model.Comment;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,29 +53,43 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
 
                 Intent intent = new Intent(context, AccommodationDetailsScreen.class);
 
-                List<Comment> commentsList = new ArrayList<>(item.getComments());
-                List<LocalDate> reservedDatesList = new ArrayList<>(item.getReservedDates());
-                List<LocalDate> freeDatesList = new ArrayList<>(item.getFreeDates());
-                List<String> amentitesList = new ArrayList<>(item.getAmentites());
+                ArrayList<Comment> commenstArrayList = new ArrayList<>();
+                ArrayList<LocalDate> reservedDatesArrayList = new ArrayList<>();
+                ArrayList<LocalDate> freeDatesArrayList= new ArrayList<>();
+                ArrayList<String> amentitesArrayList= new ArrayList<>();
 
-                ArrayList<Comment> commenstArrayList = new ArrayList<>(commentsList);
-                ArrayList<LocalDate> reservedDatesArrayList = new ArrayList<>(reservedDatesList);
-                ArrayList<LocalDate> freeDatesArrayList = new ArrayList<>(freeDatesList);
-                ArrayList<String> amentitesArrayList = new ArrayList<>(amentitesList);
-
-                item.getName();
                 intent.putExtra("a_name", item.getName());
                 intent.putExtra("a_img", item.getImageResource());
                 intent.putExtra("a_description", item.getDescription());
-                intent.putExtra("a_comments", commenstArrayList);
+                intent.putExtra("a_price", item.getPrice());
+                intent.putExtra("a_stars", item.getStars());
                 intent.putExtra("a_location_name", item.getAddress());
                 intent.putExtra("a_location_lat", item.getLatitude());
                 intent.putExtra("a_location_long", item.getLongitude());
-                intent.putExtra("a_reserved_dates", reservedDatesArrayList);
-                intent.putExtra("a_free_dates", freeDatesArrayList);
-                intent.putExtra("a_amentities", amentitesArrayList);
-                intent.putExtra("a_price", item.getPrice());
-                intent.putExtra("a_stars", item.getStars());
+
+
+                if (item.getComments() != null && !item.getComments().isEmpty()) {
+                    ArrayList<Comment> commentsList = new ArrayList<>(item.getComments());
+                    intent.putExtra("a_comments",  (Serializable) commentsList);
+                }
+//
+//                if (item.getReservedDates() != null && !item.getReservedDates().isEmpty()) {
+//                    List<LocalDate> reservedDatesList = new ArrayList<>(item.getReservedDates());
+//                    reservedDatesArrayList = new ArrayList<>(reservedDatesList);
+//                    intent.putExtra("a_reserved_dates", reservedDatesArrayList);
+//                }
+//
+//                if (item.getFreeDates() != null && !item.getFreeDates().isEmpty()) {
+//                    List<LocalDate> freeDatesList = new ArrayList<>(item.getFreeDates());
+//                    freeDatesArrayList = new ArrayList<>(freeDatesList);
+//                    intent.putExtra("a_free_dates", freeDatesArrayList);
+//                }
+//
+
+                if (item.getAmentites() != null && !item.getAmentites().isEmpty()) {
+                    ArrayList<String> amentitesList = new ArrayList<>(item.getAmentites());
+                    intent.putExtra("a_amentites",  (Serializable) amentitesList);
+                }
 
                 context.startActivity(intent);
             }

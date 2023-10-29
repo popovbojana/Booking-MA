@@ -1,9 +1,10 @@
 package com.example.booking_ma.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Accommodation {
+public class Accommodation implements Serializable {
 
     private Long id;
     private String name;

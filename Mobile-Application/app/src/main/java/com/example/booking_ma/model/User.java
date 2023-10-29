@@ -1,4 +1,6 @@
 package com.example.booking_ma.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 }
