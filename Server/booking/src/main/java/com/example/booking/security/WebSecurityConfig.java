@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/user/registration").permitAll()
                 .antMatchers("/api/user/activation/**").permitAll()
                 .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
                 .headers().frameOptions().disable().and()

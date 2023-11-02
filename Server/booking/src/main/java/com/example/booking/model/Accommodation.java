@@ -56,6 +56,9 @@ public class Accommodation {
     @JoinColumn(name = "change_id")
     private AccommodationChange accommodationChange;
 
+    @OneToMany(mappedBy = "accommodation")
+    private List<RatingComment> ratingComments;
+
 
     public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays){
         this.owner = owner;
