@@ -2,7 +2,9 @@ package com.example.booking.service.interfaces;
 
 import com.example.booking.dto.LoginDTO;
 import com.example.booking.dto.NewUserDTO;
+import com.example.booking.dto.ReportedUserReasonDTO;
 import com.example.booking.dto.TokenDTO;
+import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -15,4 +17,8 @@ public interface IUserService extends UserDetailsService {
     public boolean activateUser(Long userId) throws MessagingException, UnsupportedEncodingException;
 
     TokenDTO loginUser(LoginDTO login) throws NotActivatedException;
+
+    void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId;
+
+    void reportOwner(Long id, ReportedUserReasonDTO reason) throws NoDataWithId;
 }

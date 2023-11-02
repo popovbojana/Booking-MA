@@ -45,6 +45,12 @@ public class User implements UserDetails {
 
     private LocalDateTime activationLinkSent;
 
+    private boolean reported;
+
+    private String reportedReason;
+
+    private boolean blocked;
+
     public User(String email, String password, String name, String surname, String address, String phoneNumber, Role role){
         this.email = email;
         this.password = password;
@@ -55,6 +61,9 @@ public class User implements UserDetails {
         this.role = role;
         this.activated = false;
         this.activationLinkSent = LocalDateTime.now();
+        this.reported = false;
+        this.reportedReason = null;
+        this.blocked = false;
     }
 
     @JsonIgnore

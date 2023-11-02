@@ -2,7 +2,9 @@ package com.example.booking.service;
 
 import com.example.booking.dto.LoginDTO;
 import com.example.booking.dto.NewUserDTO;
+import com.example.booking.dto.ReportedUserReasonDTO;
 import com.example.booking.dto.TokenDTO;
+import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
 import com.example.booking.model.User;
 import com.example.booking.model.enums.Role;
@@ -10,7 +12,6 @@ import com.example.booking.repository.UserRepository;
 import com.example.booking.security.TokenUtils;
 import com.example.booking.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -105,6 +106,30 @@ public class UserService implements IUserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return token;
+    }
+
+    @Override
+    public void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
+        if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST){
+            User guest = this.userRepository.findById(id).get();
+            guest.setReported(true);
+            guest.setReportedReason(reason.getReason());
+            this.userRepository.save(guest);
+        } else {
+            throw new NoDataWithId("There is no guest with this id!");
+        }
+    }
+
+    @Override
+    public void reportOwner(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
+        if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.OWNER){
+            User owner = this.userRepository.findById(id).get();
+            owner.setReported(true);
+            owner.setReportedReason(reason.getReason());
+            this.userRepository.save(owner);
+        } else {
+            throw new NoDataWithId("There is no owner with this id!");
+        }
     }
 
     @Override
