@@ -16,4 +16,6 @@ public interface IRatingCommentService {
     AllRatingsDisplay getAllForOwner(Long id) throws NoDataWithId;
 
     AllRatingsDisplay getAllForAccommodation(Long id) throws NoDataWithId;
+
+    void report(Long id) throws NoDataWithId;
 }

@@ -44,6 +44,8 @@ public class RatingComment {
 
     private boolean approved;
 
+    private boolean reported;
+
     public RatingComment(RatingCommentType type, Guest guest, Owner owner, Accommodation accommodation, int rating, String comment){
         this.type = type;
         if (type == RatingCommentType.FOR_OWNER){
@@ -57,6 +59,7 @@ public class RatingComment {
         this.rating = rating;
         this.comment = comment;
         this.time = LocalDateTime.now();
+        this.reported = false;
     }
 
     public RatingCommentDisplayDTO parseToDisplay(){

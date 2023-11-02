@@ -77,5 +77,15 @@ public class RatingCommentController {
         }
     }
 
+    @PutMapping(value = "report/{id}")
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<?> report(@PathVariable("id") Long id){
+        try {
+            this.ratingCommentService.report(id);
+            return new ResponseEntity<>("Successfully reported rating and comment!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

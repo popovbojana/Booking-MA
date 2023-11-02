@@ -127,4 +127,15 @@ public class RatingCommentService implements IRatingCommentService {
         }
     }
 
+    @Override
+    public void report(Long id) throws NoDataWithId {
+        if (this.ratingCommentRepository.findById(id).isPresent()){
+            RatingComment ratingComment = this.ratingCommentRepository.findById(id).get();
+            ratingComment.setReported(true);
+            this.ratingCommentRepository.save(ratingComment);
+        } else {
+            throw new NoDataWithId("There is no rating and comment with this id!");
+        }
+    }
+
 }
