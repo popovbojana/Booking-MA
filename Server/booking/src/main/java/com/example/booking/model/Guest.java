@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor
@@ -20,4 +18,7 @@ public class Guest extends User{
 
     @OneToMany(mappedBy = "guest")
     private List<RatingComment> ratingComments;
+
+    @ManyToMany
+    private List<Accommodation> favoriteAccommodations;
 }

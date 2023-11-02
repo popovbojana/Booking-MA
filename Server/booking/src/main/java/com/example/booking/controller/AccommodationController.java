@@ -107,4 +107,36 @@ public class AccommodationController {
         }
         return new ResponseEntity<>("Accommodation with this id does not exist.", HttpStatus.OK);
     }
+
+    @PutMapping(value = "add-to-favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> addToFavorites(@RequestBody FavoriteAccommodationDTO favAccommodation){
+        try{
+            this.accommodationService.addToFavorites(favAccommodation);
+            return new ResponseEntity<>("Successfully added accommodation to your favorites!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "remove-from-favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> removeFromFavorites(@RequestBody FavoriteAccommodationDTO favAccommodation){
+        try{
+            this.accommodationService.removeFromFavorites(favAccommodation);
+            return new ResponseEntity<>("Successfully removed accommodation to your favorites!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "all-favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> getAllFavoritesForGuest(@PathVariable("id") Long id){
+        try{
+            return new ResponseEntity<>(this.accommodationService.getAllFavoritesForGuest(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
