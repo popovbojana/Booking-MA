@@ -1,8 +1,8 @@
 package com.example.booking.controller;
 
-import com.example.booking.dto.LoginDTO;
-import com.example.booking.dto.NewUserDTO;
-import com.example.booking.dto.ReportedUserReasonDTO;
+import com.example.booking.dto.*;
+import com.example.booking.model.Accommodation;
+import com.example.booking.model.User;
 import com.example.booking.service.interfaces.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user/")
@@ -68,5 +70,16 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "all-users")
+//    @PreAuthorize("hasAnyAuthority('GUEST','OWNER','ADMIN')")
+    public ResponseEntity<?> getAllUsers(){
+        List<User> users = this.userService.getAll();
+        List<UserDisplayDTO> userDisplay = new ArrayList<>();
+        for (User u : users){
+            userDisplay.add(u.parseToDisplay());
+        }
+        return new ResponseEntity<>(userDisplay, HttpStatus.OK);
     }
 }

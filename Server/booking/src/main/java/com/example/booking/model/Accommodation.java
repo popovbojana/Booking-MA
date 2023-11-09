@@ -59,8 +59,13 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation")
     private List<RatingComment> ratingComments;
 
+    private String address;
 
-    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays){
+    private double latitude;
+
+    private double longitude;
+
+    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, String address, double latitude, double longitude){
         this.owner = owner;
         this.name = name;
         this.description = description;
@@ -74,6 +79,9 @@ public class Accommodation {
         this.approved = false;
         this.hasChanges = false;
         this.accommodationChange = null;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public AccommodationDisplayDTO parseToDisplay() {
@@ -81,6 +89,6 @@ public class Accommodation {
         for (AvailabilityPrice ap : availabilities){
             availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
         }
-        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges);
+        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges, address, latitude, longitude);
     }
 }

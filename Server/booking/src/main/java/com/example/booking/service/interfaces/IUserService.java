@@ -6,12 +6,16 @@ import com.example.booking.dto.ReportedUserReasonDTO;
 import com.example.booking.dto.TokenDTO;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
+import com.example.booking.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public interface IUserService extends UserDetailsService {
+
+    public List<User> getAll();
 
     public boolean addNewUser(NewUserDTO newUserDTO) throws MessagingException, UnsupportedEncodingException;
     public boolean activateUser(Long userId) throws MessagingException, UnsupportedEncodingException;

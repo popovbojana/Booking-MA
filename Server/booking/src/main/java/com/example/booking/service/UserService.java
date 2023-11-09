@@ -49,6 +49,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public List<User> getAll(){
+        return this.userRepository.findAll();
+    }
+
+    @Override
     public boolean addNewUser(NewUserDTO newUserDTO) throws MessagingException, UnsupportedEncodingException {
         List<User> existingUsers = this.userRepository.findUsersByEmail(newUserDTO.getEmail());
         if(existingUsers.size() != 0){

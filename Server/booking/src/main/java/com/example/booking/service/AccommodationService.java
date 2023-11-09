@@ -35,12 +35,17 @@ public class AccommodationService implements IAccommodationService {
     }
 
     @Override
+    public List<Accommodation> GetAll(){
+        return this.accommodationRepository.findAll();
+    }
+
+    @Override
     public void addNewAccommodation(Long ownersId, NewAccommodationDTO newAccommodationDTO) {
         Owner owner = (Owner) this.userRepository.findById(ownersId).get();
 
         List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
 
-        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays());
+        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays(), newAccommodationDTO.getAddress(), newAccommodationDTO.getLatitude(), newAccommodationDTO.getLongitude());
         this.accommodationRepository.save(accommodation);
 
         for (NewAvailabilityPriceDTO ap : newAccommodationDTO.getAvailability()){

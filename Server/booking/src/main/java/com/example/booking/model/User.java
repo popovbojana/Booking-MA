@@ -1,5 +1,8 @@
 package com.example.booking.model;
 
+import com.example.booking.dto.AccommodationDisplayDTO;
+import com.example.booking.dto.AvailabilityDisplayDTO;
+import com.example.booking.dto.UserDisplayDTO;
 import com.example.booking.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -11,6 +14,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -108,5 +112,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDisplayDTO parseToDisplay() {
+        return new UserDisplayDTO(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked);
     }
 }

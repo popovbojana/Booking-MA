@@ -25,4 +25,7 @@ public class AccommodationDisplayDTO {
     private int cancellationDeadlineInDays;
     private boolean approved;
     private boolean hasChanges;
+    private String address;
+    private double latitude;
+    private double longitude;
 }

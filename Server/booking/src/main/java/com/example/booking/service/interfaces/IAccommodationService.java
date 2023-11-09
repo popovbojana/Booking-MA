@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface IAccommodationService {
 
+    List<Accommodation> GetAll();
+
     public void addNewAccommodation(Long ownersId, NewAccommodationDTO newAccommodationDTO);
     public List<Accommodation> getAllAccommodationsForOwner(Long ownersId);
     public List<Accommodation> getAllNew();
