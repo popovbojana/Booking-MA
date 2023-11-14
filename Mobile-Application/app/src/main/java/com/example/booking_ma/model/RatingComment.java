@@ -2,9 +2,10 @@ package com.example.booking_ma.model;
 
 import com.example.booking_ma.model.enums.RatingCommentType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class RatingComment {
+public class RatingComment implements Serializable {
 
     private Long id;
 
@@ -27,6 +28,18 @@ public class RatingComment {
     private boolean reported;
 
     public RatingComment() {
+    }
+
+    public RatingComment(RatingCommentType type, Guest guest, Owner owner, Accommodation accommodation, int rating, String comment, LocalDateTime time, boolean approved, boolean reported) {
+        this.type = type;
+        this.guest = guest;
+        this.owner = owner;
+        this.accommodation = accommodation;
+        this.rating = rating;
+        this.comment = comment;
+        this.time = time;
+        this.approved = approved;
+        this.reported = reported;
     }
 
     public RatingComment(Long id, RatingCommentType type, Guest guest, Owner owner, Accommodation accommodation, int rating, String comment, LocalDateTime time, boolean approved, boolean reported) {

@@ -65,7 +65,9 @@ public class Accommodation {
 
     private double longitude;
 
-    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, String address, double latitude, double longitude){
+    private double finalRating;
+
+    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, String address, double latitude, double longitude, double finalRating){
         this.owner = owner;
         this.name = name;
         this.description = description;
@@ -82,6 +84,7 @@ public class Accommodation {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.finalRating = finalRating;
     }
 
     public AccommodationDisplayDTO parseToDisplay() {
@@ -89,6 +92,6 @@ public class Accommodation {
         for (AvailabilityPrice ap : availabilities){
             availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
         }
-        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges, address, latitude, longitude);
+        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges, address, longitude, latitude, finalRating);
     }
 }

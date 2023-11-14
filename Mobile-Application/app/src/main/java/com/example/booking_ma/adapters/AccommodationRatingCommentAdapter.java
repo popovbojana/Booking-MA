@@ -1,48 +1,44 @@
 package com.example.booking_ma.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.booking_ma.AccommodationDetailsScreen;
 import com.example.booking_ma.R;
 import com.example.booking_ma.model.Comment;
+import com.example.booking_ma.model.RatingComment;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-public class AccommodationCommentAdapter extends RecyclerView.Adapter<AccommodationCommentAdapter.ViewHolder>{
+public class AccommodationRatingCommentAdapter extends RecyclerView.Adapter<AccommodationRatingCommentAdapter.ViewHolder>{
 
 
-    private List<Comment> comments;
+    private List<RatingComment> comments;
     private Context context;
 
-    public AccommodationCommentAdapter(Context context, List<Comment> comments) {
+    public AccommodationRatingCommentAdapter(Context context, List<RatingComment> comments) {
         this.context = context;
         this.comments = comments;
     }
 
     @Override
-    public AccommodationCommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AccommodationRatingCommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
-        return new AccommodationCommentAdapter.ViewHolder(view);
+        return new AccommodationRatingCommentAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(AccommodationCommentAdapter.ViewHolder holder, int position) {
-        Comment item = comments.get(position);
+    public void onBindViewHolder(AccommodationRatingCommentAdapter.ViewHolder holder, int position) {
+        RatingComment item = comments.get(position);
 
-        holder.commentGuestName.setText(item.getUser().getName() + " " + item.getUser().getSurname());
-        holder.commentStars.setRating(item.getStars());
-        holder.commentMessage.setText(item.getMessage());
+        holder.commentGuestName.setText(item.getGuest().getName()+ " " + item.getGuest().getSurname());
+        holder.commentStars.setRating(item.getRating());
+        holder.commentMessage.setText(item.getComment());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

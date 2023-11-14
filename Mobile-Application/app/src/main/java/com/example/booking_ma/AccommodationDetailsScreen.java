@@ -1,10 +1,8 @@
 package com.example.booking_ma;
 
 import android.content.Intent;
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,9 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -23,18 +19,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.booking_ma.adapters.AccommodationAdapter;
 import com.example.booking_ma.adapters.AccommodationAmentiteAdapter;
-import com.example.booking_ma.adapters.AccommodationCommentAdapter;
-import com.example.booking_ma.fragments.AccommodationsFragment;
+import com.example.booking_ma.adapters.AccommodationRatingCommentAdapter;
 import com.example.booking_ma.fragments.MapFragment;
-import com.example.booking_ma.model.Comment;
+import com.example.booking_ma.model.RatingComment;
 import com.example.booking_ma.tools.FragmentTransition;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AccommodationDetailsScreen extends AppCompatActivity {
 
@@ -42,17 +33,16 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private FragmentManager supportFragmentManager = getSupportFragmentManager();
     private FragmentTransaction fragmentTransition = supportFragmentManager.beginTransaction();
     private MapFragment mapFragment;
-    private String aName, aImg, aDescription, aLocationName, aLocationLat, aLocationLong, aReservedDates, aFreeDates;
-    private ArrayList<Comment> aComments;
-    private ArrayList<String> aAmentities;
-    private float aPrice, aStars;
+    private String aName, aImg, aDescription, aLocationName, aLocationLat, aLocationLong, aReservedDates, aFreeDates, aAmentities;
+    private ArrayList<RatingComment> aComments;
+    private double aPrice, aStars;
     private ImageView imageViewAccommodationPic;
     private TextView textViewAccommodationName, textViewAccommodationDesc, textViewAccommodationPrice, textViewAccommodationAmenities;
     private RatingBar ratingBarAccommodationStars;
     private Button buttonReserveAccommodation;
     private RecyclerView recyclerViewAccommodationComments, recyclerViewAccommodationAmentites;
     private LinearLayoutManager layoutManager;
-    private AccommodationCommentAdapter commentAdapter;
+    private AccommodationRatingCommentAdapter commentAdapter;
     private AccommodationAmentiteAdapter amentiteAdapter;
 
 
@@ -159,13 +149,13 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         aDescription = intent.getStringExtra("a_description");
         aPrice = intent.getFloatExtra("a_price", 0);
         aStars = intent.getFloatExtra("a_stars", 0);
-        aComments = (ArrayList<Comment>) intent.getSerializableExtra("a_comments");
+        aComments = (ArrayList<RatingComment>) intent.getSerializableExtra("a_comments");
         aLocationName = intent.getStringExtra("a_location_name");
         aLocationLat = intent.getStringExtra("a_location_lat");
         aLocationLong = intent.getStringExtra("a_location_long");
         aReservedDates = intent.getStringExtra("a_reserved_dates");
         aFreeDates = intent.getStringExtra("a_free_dates");
-        aAmentities = (ArrayList<String>) intent.getSerializableExtra("a_amentites");
+        aAmentities = intent.getStringExtra("a_amentites");
     }
 
     public void setPageParts(){
@@ -173,30 +163,19 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         textViewAccommodationName.setText(aName);
         textViewAccommodationDesc.setText(aDescription);
         textViewAccommodationPrice.setText(String.valueOf(aPrice));
-        ratingBarAccommodationStars.setRating(aStars);
+        ratingBarAccommodationStars.setRating(Float.valueOf(String.valueOf(aStars)));
 
-        setAccommodationCommentAdapter();
-        setAccommodationAmentiteAdapter();
+        setAccommodationRatingCommentAdapter();
     }
 
-    public void setAccommodationCommentAdapter(){
+    public void setAccommodationRatingCommentAdapter(){
 
         recyclerViewAccommodationComments = findViewById(R.id.recyclerViewAccommodationComments);
         layoutManager = new LinearLayoutManager(this);
         recyclerViewAccommodationComments.setLayoutManager(layoutManager);
 
-        commentAdapter = new AccommodationCommentAdapter(this, aComments);
+        commentAdapter = new AccommodationRatingCommentAdapter(this, aComments);
         recyclerViewAccommodationComments.setAdapter(commentAdapter);
     }
 
-    public void setAccommodationAmentiteAdapter(){
-
-        recyclerViewAccommodationAmentites= findViewById(R.id.recyclerViewAccommodationAmentites);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerViewAccommodationAmentites.setLayoutManager(layoutManager);
-
-        amentiteAdapter = new AccommodationAmentiteAdapter(this, aAmentities);
-        recyclerViewAccommodationAmentites.setAdapter(amentiteAdapter);
-
-    }
 }

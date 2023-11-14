@@ -23,5 +23,6 @@ public class NewAccommodationDTO {
     private String address;
     private double latitude;
     private double longitude;
+    private double finalRating;
 
 }

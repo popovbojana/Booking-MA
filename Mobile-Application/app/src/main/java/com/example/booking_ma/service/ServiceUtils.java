@@ -1,5 +1,10 @@
 package com.example.booking_ma.service;
 
+import com.example.booking_ma.tools.LocalDateTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -9,12 +14,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceUtils {
 
-    //OVDE UNESI SVOJ LOKALHOST (MOJ JE 192.167.1.19) u cmd kucas ipconfig
-    public static final String SERVICE_API_PATH = "http://192.168.1.19:8084/api/";
+    //OVDE UNESI SVOJ LOKALHOST (MOJ JE 192.168.1.24) u cmd kucas ipconfig
+    private static final String SERVICE_API_PATH = "http://192.168.1.24:8081/api/";
 
-    public static final String accommodation = "passenger";
-    public static final String user = "user";
-    public static final String ratingComment = "rating-comment";
+    protected static final String accommodation = "accommodation";
+    protected static final String user = "user";
+    protected static final String ratingComment = "rating-comment";
 
     public static OkHttpClient test(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -29,12 +34,18 @@ public class ServiceUtils {
 
     public static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(SERVICE_API_PATH)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(getCustomGson()))
             .client(test())
             .build();
 
-    public static IAccommodationService userService = retrofit.create(IAccommodationService.class);
-    public static IUserService passengerService = retrofit.create(IUserService.class);
-    public static IRatingCommentService driverService = retrofit.create(IRatingCommentService.class);
+    private static Gson getCustomGson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer());
+        return gsonBuilder.create();
+    }
+
+    public static IAccommodationService accommodationService = retrofit.create(IAccommodationService.class);
+    public static IUserService userService = retrofit.create(IUserService.class);
+    public static IRatingCommentService ratingCommentService = retrofit.create(IRatingCommentService.class);
 
 }

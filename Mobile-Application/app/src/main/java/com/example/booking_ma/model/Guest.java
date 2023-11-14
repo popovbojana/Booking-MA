@@ -12,6 +12,9 @@ public class Guest extends User {
 
     private List<Accommodation> favoriteAccommodations;
 
+    public Guest(){
+    }
+
     public Guest(String name, String surname) {
         super(name, surname);
     }
@@ -21,6 +24,4 @@ public class Guest extends User {
         this.ratingComments = ratingComments;
         this.favoriteAccommodations = favoriteAccommodations;
     }
-
-
 }
