@@ -5,6 +5,7 @@ import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
 import com.example.booking.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -22,7 +23,7 @@ public interface IUserService extends UserDetailsService {
     public boolean addNewUser(NewUserDTO newUserDTO) throws MessagingException, UnsupportedEncodingException;
     public boolean activateUser(Long userId) throws MessagingException, UnsupportedEncodingException;
 
-    TokenDTO loginUser(LoginDTO login) throws NotActivatedException;
+    TokenDTO loginUser(LoginDTO login) throws NotActivatedException, UsernameNotFoundException;
 
     void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId;
 

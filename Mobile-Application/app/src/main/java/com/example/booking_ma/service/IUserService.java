@@ -26,7 +26,7 @@ public interface IUserService {
     Call<UserDisplayDTO> getAllUsers();
 
     @POST(ServiceUtils.user + "/registration")
-    Call<ResponseMessage> registration(@Body NewUserDTO newUser);
+    Call<Void> registration(@Body NewUserDTO newUser);
 
     @PUT(ServiceUtils.user + "/update-user/{userId}")
     Call<ResponseMessage> updateUser(@Path("userId") Long userId, @Body UserUpdateDTO u);
