@@ -24,5 +24,6 @@ public class NewAccommodationDTO {
     private double latitude;
     private double longitude;
     private double finalRating;
+    private double standardPrice;
 
 }

@@ -49,7 +49,10 @@ public class AccommodationRatingCommentAdapter extends RecyclerView.Adapter<Acco
 
     @Override
     public int getItemCount() {
-        return comments.size();
+        if(comments.size()!=0 || comments.isEmpty() || comments!=null){
+            return comments.size();
+        }
+        return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

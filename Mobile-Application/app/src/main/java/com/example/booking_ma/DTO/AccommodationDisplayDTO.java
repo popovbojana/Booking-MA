@@ -23,11 +23,12 @@ public class AccommodationDisplayDTO {
     private double latitude;
     private double longitude;
     private double finalRating;
+    private double standardPrice;
 
     public AccommodationDisplayDTO() {
     }
 
-    public AccommodationDisplayDTO(Long id, Long ownersId, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityDisplayDTO> availabilities, int cancellationDeadlineInDays, boolean approved, boolean hasChanges, String address, double latitude, double longitude, double finalRating) {
+    public AccommodationDisplayDTO(Long id, Long ownersId, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityDisplayDTO> availabilities, int cancellationDeadlineInDays, boolean approved, boolean hasChanges, String address, double latitude, double longitude, double finalRating, double standardPrice) {
         this.id = id;
         this.ownersId = ownersId;
         this.name = name;
@@ -45,6 +46,7 @@ public class AccommodationDisplayDTO {
         this.latitude = latitude;
         this.longitude = longitude;
         this.finalRating = finalRating;
+        this.standardPrice = standardPrice;
     }
 
     public Long getId() {
@@ -181,5 +183,13 @@ public class AccommodationDisplayDTO {
 
     public void setFinalRating(double finalRating) {
         this.finalRating = finalRating;
+    }
+
+    public double getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(double standardPrice) {
+        this.standardPrice = standardPrice;
     }
 }

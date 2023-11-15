@@ -168,9 +168,9 @@ public class AccommodationsFragment extends Fragment {
         accommodation2.setRatingComments(accomodation2Comments);
         accommodation3.setRatingComments(accomodation3Comments);
 
-        AccommodationChange accommodationChange1 = new AccommodationChange(1L, accommodation1, "Change Accommodation 1", "Change description 1", "Change amentites 1", 1, 3, "Change TYPE", PriceType.PER_GUEST, new ArrayList<AvailabilityPrice>(), 5);
-        AccommodationChange accommodationChange2 = new AccommodationChange(2L, accommodation1, "Change Accommodation 1", "Change description 1", "Change amentites 1", 1, 3, "Change TYPE", PriceType.PER_GUEST, new ArrayList<AvailabilityPrice>(), 5);
-        AccommodationChange accommodationChange3 = new AccommodationChange(3L, accommodation1, "Change Accommodation 1", "Change description 1", "Change amentites 1", 1, 3, "Change TYPE", PriceType.PER_GUEST, new ArrayList<AvailabilityPrice>(), 5);
+        AccommodationChange accommodationChange1 = new AccommodationChange(1L, accommodation1, "Change Accommodation 1", "Change description 1", "Change amentites 1", 1, 3, "Change TYPE", PriceType.PER_GUEST, new ArrayList<AvailabilityPrice>(), 5, 10.0);
+        AccommodationChange accommodationChange2 = new AccommodationChange(2L, accommodation1, "Change Accommodation 1", "Change description 1", "Change amentites 1", 1, 3, "Change TYPE", PriceType.PER_GUEST, new ArrayList<AvailabilityPrice>(), 5, 15.0);
+        AccommodationChange accommodationChange3 = new AccommodationChange(3L, accommodation1, "Change Accommodation 1", "Change description 1", "Change amentites 1", 1, 3, "Change TYPE", PriceType.PER_GUEST, new ArrayList<AvailabilityPrice>(), 5, 18.0);
 
         accommodation1.setAccommodationChange(accommodationChange1);
         accommodation2.setAccommodationChange(accommodationChange2);

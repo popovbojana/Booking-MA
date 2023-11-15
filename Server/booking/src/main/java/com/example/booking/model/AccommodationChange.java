@@ -47,7 +47,9 @@ public class AccommodationChange {
 
     private int cancellationDeadlineInDays;
 
-    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays){
+    private double standardPrice;
+
+    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, double standardPrice){
         this.accommodation = accommodation;
         this.name = name;
         this.description = description;
@@ -65,6 +67,6 @@ public class AccommodationChange {
         for (AvailabilityPrice ap : availabilities){
             availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
         }
-        return new AccommodationChangeDisplayDTO(accommodation.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays);
+        return new AccommodationChangeDisplayDTO(accommodation.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, standardPrice);
     }
 }

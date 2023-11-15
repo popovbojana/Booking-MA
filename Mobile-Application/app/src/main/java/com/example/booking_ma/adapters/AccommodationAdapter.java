@@ -46,7 +46,7 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
 
 //        holder.accommodationImage.setImageResource(item.getImageResource());
         holder.accommodationName.setText(item.getName());
-        holder.accommodationPrice.setText(String.valueOf(999.99));
+        holder.accommodationPrice.setText(String.valueOf(item.getStandardPrice()));
         holder.accommodationStars.setRating(Float.valueOf(String.valueOf(item.getFinalRating())));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
                 intent.putExtra("a_name", item.getName());
                 intent.putExtra("a_img", R.drawable.item);
                 intent.putExtra("a_description", item.getDescription());
-                intent.putExtra("a_price", 999.99);
+                intent.putExtra("a_price", item.getStandardPrice());
                 intent.putExtra("a_stars", item.getFinalRating());
                 intent.putExtra("a_location_name", item.getAddress());
                 intent.putExtra("a_location_lat", item.getLatitude());

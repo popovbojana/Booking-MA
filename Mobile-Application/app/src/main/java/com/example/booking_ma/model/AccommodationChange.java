@@ -29,10 +29,12 @@ public class AccommodationChange implements Serializable {
 
     private int cancellationDeadlineInDays;
 
+    private double standardPrice;
+
     public AccommodationChange() {
     }
 
-    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays) {
+    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, double standardPrice) {
         this.accommodation = accommodation;
         this.name = name;
         this.description = description;
@@ -43,9 +45,10 @@ public class AccommodationChange implements Serializable {
         this.priceType = priceType;
         this.availabilities = availabilities;
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
+        this.standardPrice = standardPrice;
     }
 
-    public AccommodationChange(Long id, Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays) {
+    public AccommodationChange(Long id, Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, double standardPrice) {
         this.id = id;
         this.accommodation = accommodation;
         this.name = name;
@@ -57,6 +60,7 @@ public class AccommodationChange implements Serializable {
         this.priceType = priceType;
         this.availabilities = availabilities;
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
+        this.standardPrice = standardPrice;
     }
 
     public Long getId() {
@@ -145,5 +149,13 @@ public class AccommodationChange implements Serializable {
 
     public void setCancellationDeadlineInDays(int cancellationDeadlineInDays) {
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
+    }
+
+    public double getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(double standardPrice) {
+        this.standardPrice = standardPrice;
     }
 }
