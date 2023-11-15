@@ -1,5 +1,7 @@
 package com.example.booking_ma.service;
 
+import com.example.booking_ma.DTO.NewUserDTO;
+import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 
 import retrofit2.Call;
@@ -19,5 +21,8 @@ public interface IUserService {
 
     @GET(ServiceUtils.user + "/all-users")
     Call<UserDisplayDTO> getAllUsers();
+
+    @POST(ServiceUtils.user + "/registration")
+    Call<ResponseMessage> registration(@Body NewUserDTO newUser);
 
 }

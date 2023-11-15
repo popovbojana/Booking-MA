@@ -15,6 +15,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.booking_ma.DTO.NewUserDTO;
+import com.example.booking_ma.DTO.ResponseMessage;
+import com.example.booking_ma.model.enums.Role;
+import com.example.booking_ma.service.ServiceUtils;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegisterScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -68,7 +77,7 @@ public class RegisterScreen extends AppCompatActivity {
                 String surname = editTextSurname.getText().toString();
                 String address = editTextAddress.getText().toString();
                 String phoneNumber = editTextPhoneNumber.getText().toString();
-//                String role = "";
+                String role = "";
 
                 spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -110,6 +119,22 @@ public class RegisterScreen extends AppCompatActivity {
                     textViewError.setText("Phone number is required!");
                 } else {
                     //TODO: povezati sa serverom
+                    NewUserDTO newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
+                    Call<ResponseMessage> call = ServiceUtils.userService.registration(newUser);
+                    call.enqueue(new Callback<ResponseMessage>() {
+                        @Override
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            if(!response.isSuccessful()) return;
+                            Log.d("Success", response.body().getMessage());
+                            Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            Log.d("Fail", t.getMessage());
+                        }
+                    });
                     Log.i("Success", "Successfully registered!");
                     Toast.makeText(RegisterScreen.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                 }
