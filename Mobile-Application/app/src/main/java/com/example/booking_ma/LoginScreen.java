@@ -13,6 +13,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.booking_ma.DTO.LoginDTO;
+import com.example.booking_ma.DTO.TokenDTO;
+import com.example.booking_ma.service.ServiceUtils;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -58,9 +66,26 @@ public class LoginScreen extends AppCompatActivity {
                     Log.i("Error", "Empty password");
                     textViewError.setText("Password is required!");
                 } else {
-                    //TODO: povezati sa serverom
-                    Log.i("Success", "Logged in!");
-                    Toast.makeText(LoginScreen.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                    LoginDTO loginDTO = new LoginDTO(email, password);
+                    Call<TokenDTO> call = ServiceUtils.userService.login(loginDTO);
+                    call.enqueue(new Callback<TokenDTO>() {
+                        @Override
+                        public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
+                            if(!response.isSuccessful()){
+                                Log.i("Error", response.message());
+                                Toast.makeText(LoginScreen.this, response.message(), Toast.LENGTH_SHORT).show();
+                            };
+                            Log.i("Success", "Token:" + response.body().getAccessToken());
+                            Toast.makeText(LoginScreen.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginScreen.this, GuestMainScreen.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Call<TokenDTO> call, Throwable t) {
+                            Log.i("Fail", t.getMessage());
+                        }
+                    });
                 }
             }
         });

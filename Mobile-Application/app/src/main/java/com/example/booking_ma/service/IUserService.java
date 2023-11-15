@@ -1,7 +1,9 @@
 package com.example.booking_ma.service;
 
+import com.example.booking_ma.DTO.LoginDTO;
 import com.example.booking_ma.DTO.NewUserDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
+import com.example.booking_ma.DTO.TokenDTO;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
 
@@ -28,5 +30,8 @@ public interface IUserService {
 
     @PUT(ServiceUtils.user + "/update-user/{userId}")
     Call<ResponseMessage> updateUser(@Path("userId") Long userId, @Body UserUpdateDTO u);
+
+    @POST(ServiceUtils.user + "/login")
+    Call<TokenDTO> login(@Body LoginDTO loginDTO);
 
 }
