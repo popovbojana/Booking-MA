@@ -132,9 +132,9 @@ public class RegisterScreen extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 try {
-                                    String errorMessage = response.errorBody().string();                                    Log.e("Error", "Login failed.");
+                                    String errorMessage = response.errorBody().string();
                                     Log.e("Error", "Registration failed:" + errorMessage);
-                                    Toast.makeText(RegisterScreen.this, "Registration: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterScreen.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                     Log.e("Error", "Registration failed.");
