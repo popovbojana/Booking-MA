@@ -105,21 +105,25 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public TokenDTO loginUser(LoginDTO login) throws NotActivatedException {
-        User user = loadUserByUsername(login.getEmail());
-        System.out.println(user.getEmail());
+    public TokenDTO loginUser(LoginDTO login) throws NotActivatedException, UsernameNotFoundException {
+        try{
+            User user = loadUserByUsername(login.getEmail());
 
-        if(!user.isActivated()){
-            throw new NotActivatedException("Not activated account!");
+            if(!user.isActivated()){
+                throw new NotActivatedException("Not activated account!");
+            }
+
+            TokenDTO token = new TokenDTO();
+            token.setAccessToken(this.tokenUtils.generateToken(user));
+            token.setRefreshToken(this.tokenUtils.generateRefreshToken(user));
+            Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return token;
+        } catch (UsernameNotFoundException ex) {
+            throw new UsernameNotFoundException(String.format("No user found with email '%s'.", login.getEmail()));
         }
 
-        TokenDTO token = new TokenDTO();
-        token.setAccessToken(this.tokenUtils.generateToken(user));
-        token.setRefreshToken(this.tokenUtils.generateRefreshToken(user));
-        Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return token;
     }
 
     @Override

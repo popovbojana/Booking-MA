@@ -119,22 +119,22 @@ public class RegisterScreen extends AppCompatActivity {
                     textViewError.setText("Phone number is required!");
                 } else {
                     NewUserDTO newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
-                    Call<ResponseMessage> call = ServiceUtils.userService.registration(newUser);
-                    call.enqueue(new Callback<ResponseMessage>() {
+                    Call<Void> call = ServiceUtils.userService.registration(newUser);
+                    call.enqueue(new Callback<Void>() {
                         @Override
-                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                        public void onResponse(Call<Void> call, Response<Void> response) {
                             if(!response.isSuccessful()) {
-                                Log.i("Error", response.message());
-                                Toast.makeText(RegisterScreen.this, response.message(), Toast.LENGTH_SHORT).show();
+                                Log.i("Error", "Unsuccessful registration! Account with this email already exists.");
+                                Toast.makeText(RegisterScreen.this, "Unsuccessful registration! Account with this email already exists.", Toast.LENGTH_SHORT).show();
                             };
-                            Log.i("Success", response.message());
-                            Toast.makeText(RegisterScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.i("Success", "Successfully registered!");
+                            Toast.makeText(RegisterScreen.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
                             startActivity(intent);
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                        public void onFailure(Call<Void> call, Throwable t) {
                             Log.i("Fail", t.getMessage());
                         }
                     });
