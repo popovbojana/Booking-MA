@@ -3,6 +3,7 @@ package com.example.booking.model;
 import com.example.booking.dto.AccommodationDisplayDTO;
 import com.example.booking.dto.AvailabilityDisplayDTO;
 import com.example.booking.dto.UserDisplayDTO;
+import com.example.booking.dto.UserUpdateDTO;
 import com.example.booking.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -69,6 +71,7 @@ public class User implements UserDetails {
         this.reportedReason = null;
         this.blocked = false;
     }
+
 
     @JsonIgnore
     @Override

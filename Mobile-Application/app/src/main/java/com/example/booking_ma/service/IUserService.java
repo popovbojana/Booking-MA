@@ -3,6 +3,7 @@ package com.example.booking_ma.service;
 import com.example.booking_ma.DTO.NewUserDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
+import com.example.booking_ma.DTO.UserUpdateDTO;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,5 +25,8 @@ public interface IUserService {
 
     @POST(ServiceUtils.user + "/registration")
     Call<ResponseMessage> registration(@Body NewUserDTO newUser);
+
+    @PUT(ServiceUtils.user + "/update-user/{userId}")
+    Call<ResponseMessage> updateUser(@Path("userId") Long userId, @Body UserUpdateDTO u);
 
 }

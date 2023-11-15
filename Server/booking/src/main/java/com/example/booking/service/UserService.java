@@ -1,9 +1,6 @@
 package com.example.booking.service;
 
-import com.example.booking.dto.LoginDTO;
-import com.example.booking.dto.NewUserDTO;
-import com.example.booking.dto.ReportedUserReasonDTO;
-import com.example.booking.dto.TokenDTO;
+import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
 import com.example.booking.model.User;
@@ -24,6 +21,8 @@ import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -46,6 +45,16 @@ public class UserService implements IUserService {
     @Autowired
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public Optional<User> getUser(Long id){
+        return this.userRepository.findById(id);
+    }
+
+    @Override
+    public void add(User user){
+        this.userRepository.save(user);
     }
 
     @Override
@@ -134,6 +143,28 @@ public class UserService implements IUserService {
             this.userRepository.save(owner);
         } else {
             throw new NoDataWithId("There is no owner with this id!");
+        }
+    }
+
+    @Override
+    public void update(Long userId, UserUpdateDTO userUpdate) throws NoDataWithId {
+        if (this.userRepository.findById(userId).isPresent()){
+            User user = this.userRepository.findById(userId).get();
+            if(!userUpdate.getName().equals("")){
+                user.setName(userUpdate.getName());
+            }
+            if(!userUpdate.getSurname().equals("")){
+                user.setSurname(userUpdate.getSurname());
+            }
+            if(!userUpdate.getPhoneNumber().equals("")){
+                user.setEmail(userUpdate.getPhoneNumber());
+            }
+            if(!userUpdate.getEmail().equals("")){
+                user.setEmail(userUpdate.getEmail());
+            }
+            this.userRepository.save(user);
+        } else {
+            throw new NoDataWithId("There is no user with this id!");
         }
     }
 

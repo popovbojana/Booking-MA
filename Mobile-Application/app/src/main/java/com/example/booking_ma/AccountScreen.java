@@ -1,6 +1,7 @@
 package com.example.booking_ma;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,9 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.booking_ma.DTO.ResponseMessage;
+import com.example.booking_ma.DTO.UserUpdateDTO;
+import com.example.booking_ma.service.ServiceUtils;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountScreen extends AppCompatActivity {
 
@@ -105,7 +115,9 @@ public class AccountScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextName.setEnabled(false);
-
+                String name = editTextName.getText().toString();
+                UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -113,7 +125,9 @@ public class AccountScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextSurname.setEnabled(false);
-
+                String surname = editTextSurname.getText().toString();
+                UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -121,7 +135,9 @@ public class AccountScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextPhoneNumber.setEnabled(false);
-
+                String phoneNumber = editTextPhoneNumber.getText().toString();
+                UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -129,7 +145,9 @@ public class AccountScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextEmail.setEnabled(false);
-
+                String email = editTextEmail.getText().toString();
+                UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -249,4 +267,24 @@ public class AccountScreen extends AppCompatActivity {
         editTextEmail.setEnabled(false);
         editTextPassword.setEnabled(false);
     }
+
+    private void updateUser(UserUpdateDTO userUpdateDTO) {
+        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(1L, userUpdateDTO);
+        call.enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                if (!response.isSuccessful()) {
+                    Log.i("Error", response.message());
+                };
+                Log.d("Success", response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                Log.d("Fail", t.getMessage());
+            }
+        });
+    }
+
 }
+

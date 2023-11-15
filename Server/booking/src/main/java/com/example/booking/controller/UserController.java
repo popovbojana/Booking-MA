@@ -82,4 +82,15 @@ public class UserController {
         }
         return new ResponseEntity<>(userDisplay, HttpStatus.OK);
     }
+
+    @PutMapping(value = "update-user/{userId}")
+//    @PreAuthorize("hasAnyAuthority('GUEST','OWNER','ADMIN')")
+    public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId, @RequestBody UserUpdateDTO userUpdate) {
+        try {
+            this.userService.update(userId, userUpdate);
+            return new ResponseEntity<>("Successfully updated user!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
