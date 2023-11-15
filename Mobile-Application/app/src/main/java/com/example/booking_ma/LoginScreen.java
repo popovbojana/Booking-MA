@@ -17,6 +17,8 @@ import com.example.booking_ma.DTO.LoginDTO;
 import com.example.booking_ma.DTO.TokenDTO;
 import com.example.booking_ma.service.ServiceUtils;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,15 +73,29 @@ public class LoginScreen extends AppCompatActivity {
                     call.enqueue(new Callback<TokenDTO>() {
                         @Override
                         public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
-                            if(!response.isSuccessful()){
-                                Log.i("Error", response.message());
-                                Toast.makeText(LoginScreen.this, response.message(), Toast.LENGTH_SHORT).show();
-                            };
-                            Log.i("Success", "Token:" + response.body().getAccessToken());
-                            Toast.makeText(LoginScreen.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginScreen.this, GuestMainScreen.class);
-                            startActivity(intent);
+                            if (response.isSuccessful()) {
+                                TokenDTO tokenDTO = response.body();
+                                if (tokenDTO != null) {
+                                    String token = tokenDTO.getAccessToken();
+                                    Log.i("Success", "Token: " + token);
+                                    Toast.makeText(LoginScreen.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.e("Error", "Login failed.");
+                                    Toast.makeText(LoginScreen.this, "Login failed. Invalid server response.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                try {
+                                    String errorMessage = response.errorBody().string();                                    Log.e("Error", "Login failed.");
+                                    Log.e("Error", "Login failed:" + errorMessage);
+                                    Toast.makeText(LoginScreen.this, "Login failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Log.e("Error", "Login failed.");
+                                    Toast.makeText(LoginScreen.this, "Login failed. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
+
 
                         @Override
                         public void onFailure(Call<TokenDTO> call, Throwable t) {
