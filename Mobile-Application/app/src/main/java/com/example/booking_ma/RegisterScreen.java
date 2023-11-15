@@ -118,25 +118,26 @@ public class RegisterScreen extends AppCompatActivity {
                     Log.i("Error", "Phone number empty");
                     textViewError.setText("Phone number is required!");
                 } else {
-                    //TODO: povezati sa serverom
                     NewUserDTO newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
                     Call<ResponseMessage> call = ServiceUtils.userService.registration(newUser);
                     call.enqueue(new Callback<ResponseMessage>() {
                         @Override
                         public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                            if(!response.isSuccessful()) return;
-                            Log.d("Success", response.body().getMessage());
+                            if(!response.isSuccessful()) {
+                                Log.i("Error", response.message());
+                                Toast.makeText(RegisterScreen.this, response.message(), Toast.LENGTH_SHORT).show();
+                            };
+                            Log.i("Success", response.message());
+                            Toast.makeText(RegisterScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
                             startActivity(intent);
                         }
 
                         @Override
                         public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                            Log.d("Fail", t.getMessage());
+                            Log.i("Fail", t.getMessage());
                         }
                     });
-                    Log.i("Success", "Successfully registered!");
-                    Toast.makeText(RegisterScreen.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
                 }
 
             }
