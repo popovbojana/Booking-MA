@@ -1,11 +1,14 @@
 package com.example.booking_ma.service;
 
+import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.LoginDTO;
 import com.example.booking_ma.DTO.NewUserDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.TokenDTO;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,8 +25,11 @@ public interface IUserService {
                     "Content-Type:application/json"}
     )
 
+    @GET(ServiceUtils.user + "/user-display/{userId}")
+    Call<UserDisplayDTO> getUserDisplay(@Path("userId") Long userId);
+
     @GET(ServiceUtils.user + "/all-users")
-    Call<UserDisplayDTO> getAllUsers();
+    Call<List<UserDisplayDTO>> getAllUsers();
 
     @POST(ServiceUtils.user + "/registration")
     Call<Void> registration(@Body NewUserDTO newUser);
@@ -34,6 +40,8 @@ public interface IUserService {
     @POST(ServiceUtils.user + "/login")
     Call<TokenDTO> login(@Body LoginDTO loginDTO);
 
+    @PUT(ServiceUtils.user + "/change-password/{userId}")
+    Call<ResponseMessage> changePassword(@Path("userId") Long userId, @Body ChangePasswordDTO u);
     
 
 }

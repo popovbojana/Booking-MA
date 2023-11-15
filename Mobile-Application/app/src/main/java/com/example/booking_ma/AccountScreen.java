@@ -16,7 +16,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
+import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
 import com.example.booking_ma.service.ServiceUtils;
 
@@ -73,7 +75,7 @@ public class AccountScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        setDataToEditText();
+        loadUser();
         setEditTextsToFalse();
 
         buttonEditName.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +119,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextName.setEnabled(false);
                 String name = editTextName.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
-                updateUser(userUpdateDTO);
+                updateUser(1L, userUpdateDTO);
             }
         });
 
@@ -127,7 +129,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextSurname.setEnabled(false);
                 String surname = editTextSurname.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
-                updateUser(userUpdateDTO);
+                updateUser(1L, userUpdateDTO);
             }
         });
 
@@ -137,7 +139,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextPhoneNumber.setEnabled(false);
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
-                updateUser(userUpdateDTO);
+                updateUser(1L, userUpdateDTO);
             }
         });
 
@@ -147,7 +149,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextEmail.setEnabled(false);
                 String email = editTextEmail.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
-                updateUser(userUpdateDTO);
+                updateUser(1L, userUpdateDTO);
             }
         });
 
@@ -200,6 +202,7 @@ public class AccountScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textViewError.setText("");
+
                 String currentPassword = editTextCurrentPassword.getText().toString();
                 String newPassword = editTextNewPassword.getText().toString();
                 String confirmPassword = editTextConfirmPassword.getText().toString();
@@ -218,6 +221,7 @@ public class AccountScreen extends AppCompatActivity {
                 else{
                     Log.i("Success", "Good password");
                     editTextPassword.setText(newPassword);
+                    changePassword(1L, new ChangePasswordDTO(newPassword, currentPassword));
                     dialog.dismiss();
                 }
             }
@@ -251,13 +255,34 @@ public class AccountScreen extends AppCompatActivity {
         dialog.show();
     }
 
+    private void loadUser() {
 
-    private void setDataToEditText(){
-        editTextName.setText("Name");
-        editTextSurname.setText("Surname");
-        editTextPhoneNumber.setText("Phone number");
-        editTextEmail.setText("Email");
-        editTextPassword.setText("Password");
+        Call<UserDisplayDTO> call = ServiceUtils.userService.getUserDisplay(1L);
+        call.enqueue(new Callback<UserDisplayDTO>() {
+            @Override
+            public void onResponse(Call<UserDisplayDTO> call, Response<UserDisplayDTO> response) {
+                if (response.isSuccessful()) {
+                    Log.i("Success", response.message());
+
+                    setDataToEditText(response.body());
+                } else {
+                    onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDisplayDTO> call, Throwable t) {
+                Log.d("Fail", t.getMessage());
+            }
+        });
+    }
+
+    private void setDataToEditText(UserDisplayDTO userDisplay) {
+        editTextName.setText(userDisplay.getName());
+        editTextSurname.setText(userDisplay.getSurname());
+        editTextPhoneNumber.setText(userDisplay.getPhoneNumber());
+        editTextEmail.setText(userDisplay.getEmail());
+        editTextPassword.setText("marko123");
     }
 
     private void setEditTextsToFalse(){
@@ -268,8 +293,8 @@ public class AccountScreen extends AppCompatActivity {
         editTextPassword.setEnabled(false);
     }
 
-    private void updateUser(UserUpdateDTO userUpdateDTO) {
-        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(1L, userUpdateDTO);
+    private void updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
+        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -277,6 +302,26 @@ public class AccountScreen extends AppCompatActivity {
                     Log.i("Error", response.message());
                 };
                 Log.d("Success", response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                Log.d("Fail", t.getMessage());
+            }
+        });
+    }
+
+    private void changePassword(Long userId, ChangePasswordDTO changePasswordDTO) {
+        Call<ResponseMessage> call = ServiceUtils.userService.changePassword(userId, changePasswordDTO);
+        call.enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                if (response.isSuccessful()) {
+                    Log.i("Success", response.message());
+                }
+                else{
+                    onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                }
             }
 
             @Override

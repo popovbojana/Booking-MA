@@ -124,4 +124,17 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/user-display/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    //    @PreAuthorize("hasAnyAuthority('GUEST','OWNER','ADMIN')")
+    public ResponseEntity<?> getUserDisplay(@PathVariable("userId") Long userId) {
+        try {
+            User user = userService.getUser(userId).orElseThrow(() -> new NoDataWithId("User not found"));
+            UserDisplayDTO userDisplay = user.parseToDisplay();
+
+            return new ResponseEntity<>(userDisplay, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
