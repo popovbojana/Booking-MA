@@ -22,6 +22,6 @@ public class AccommodationChangesDTO {
     private PriceType priceType;
     private List<NewAvailabilityPriceDTO> availabilities;
     private int cancellationDeadlineInDays;
-
+    private double standardPrice;
 
 }

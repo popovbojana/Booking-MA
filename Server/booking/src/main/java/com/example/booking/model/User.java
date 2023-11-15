@@ -1,5 +1,9 @@
 package com.example.booking.model;
 
+import com.example.booking.dto.AccommodationDisplayDTO;
+import com.example.booking.dto.AvailabilityDisplayDTO;
+import com.example.booking.dto.UserDisplayDTO;
+import com.example.booking.dto.UserUpdateDTO;
 import com.example.booking.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -11,6 +15,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,6 +51,12 @@ public class User implements UserDetails {
 
     private LocalDateTime activationLinkSent;
 
+    private boolean reported;
+
+    private String reportedReason;
+
+    private boolean blocked;
+
     public User(String email, String password, String name, String surname, String address, String phoneNumber, Role role){
         this.email = email;
         this.password = password;
@@ -55,7 +67,11 @@ public class User implements UserDetails {
         this.role = role;
         this.activated = false;
         this.activationLinkSent = LocalDateTime.now();
+        this.reported = false;
+        this.reportedReason = null;
+        this.blocked = false;
     }
+
 
     @JsonIgnore
     @Override
@@ -99,5 +115,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDisplayDTO parseToDisplay() {
+        return new UserDisplayDTO(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked);
     }
 }

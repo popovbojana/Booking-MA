@@ -1,11 +1,12 @@
 package com.example.booking.service;
 
+import com.example.booking.dto.AccommodationDisplayDTO;
 import com.example.booking.dto.NewAccommodationDTO;
 import com.example.booking.dto.NewAvailabilityPriceDTO;
-import com.example.booking.model.Accommodation;
-import com.example.booking.model.AccommodationChange;
-import com.example.booking.model.AvailabilityPrice;
-import com.example.booking.model.Owner;
+import com.example.booking.dto.FavoriteAccommodationDTO;
+import com.example.booking.exceptions.NoDataWithId;
+import com.example.booking.model.*;
+import com.example.booking.model.enums.Role;
 import com.example.booking.repository.AccommodationChangeRepository;
 import com.example.booking.repository.AccommodationRepository;
 import com.example.booking.repository.AvailabilityPriceRepository;
@@ -34,12 +35,17 @@ public class AccommodationService implements IAccommodationService {
     }
 
     @Override
+    public List<Accommodation> GetAll(){
+        return this.accommodationRepository.findAll();
+    }
+
+    @Override
     public void addNewAccommodation(Long ownersId, NewAccommodationDTO newAccommodationDTO) {
         Owner owner = (Owner) this.userRepository.findById(ownersId).get();
 
         List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
 
-        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays());
+        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays(), newAccommodationDTO.getAddress(), newAccommodationDTO.getLatitude(), newAccommodationDTO.getLongitude(), newAccommodationDTO.getFinalRating(), newAccommodationDTO.getStandardPrice());
         this.accommodationRepository.save(accommodation);
 
         for (NewAvailabilityPriceDTO ap : newAccommodationDTO.getAvailability()){
@@ -154,5 +160,59 @@ public class AccommodationService implements IAccommodationService {
     @Override
     public List<Accommodation> getAll() {
         return this.accommodationRepository.findAll();
+    }
+
+    @Override
+    public void addToFavorites(FavoriteAccommodationDTO favAccommodation) throws NoDataWithId {
+        if (this.userRepository.findById(favAccommodation.getGuestsId()).isPresent() && this.userRepository.findById(favAccommodation.getGuestsId()).get().getRole() == Role.GUEST){
+            if (this.accommodationRepository.findById(favAccommodation.getAccommodationsId()).isPresent()){
+                Guest guest = (Guest) this.userRepository.findById(favAccommodation.getGuestsId()).get();
+                Accommodation accommodation = this.accommodationRepository.findById(favAccommodation.getAccommodationsId()).get();
+                if (!guest.getFavoriteAccommodations().contains(accommodation)){
+                    guest.getFavoriteAccommodations().add(accommodation);
+                    this.userRepository.save(guest);
+                } else {
+                    throw new NoDataWithId("This accommodation is already in your favorites!");
+                }
+            } else {
+                throw new NoDataWithId("There is no accommodation with this id!");
+            }
+        } else {
+            throw new NoDataWithId("There is no guest with this id!");
+        }
+    }
+
+    @Override
+    public void removeFromFavorites(FavoriteAccommodationDTO favAccommodation) throws NoDataWithId {
+        if (this.userRepository.findById(favAccommodation.getGuestsId()).isPresent() && this.userRepository.findById(favAccommodation.getGuestsId()).get().getRole() == Role.GUEST){
+            if (this.accommodationRepository.findById(favAccommodation.getAccommodationsId()).isPresent()){
+                Guest guest = (Guest) this.userRepository.findById(favAccommodation.getGuestsId()).get();
+                Accommodation accommodation = this.accommodationRepository.findById(favAccommodation.getAccommodationsId()).get();
+                if (guest.getFavoriteAccommodations().contains(accommodation)){
+                    guest.getFavoriteAccommodations().remove(accommodation);
+                    this.userRepository.save(guest);
+                } else {
+                    throw new NoDataWithId("There is no accommodation with this id in your favorites!");
+                }
+            } else {
+                throw new NoDataWithId("There is no accommodation with this id!");
+            }
+        } else {
+            throw new NoDataWithId("There is no guest with this id!");
+        }
+    }
+
+    @Override
+    public List<AccommodationDisplayDTO> getAllFavoritesForGuest(Long id) throws NoDataWithId {
+        if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST) {
+            Guest guest = this.userRepository.findGuestById(id);
+            List<AccommodationDisplayDTO> display = new ArrayList<>();
+            for (Accommodation a : guest.getFavoriteAccommodations()){
+                display.add(a.parseToDisplay());
+            }
+            return display;
+        } else {
+            throw new NoDataWithId("There is no guest with this id!");
+        }
     }
 }

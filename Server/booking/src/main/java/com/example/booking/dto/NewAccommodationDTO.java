@@ -20,5 +20,10 @@ public class NewAccommodationDTO {
     private PriceType priceType;
     private List<NewAvailabilityPriceDTO> availability;
     private int cancellationDeadlineInDays;
+    private String address;
+    private double latitude;
+    private double longitude;
+    private double finalRating;
+    private double standardPrice;
 
 }

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/api/accommodation/")
 public class AccommodationController {
 
@@ -31,7 +30,7 @@ public class AccommodationController {
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<?> addNewAccommodation(@PathVariable("ownersId") Long ownersId, @RequestBody NewAccommodationDTO newAccommodation){
         this.accommodationService.addNewAccommodation(ownersId, newAccommodation);
-        return new ResponseEntity<>("Successfully saved new accommodation! Waiting for admin to approve.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Successfully saved new accommodation! Waiting for admin to approve."), HttpStatus.OK);
     }
 
     @GetMapping(value = "all-accommodation/{ownersId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,12 +48,12 @@ public class AccommodationController {
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<?> changeAccommodation(@PathVariable("id") Long id, @RequestBody AccommodationChangesDTO changes){
         this.accommodationChangeService.addAccommodationChange(id, changes);
-        return new ResponseEntity<>("Accommodation changes saved! Waiting for admin to approve them.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Accommodation changes saved! Waiting for admin to approve them."), HttpStatus.OK);
     }
 
     @GetMapping(value = "all-accommodation", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST')")
-    public ResponseEntity<?> getallAccommodation(){
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST')")
+    public ResponseEntity<?> getAllAccommodation(){
         List<Accommodation> accommodations = this.accommodationService.getAll();
         List<AccommodationDisplayDTO> accommodationDisplay = new ArrayList<>();
         for (Accommodation a : accommodations){
@@ -89,23 +88,55 @@ public class AccommodationController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> approveNewAccommodation(@PathVariable("id") Long id, @RequestBody ApprovalDTO approvalDTO){
         if(approvalDTO.isApproval() && this.accommodationService.approveNewAccommodation(id, true)){
-            return new ResponseEntity<>("Approved accommodation!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Approved accommodation!"), HttpStatus.OK);
         }
         if(!approvalDTO.isApproval() && this.accommodationService.approveNewAccommodation(id, false)){
-            return new ResponseEntity<>("Disapproved accommodation!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Disapproved accommodation!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>("Accommodation with this id does not exist.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Accommodation with this id does not exist."), HttpStatus.OK);
     }
 
     @PutMapping(value = "approval-changes-accommodation/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> approveChangesAccommodation(@PathVariable("id") Long id, @RequestBody ApprovalDTO approvalDTO){
         if(approvalDTO.isApproval() && this.accommodationService.approveAccommodationChanges(id, true)){
-            return new ResponseEntity<>("Approved changes for accommodation!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Approved changes for accommodation!"), HttpStatus.OK);
         }
         if(!approvalDTO.isApproval() && this.accommodationService.approveAccommodationChanges(id, false)){
-            return new ResponseEntity<>("Disapproved changes for accommodation!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Disapproved changes for accommodation!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>("Accommodation with this id does not exist.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Accommodation with this id does not exist."), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "add-to-favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> addToFavorites(@RequestBody FavoriteAccommodationDTO favAccommodation){
+        try{
+            this.accommodationService.addToFavorites(favAccommodation);
+            return new ResponseEntity<>(new MessageDTO("Successfully added accommodation to your favorites!"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "remove-from-favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> removeFromFavorites(@RequestBody FavoriteAccommodationDTO favAccommodation){
+        try{
+            this.accommodationService.removeFromFavorites(favAccommodation);
+            return new ResponseEntity<>(new MessageDTO("Successfully removed accommodation to your favorites!"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "all-favorites/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('GUEST')")
+    public ResponseEntity<?> getAllFavoritesForGuest(@PathVariable("id") Long id){
+        try{
+            return new ResponseEntity<>(this.accommodationService.getAllFavoritesForGuest(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

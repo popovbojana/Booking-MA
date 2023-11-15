@@ -1,7 +1,9 @@
 package com.example.booking_ma;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +15,26 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.auth0.android.jwt.JWT;
+import com.example.booking_ma.DTO.LoginDTO;
+import com.example.booking_ma.DTO.Token;
+import com.example.booking_ma.DTO.TokenDTO;
+import com.example.booking_ma.service.ServiceUtils;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin, buttonRegister;
     private TextView textViewError;
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +74,58 @@ public class LoginScreen extends AppCompatActivity {
                     Log.i("Error", "Empty password");
                     textViewError.setText("Password is required!");
                 } else {
-                    //TODO: povezati sa serverom
-                    Log.i("Success", "Logged in!");
-                    Toast.makeText(LoginScreen.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                    LoginDTO loginDTO = new LoginDTO(email, password);
+                    Call<TokenDTO> call = ServiceUtils.userService.login(loginDTO);
+                    call.enqueue(new Callback<TokenDTO>() {
+                        @Override
+                        public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
+                            if (response.isSuccessful()) {
+                                TokenDTO tokenDTO = response.body();
+                                if (tokenDTO != null) {
+                                    String token = tokenDTO.getAccessToken();
+                                    Log.i("Success", "Token: " + token);
+                                    Toast.makeText(LoginScreen.this, "Login successful!", Toast.LENGTH_SHORT).show();
+
+                                    JWT jwt = new JWT(token);
+
+                                    Long id = jwt.getClaim("id").asLong();
+                                    String email = jwt.getClaim("sub").asString();
+                                    String role = jwt.getClaim("role").asString();
+
+                                    setToken(tokenDTO);
+                                    setPreferences(id, email, role, tokenDTO);
+                                    setTokenPreference(tokenDTO.getAccessToken(), tokenDTO.getRefreshToken());
+                                    if(role.equalsIgnoreCase("OWNER")){
+//                                        startActivity(new Intent(LoginScreen.this, HostMainScreen.class));
+                                    }
+                                    else if(role.equalsIgnoreCase("GUEST")) {
+                                        startActivity(new Intent(LoginScreen.this, GuestMainScreen.class));
+                                    } else if (role.equalsIgnoreCase("ADMIN")) {
+//                                        startActivity(new Intent(LoginScreen.this, AdministratorMainScreen.class));
+                                    }
+                                } else {
+                                    Log.e("Error", "Login failed.");
+                                    Toast.makeText(LoginScreen.this, "Login failed. Invalid server response.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                try {
+                                    String errorMessage = response.errorBody().string();                                    Log.e("Error", "Login failed.");
+                                    Log.e("Error", "Login failed:" + errorMessage);
+                                    Toast.makeText(LoginScreen.this, "Login failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Log.e("Error", "Login failed.");
+                                    Toast.makeText(LoginScreen.this, "Login failed. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+
+                        @Override
+                        public void onFailure(Call<TokenDTO> call, Throwable t) {
+                            Log.i("Fail", t.getMessage());
+                        }
+                    });
                 }
             }
         });
@@ -73,4 +138,41 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
     }
+
+    private void setToken(TokenDTO loginResponse) {
+        Token tokenDTO = Token.getInstance();
+        tokenDTO.setAccessToken(loginResponse.getAccessToken());
+        tokenDTO.setRefreshToken(loginResponse.getRefreshToken());
+    }
+
+    private void deleteTokenPreferences() {
+        Token tokenDTO = Token.getInstance();
+        tokenDTO.setAccessToken(null);
+        tokenDTO.setRefreshToken(null);
+        this.sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = this.sharedPreferences.edit();
+        spEditor.clear().commit();
+    }
+
+    private void setTokenPreference(String token, String refreshToken) {
+        this.sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = this.sharedPreferences.edit();
+        spEditor.putString("pref_accessToken", token);
+        spEditor.putString("pref_refreshToken", refreshToken);
+    }
+
+    private void setSharedPreferences(Long id, String email, String role){
+        this.sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = this.sharedPreferences.edit();
+        spEditor.putLong("pref_id", id);
+        spEditor.putString("pref_email", email);
+        spEditor.putString("pref_role", role);
+        spEditor.apply();
+    }
+
+    private void setPreferences(Long id, String email, String role, TokenDTO loginResponse){
+        setSharedPreferences(id, email, role);
+        setTokenPreference(loginResponse.getAccessToken(), loginResponse.getRefreshToken());
+    }
+
 }

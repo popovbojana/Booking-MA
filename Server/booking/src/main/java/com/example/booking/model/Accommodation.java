@@ -56,8 +56,21 @@ public class Accommodation {
     @JoinColumn(name = "change_id")
     private AccommodationChange accommodationChange;
 
+    @OneToMany(mappedBy = "accommodation")
+    private List<RatingComment> ratingComments;
 
-    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays){
+    private String address;
+
+    private double latitude;
+
+    private double longitude;
+
+    private double finalRating;
+
+    private double standardPrice;
+
+
+    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, String address, double latitude, double longitude, double finalRating, double standardPrice){
         this.owner = owner;
         this.name = name;
         this.description = description;
@@ -71,6 +84,11 @@ public class Accommodation {
         this.approved = false;
         this.hasChanges = false;
         this.accommodationChange = null;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.finalRating = finalRating;
+        this.standardPrice = standardPrice;
     }
 
     public AccommodationDisplayDTO parseToDisplay() {
@@ -78,6 +96,6 @@ public class Accommodation {
         for (AvailabilityPrice ap : availabilities){
             availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
         }
-        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges);
+        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges, address, longitude, latitude, finalRating, standardPrice);
     }
 }

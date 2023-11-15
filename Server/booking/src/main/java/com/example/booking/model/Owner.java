@@ -21,4 +21,7 @@ public class Owner extends User{
     @OneToMany(mappedBy = "owner")
     private List<Accommodation> accommodations;
 
+    @OneToMany(mappedBy = "owner")
+    private List<RatingComment> ratingComments;
+
 }

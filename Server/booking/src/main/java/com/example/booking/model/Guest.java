@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Setter
@@ -15,4 +15,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "guests")
 public class Guest extends User{
+
+    @OneToMany(mappedBy = "guest")
+    private List<RatingComment> ratingComments;
+
+    @ManyToMany
+    private List<Accommodation> favoriteAccommodations;
 }
