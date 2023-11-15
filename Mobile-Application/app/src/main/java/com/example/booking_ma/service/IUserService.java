@@ -34,4 +34,6 @@ public interface IUserService {
     @POST(ServiceUtils.user + "/login")
     Call<TokenDTO> login(@Body LoginDTO loginDTO);
 
+    
+
 }
