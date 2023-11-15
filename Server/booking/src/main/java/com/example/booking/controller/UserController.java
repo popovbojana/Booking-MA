@@ -39,7 +39,7 @@ public class UserController {
         if(this.userService.addNewUser(newUser)){
             return new ResponseEntity<>(new MessageDTO("Successfully registered!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new MessageDTO("Unsuccessful registration! Account with this email already exists."), HttpStatus.OK);
+        return new ResponseEntity<>("Unsuccessful registration! Account with this email already exists.", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "activation/{userId}")
@@ -55,7 +55,7 @@ public class UserController {
         try{
             return new ResponseEntity<>(this.userService.loginUser(login), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

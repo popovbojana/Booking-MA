@@ -20,6 +20,8 @@ import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.model.enums.Role;
 import com.example.booking_ma.service.ServiceUtils;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,22 +121,30 @@ public class RegisterScreen extends AppCompatActivity {
                     textViewError.setText("Phone number is required!");
                 } else {
                     NewUserDTO newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
-                    Call<Void> call = ServiceUtils.userService.registration(newUser);
-                    call.enqueue(new Callback<Void>() {
+                    Call<ResponseMessage> call = ServiceUtils.userService.registration(newUser);
+                    call.enqueue(new Callback<ResponseMessage>() {
                         @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            if(!response.isSuccessful()) {
-                                Log.i("Error", "Unsuccessful registration! Account with this email already exists.");
-                                Toast.makeText(RegisterScreen.this, "Unsuccessful registration! Account with this email already exists.", Toast.LENGTH_SHORT).show();
-                            };
-                            Log.i("Success", "Successfully registered!");
-                            Toast.makeText(RegisterScreen.this, "Successfully registered!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
-                            startActivity(intent);
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            if(response.isSuccessful()) {
+                                Log.i("Success", response.body().getMessage());
+                                Toast.makeText(RegisterScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+                                startActivity(intent);
+                            } else {
+                                try {
+                                    String errorMessage = response.errorBody().string();
+                                    Log.e("Error", "Registration failed:" + errorMessage);
+                                    Toast.makeText(RegisterScreen.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Log.e("Error", "Registration failed.");
+                                    Toast.makeText(RegisterScreen.this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
                             Log.i("Fail", t.getMessage());
                         }
                     });
