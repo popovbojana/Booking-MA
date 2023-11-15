@@ -37,17 +37,17 @@ public class UserController {
     @PostMapping(value = "registration", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerNewUser(@RequestBody NewUserDTO newUser) throws MessagingException, UnsupportedEncodingException {
         if(this.userService.addNewUser(newUser)){
-            return new ResponseEntity<>("Successfully registered!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully registered!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>("Unsuccessful registration! Account with this email already exists.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Unsuccessful registration! Account with this email already exists."), HttpStatus.OK);
     }
 
     @GetMapping(value = "activation/{userId}")
     public ResponseEntity<?> activateUserAccount(@PathVariable("userId") Long userId) throws MessagingException, UnsupportedEncodingException {
         if(this.userService.activateUser(userId)){
-            return new ResponseEntity<>("Successfully activated account!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully activated account!"), HttpStatus.OK);
         }
-        return new ResponseEntity<>("Unsuccessful activation! Activation link has expired (you will get new one now) or account already activated.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Unsuccessful activation! Activation link has expired (you will get new one now) or account already activated."), HttpStatus.OK);
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +55,7 @@ public class UserController {
         try{
             return new ResponseEntity<>(this.userService.loginUser(login), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -64,9 +64,9 @@ public class UserController {
     public ResponseEntity<?> reportGuest(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason){
         try{
             this.userService.reportGuest(id, reason);
-            return new ResponseEntity<>("Successfully reported guest!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully reported guest!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -75,9 +75,9 @@ public class UserController {
     public ResponseEntity<?> reportOwner(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason){
         try{
             this.userService.reportOwner(id, reason);
-            return new ResponseEntity<>("Successfully reported owner!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully reported owner!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -97,9 +97,9 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId, @RequestBody UserUpdateDTO userUpdate) {
         try {
             this.userService.update(userId, userUpdate);
-            return new ResponseEntity<>("Successfully updated user!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully updated user!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -116,11 +116,11 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
             userService.add(user);
 
-            return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Password successfully changed!"), HttpStatus.OK);
         } catch (PasswordNotMatchingException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

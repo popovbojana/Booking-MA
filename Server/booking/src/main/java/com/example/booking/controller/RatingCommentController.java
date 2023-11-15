@@ -1,5 +1,6 @@
 package com.example.booking.controller;
 
+import com.example.booking.dto.MessageDTO;
 import com.example.booking.dto.RateCommentDTO;
 import com.example.booking.service.interfaces.IAccommodationService;
 import com.example.booking.service.interfaces.IRatingCommentService;
@@ -30,9 +31,9 @@ public class RatingCommentController {
     public ResponseEntity<?> rateComment(@RequestBody RateCommentDTO rateCommentDTO){
         try{
             this.ratingCommentService.rateComment(rateCommentDTO);
-            return new ResponseEntity<>("Successfully added new rating and comment!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully added new rating and comment!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -41,9 +42,9 @@ public class RatingCommentController {
     public ResponseEntity<?> deleteRatingComment(@PathVariable("id") Long id){
         try {
             this.ratingCommentService.deleteRatingComment(id);
-            return new ResponseEntity<>("Successfully deleted rating and comment!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully deleted rating and comment!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -53,7 +54,7 @@ public class RatingCommentController {
         try {
             return new ResponseEntity<>(this.ratingCommentService.getAllForGuest(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -63,7 +64,7 @@ public class RatingCommentController {
         try {
             return new ResponseEntity<>(this.ratingCommentService.getAllForOwner(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -73,7 +74,7 @@ public class RatingCommentController {
         try {
             return new ResponseEntity<>(this.ratingCommentService.getAllForAccommodation(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -82,9 +83,9 @@ public class RatingCommentController {
     public ResponseEntity<?> report(@PathVariable("id") Long id){
         try {
             this.ratingCommentService.report(id);
-            return new ResponseEntity<>("Successfully reported rating and comment!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO("Successfully reported rating and comment!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
