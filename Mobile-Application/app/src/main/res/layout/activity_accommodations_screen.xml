@@ -25,10 +25,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
 
+        <!-- Button for "Add New" -->
+        <Button
+            android:id="@+id/btnAddNew"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add New"
+            android:layout_marginEnd="8dp" />
 
-
+        <!-- Button for "Generate Report" -->
+        <Button
+            android:id="@+id/btnGenerateReport"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Generate Report"
+            android:layout_marginStart="8dp" />
 
     </LinearLayout>
 

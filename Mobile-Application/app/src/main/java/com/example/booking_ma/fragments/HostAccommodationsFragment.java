@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.R;
 import com.example.booking_ma.adapters.AccommodationAdapter;
+import com.example.booking_ma.adapters.HostAccommodationsAdapter;
 import com.example.booking_ma.model.Accommodation;
 import com.example.booking_ma.service.ServiceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,7 +30,7 @@ public class HostAccommodationsFragment extends Fragment {
 
     private RecyclerView recyclerViewAccommodations;
     private LinearLayoutManager layoutManager;
-    private AccommodationAdapter adapter;
+    private HostAccommodationsAdapter adapter;
     private List<Accommodation> allAccommodations;
     private Long ownersId;
     private String token;
@@ -60,7 +62,7 @@ public class HostAccommodationsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<AccommodationDisplayDTO> accommodations = response.body();
 
-                    AccommodationAdapter adapter = new AccommodationAdapter(getContext(), accommodations);
+                    HostAccommodationsAdapter adapter = new HostAccommodationsAdapter(getContext(), accommodations);
                     recyclerViewAccommodations.setAdapter(adapter);
                 } else {
                     Log.e("API Error", "Failed to fetch accommodations: " + response.message());
