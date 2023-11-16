@@ -16,7 +16,7 @@ public class ServiceUtils {
 
     //OVDE UNESI SVOJ LOKALHOST (MOJ JE 192.168.1.24) u cmd kucas ipconfig
     //fica
-    private static final String SERVICE_API_PATH = "http://192.168.1.24:8081/api/";
+    private static final String SERVICE_API_PATH = "http://192.168.1.25:8081/api/";
     //bojana
 //    private static final String SERVICE_API_PATH = "http://172.20.10.4:8081/api/";
 

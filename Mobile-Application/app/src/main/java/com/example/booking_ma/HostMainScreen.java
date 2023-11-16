@@ -126,8 +126,8 @@ public class HostMainScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostAccommodationsScreen) {
-/*            Intent intent = new Intent(this, AccommodationsScreen.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(this, AccommodationsScreen.class);
+            startActivity(intent);
             return true;
         }
 

@@ -47,7 +47,7 @@ public class AccountScreen extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("FAB Car");
+        getSupportActionBar().setTitle("Booking");
 
         editTextName = findViewById(R.id.editTextName);
         editTextSurname = findViewById(R.id.editTextSurname);
