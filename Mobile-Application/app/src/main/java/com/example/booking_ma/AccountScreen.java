@@ -228,7 +228,7 @@ public class AccountScreen extends AppCompatActivity {
                 Log.i("EditText password", editTextPassword.getText().toString());
                 Log.i("Current password", currentPassword);
 
-                Call<Boolean> call = ServiceUtils.userService.checkUserPassword(myId, userPasswordDTO);
+                Call<Boolean> call = ServiceUtils.userService(token).checkUserPassword(myId, userPasswordDTO);
                 call.enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -251,7 +251,7 @@ public class AccountScreen extends AppCompatActivity {
                                     passwordStars.append("*");
                                 }
                                 editTextPassword.setText(passwordStars);
-                                changePassword(new ChangePasswordDTO(newPassword, currentPassword));
+                                changePassword(token, myId, new ChangePasswordDTO(newPassword, currentPassword));
                                 dialog.dismiss();
                             }
 
