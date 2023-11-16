@@ -1,7 +1,9 @@
 package com.example.booking_ma;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +41,8 @@ public class AccountScreen extends AppCompatActivity {
     private EditText editTextCurrentPassword, editTextNewPassword, editTextConfirmPassword;
     private EditText editTextName, editTextSurname, editTextPhoneNumber, editTextEmail, editTextPassword;
     private TextView textViewError;
+    private SharedPreferences sharedPreferences;
+    private Long myId;
 
 
     @Override
@@ -50,6 +54,9 @@ public class AccountScreen extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("FAB Car");
+
+        sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        myId = sharedPreferences.getLong("pref_id", 0L);
 
         editTextName = findViewById(R.id.editTextName);
         editTextSurname = findViewById(R.id.editTextSurname);
@@ -121,7 +128,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextName.setEnabled(false);
                 String name = editTextName.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
-                updateUser(1L, userUpdateDTO);
+                updateUser(myId, userUpdateDTO);
             }
         });
 
@@ -131,7 +138,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextSurname.setEnabled(false);
                 String surname = editTextSurname.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
-                updateUser(1L, userUpdateDTO);
+                updateUser(myId, userUpdateDTO);
             }
         });
 
@@ -141,7 +148,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextPhoneNumber.setEnabled(false);
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
-                updateUser(1L, userUpdateDTO);
+                updateUser(myId, userUpdateDTO);
             }
         });
 
@@ -151,7 +158,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextEmail.setEnabled(false);
                 String email = editTextEmail.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
-                updateUser(1L, userUpdateDTO);
+                updateUser(myId, userUpdateDTO);
             }
         });
 
@@ -213,7 +220,7 @@ public class AccountScreen extends AppCompatActivity {
                 Log.i("EditText password", editTextPassword.getText().toString());
                 Log.i("Current password", currentPassword);
 
-                Call<Boolean> call = ServiceUtils.userService.checkUserPassword(1L, userPasswordDTO);
+                Call<Boolean> call = ServiceUtils.userService.checkUserPassword(myId, userPasswordDTO);
                 call.enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -236,7 +243,7 @@ public class AccountScreen extends AppCompatActivity {
                                     passwordStars.append("*");
                                 }
                                 editTextPassword.setText(passwordStars);
-                                changePassword(1L, new ChangePasswordDTO(newPassword, currentPassword));
+                                changePassword(myId, new ChangePasswordDTO(newPassword, currentPassword));
                                 dialog.dismiss();
                             }
 
@@ -283,7 +290,7 @@ public class AccountScreen extends AppCompatActivity {
 
     private void loadUser() {
 
-        Call<UserDisplayDTO> call = ServiceUtils.userService.getUserDisplay(1L);
+        Call<UserDisplayDTO> call = ServiceUtils.userService.getUserDisplay(myId);
         call.enqueue(new Callback<UserDisplayDTO>() {
             @Override
             public void onResponse(Call<UserDisplayDTO> call, Response<UserDisplayDTO> response) {

@@ -95,14 +95,18 @@ public class LoginScreen extends AppCompatActivity {
                                     setToken(tokenDTO);
                                     setPreferences(id, email, role, tokenDTO);
                                     setTokenPreference(tokenDTO.getAccessToken(), tokenDTO.getRefreshToken());
+
                                     if(role.equalsIgnoreCase("OWNER")){
                                         startActivity(new Intent(LoginScreen.this, HostMainScreen.class));
                                     }
+
                                     else if(role.equalsIgnoreCase("GUEST")) {
                                         startActivity(new Intent(LoginScreen.this, GuestMainScreen.class));
+
                                     } else if (role.equalsIgnoreCase("ADMIN")) {
 //                                        startActivity(new Intent(LoginScreen.this, AdministratorMainScreen.class));
                                     }
+                                    
                                 } else {
                                     Log.e("Error", "Login failed.");
                                     Toast.makeText(LoginScreen.this, "Login failed. Invalid server response.", Toast.LENGTH_SHORT).show();
