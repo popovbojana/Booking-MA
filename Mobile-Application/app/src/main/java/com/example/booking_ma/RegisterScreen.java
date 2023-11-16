@@ -1,6 +1,8 @@
 package com.example.booking_ma;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +36,8 @@ public class RegisterScreen extends AppCompatActivity {
     private TextView textViewError;
     private Button buttonRegister, buttonLogin;
 
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,10 @@ public class RegisterScreen extends AppCompatActivity {
 
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonLogin = findViewById(R.id.buttonLogin);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("pref_accessToken", "");
+
     }
 
     @Override
@@ -121,7 +129,7 @@ public class RegisterScreen extends AppCompatActivity {
                     textViewError.setText("Phone number is required!");
                 } else {
                     NewUserDTO newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
-                    Call<ResponseMessage> call = ServiceUtils.userService.registration(newUser);
+                    Call<ResponseMessage> call = ServiceUtils.userService(token).registration(newUser);
                     call.enqueue(new Callback<ResponseMessage>() {
                         @Override
                         public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {

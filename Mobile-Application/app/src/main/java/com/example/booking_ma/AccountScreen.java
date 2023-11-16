@@ -1,7 +1,9 @@
 package com.example.booking_ma;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +22,8 @@ import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
+import com.example.booking_ma.service.IAccommodationService;
+import com.example.booking_ma.service.IUserService;
 import com.example.booking_ma.service.ServiceUtils;
 
 import retrofit2.Call;
@@ -37,6 +41,7 @@ public class AccountScreen extends AppCompatActivity {
     private EditText editTextCurrentPassword, editTextNewPassword, editTextConfirmPassword;
     private EditText editTextName, editTextSurname, editTextPhoneNumber, editTextEmail, editTextPassword;
     private TextView textViewError;
+    private String token;
 
 
     @Override
@@ -69,13 +74,15 @@ public class AccountScreen extends AppCompatActivity {
         buttonLogOut = findViewById(R.id.buttonLogOut);
         buttonDeleteAccount = findViewById(R.id.buttonDeleteAccount);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("pref_accessToken", "");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        loadUser();
+        loadUser(token);
         setEditTextsToFalse();
 
         buttonEditName.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +126,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextName.setEnabled(false);
                 String name = editTextName.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
-                updateUser(1L, userUpdateDTO);
+                updateUser(token,1L, userUpdateDTO);
             }
         });
 
@@ -129,7 +136,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextSurname.setEnabled(false);
                 String surname = editTextSurname.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
-                updateUser(1L, userUpdateDTO);
+                updateUser(token,1L, userUpdateDTO);
             }
         });
 
@@ -139,7 +146,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextPhoneNumber.setEnabled(false);
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
-                updateUser(1L, userUpdateDTO);
+                updateUser(token,1L, userUpdateDTO);
             }
         });
 
@@ -149,7 +156,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextEmail.setEnabled(false);
                 String email = editTextEmail.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
-                updateUser(1L, userUpdateDTO);
+                updateUser(token,1L, userUpdateDTO);
             }
         });
 
@@ -221,7 +228,7 @@ public class AccountScreen extends AppCompatActivity {
                 else{
                     Log.i("Success", "Good password");
                     editTextPassword.setText(newPassword);
-                    changePassword(1L, new ChangePasswordDTO(newPassword, currentPassword));
+                    changePassword(token,1L, new ChangePasswordDTO(newPassword, currentPassword));
                     dialog.dismiss();
                 }
             }
@@ -255,9 +262,8 @@ public class AccountScreen extends AppCompatActivity {
         dialog.show();
     }
 
-    private void loadUser() {
-
-        Call<UserDisplayDTO> call = ServiceUtils.userService.getUserDisplay(1L);
+    private void loadUser(String jwtToken) {
+        Call<UserDisplayDTO> call = ServiceUtils.userService(jwtToken).getUserDisplay(1L);
         call.enqueue(new Callback<UserDisplayDTO>() {
             @Override
             public void onResponse(Call<UserDisplayDTO> call, Response<UserDisplayDTO> response) {
@@ -293,8 +299,10 @@ public class AccountScreen extends AppCompatActivity {
         editTextPassword.setEnabled(false);
     }
 
-    private void updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
-        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
+    private void updateUser(String jwtToken, Long userId, UserUpdateDTO userUpdateDTO) {
+        IUserService userService = ServiceUtils.userService(jwtToken);
+
+        Call<ResponseMessage> call = userService.updateUser(userId, userUpdateDTO);
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -311,8 +319,10 @@ public class AccountScreen extends AppCompatActivity {
         });
     }
 
-    private void changePassword(Long userId, ChangePasswordDTO changePasswordDTO) {
-        Call<ResponseMessage> call = ServiceUtils.userService.changePassword(userId, changePasswordDTO);
+    private void changePassword(String jwtToken, Long userId, ChangePasswordDTO changePasswordDTO) {
+        IUserService userService = ServiceUtils.userService(jwtToken);
+
+        Call<ResponseMessage> call = userService.changePassword(userId, changePasswordDTO);
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {

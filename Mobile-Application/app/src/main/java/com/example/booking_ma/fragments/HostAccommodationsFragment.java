@@ -31,6 +31,7 @@ public class HostAccommodationsFragment extends Fragment {
     private AccommodationAdapter adapter;
     private List<Accommodation> allAccommodations;
     private Long ownersId;
+    private String token;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,16 +43,16 @@ public class HostAccommodationsFragment extends Fragment {
 
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         ownersId = sharedPreferences.getLong("pref_id", 0L);
+        token = sharedPreferences.getString("pref_accessToken", "");
 
-        getAllAccommodations(ownersId);
+        getAllAccommodations(token, ownersId);
         recyclerViewAccommodations.setAdapter(adapter);
 
         return view;
     }
 
-    private void getAllAccommodations(Long id) {
-
-        Call<List<AccommodationDisplayDTO>> call = ServiceUtils.accommodationService.getAllAccommodationForOwner(id);
+    private void getAllAccommodations(String jwtToken, Long id) {
+        Call<List<AccommodationDisplayDTO>> call = ServiceUtils.accommodationService(jwtToken).getAllAccommodationForOwner(id);
 
         call.enqueue(new Callback<List<AccommodationDisplayDTO>>() {
             @Override

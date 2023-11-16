@@ -1,6 +1,8 @@
 package com.example.booking_ma.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,8 @@ public class AccommodationsFragment extends Fragment {
     private AccommodationAdapter adapter;
     private List<Accommodation> allAccommodations;
 
+    private String token;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accommodations, container, false);
@@ -53,15 +57,18 @@ public class AccommodationsFragment extends Fragment {
 //        allAccommodations = getAllDummyAccommodations();
 //        allAccommodations =
 //        adapter = new AccommodationAdapter(getActivity(), allAccommodations);
-        getAllAccommodations();
         recyclerViewAccommodations.setAdapter(adapter);
+
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("pref_accessToken", "");
+        Log.e("TOKEN", token);
+        getAllAccommodations();
 
         return view;
     }
 
     private void getAllAccommodations() {
-
-        Call<List<AccommodationDisplayDTO>> call = ServiceUtils.accommodationService.getAllAccommodations();
+        Call<List<AccommodationDisplayDTO>> call = ServiceUtils.accommodationService(token).getAllAccommodations();
 
         call.enqueue(new Callback<List<AccommodationDisplayDTO>>() {
             @Override
