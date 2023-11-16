@@ -3,8 +3,10 @@ package com.example.booking.service;
 import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
-import com.example.booking.model.User;
+import com.example.booking.model.*;
 import com.example.booking.model.enums.Role;
+import com.example.booking.repository.AccommodationRepository;
+import com.example.booking.repository.AvailabilityPriceRepository;
 import com.example.booking.repository.UserRepository;
 import com.example.booking.security.TokenUtils;
 import com.example.booking.service.interfaces.IUserService;
@@ -21,13 +23,14 @@ import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final AccommodationRepository accommodationRepository;
+    private final AvailabilityPriceRepository availabilityPriceRepository;
 
     @Autowired
     private MailService mailService;
@@ -43,13 +46,42 @@ public class UserService implements IUserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, AccommodationRepository accommodationRepository, AvailabilityPriceRepository availabilityPriceRepository){
         this.userRepository = userRepository;
+        this.accommodationRepository = accommodationRepository;
+        this.availabilityPriceRepository = availabilityPriceRepository;
+    }
+
+    @Override
+    public void removeUser(Long id){
+        this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public void removeOwner(Long id){
+        Owner owner = getOwner(id).get();
+        for(Accommodation accommodation : owner.getAccommodations()){
+            for(AvailabilityPrice availabilityPrice : accommodation.getAvailabilities()){
+                availabilityPriceRepository.deleteById(availabilityPrice.getId());
+            }
+            accommodationRepository.deleteById(accommodation.getId());
+        }
+        this.userRepository.deleteById(id);
     }
 
     @Override
     public Optional<User> getUser(Long id){
         return this.userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Guest> getGuest(Long id){
+        return this.userRepository.findGuestById(id);
+    }
+
+    @Override
+    public Optional<Owner> getOwner(Long id){
+        return this.userRepository.findOwnerById(id);
     }
 
     @Override
@@ -179,5 +211,15 @@ public class UserService implements IUserService {
             throw new UsernameNotFoundException(String.format("No user found with email '%s'.", username));
         }
         return user;
+    }
+
+    @Override
+    public String convertPasswordToStars(String password){
+        int numberOfAsterisks = password.length();
+        StringBuilder passwordStars = new StringBuilder();
+        for (int i = 0; i < numberOfAsterisks; i++) {
+            passwordStars.append("*");
+        }
+        return passwordStars.toString();
     }
 }

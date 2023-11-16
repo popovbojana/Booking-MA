@@ -21,4 +21,10 @@ public class Guest extends User{
 
     @ManyToMany
     private List<Accommodation> favoriteAccommodations;
+
+    @ManyToMany
+    private List<Accommodation> historyAccommodations;
+
+    @ManyToMany
+    private List<Accommodation> reservedAccommodations;
 }

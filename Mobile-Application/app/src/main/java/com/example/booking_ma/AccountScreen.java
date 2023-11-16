@@ -128,7 +128,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextName.setEnabled(false);
                 String name = editTextName.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
-                updateUser(myId, userUpdateDTO);
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -138,7 +138,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextSurname.setEnabled(false);
                 String surname = editTextSurname.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
-                updateUser(myId, userUpdateDTO);
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -148,7 +148,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextPhoneNumber.setEnabled(false);
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
-                updateUser(myId, userUpdateDTO);
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -158,7 +158,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextEmail.setEnabled(false);
                 String email = editTextEmail.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
-                updateUser(myId, userUpdateDTO);
+                updateUser(userUpdateDTO);
             }
         });
 
@@ -243,7 +243,7 @@ public class AccountScreen extends AppCompatActivity {
                                     passwordStars.append("*");
                                 }
                                 editTextPassword.setText(passwordStars);
-                                changePassword(myId, new ChangePasswordDTO(newPassword, currentPassword));
+                                changePassword(new ChangePasswordDTO(newPassword, currentPassword));
                                 dialog.dismiss();
                             }
 
@@ -311,8 +311,8 @@ public class AccountScreen extends AppCompatActivity {
     }
 
 
-    private void updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
-        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
+    private void updateUser(UserUpdateDTO userUpdateDTO) {
+        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(myId, userUpdateDTO);
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -329,8 +329,8 @@ public class AccountScreen extends AppCompatActivity {
         });
     }
 
-    private void changePassword(Long userId, ChangePasswordDTO changePasswordDTO) {
-        Call<ResponseMessage> call = ServiceUtils.userService.changePassword(userId, changePasswordDTO);
+    private void changePassword(ChangePasswordDTO changePasswordDTO) {
+        Call<ResponseMessage> call = ServiceUtils.userService.changePassword(myId, changePasswordDTO);
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -348,6 +348,24 @@ public class AccountScreen extends AppCompatActivity {
             }
         });
     }
+
+//    private void deleteAccount() {
+//        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
+//        call.enqueue(new Callback<ResponseMessage>() {
+//            @Override
+//            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+//                if (!response.isSuccessful()) {
+//                    Log.i("Error", response.message());
+//                };
+//                Log.d("Success", response.body().getMessage());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+//                Log.d("Fail", t.getMessage());
+//            }
+//        });
+//    }
 
     private void setDataToEditText(UserDisplayDTO userDisplay) {
 
@@ -371,6 +389,8 @@ public class AccountScreen extends AppCompatActivity {
         editTextEmail.setEnabled(false);
         editTextPassword.setEnabled(false);
     }
+
+
 
 }
 

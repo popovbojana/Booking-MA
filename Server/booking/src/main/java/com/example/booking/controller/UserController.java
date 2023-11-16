@@ -4,7 +4,10 @@ import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.PasswordNotMatchingException;
 import com.example.booking.model.Accommodation;
+import com.example.booking.model.Guest;
+import com.example.booking.model.Owner;
 import com.example.booking.model.User;
+import com.example.booking.model.enums.Role;
 import com.example.booking.service.interfaces.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -28,7 +31,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserController(IUserService userService, PasswordEncoder passwordEncoder){
+    public UserController(IUserService userService, PasswordEncoder passwordEncoder) {
 
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -36,7 +39,7 @@ public class UserController {
 
     @PostMapping(value = "registration", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerNewUser(@RequestBody NewUserDTO newUser) throws MessagingException, UnsupportedEncodingException {
-        if(this.userService.addNewUser(newUser)){
+        if (this.userService.addNewUser(newUser)) {
             return new ResponseEntity<>(new MessageDTO("Successfully registered!"), HttpStatus.OK);
         }
         return new ResponseEntity<>("Unsuccessful registration! Account with this email already exists.", HttpStatus.BAD_REQUEST);
@@ -44,7 +47,7 @@ public class UserController {
 
     @GetMapping(value = "activation/{userId}")
     public ResponseEntity<?> activateUserAccount(@PathVariable("userId") Long userId) throws MessagingException, UnsupportedEncodingException {
-        if(this.userService.activateUser(userId)){
+        if (this.userService.activateUser(userId)) {
             return new ResponseEntity<>(new MessageDTO("Successfully activated account!"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageDTO("Unsuccessful activation! Activation link has expired (you will get new one now) or account already activated."), HttpStatus.OK);
@@ -52,7 +55,7 @@ public class UserController {
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
-        try{
+        try {
             return new ResponseEntity<>(this.userService.loginUser(login), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -61,8 +64,8 @@ public class UserController {
 
     @PutMapping(value = "report-guest/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('OWNER')")
-    public ResponseEntity<?> reportGuest(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason){
-        try{
+    public ResponseEntity<?> reportGuest(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason) {
+        try {
             this.userService.reportGuest(id, reason);
             return new ResponseEntity<>(new MessageDTO("Successfully reported guest!"), HttpStatus.OK);
         } catch (Exception e) {
@@ -72,8 +75,8 @@ public class UserController {
 
     @PutMapping(value = "report-owner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('GUEST')")
-    public ResponseEntity<?> reportOwner(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason){
-        try{
+    public ResponseEntity<?> reportOwner(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason) {
+        try {
             this.userService.reportOwner(id, reason);
             return new ResponseEntity<>(new MessageDTO("Successfully reported owner!"), HttpStatus.OK);
         } catch (Exception e) {
@@ -83,10 +86,10 @@ public class UserController {
 
     @GetMapping(value = "all-users", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAnyAuthority('GUEST','OWNER','ADMIN')")
-    public ResponseEntity<?> getAllUsers(){
+    public ResponseEntity<?> getAllUsers() {
         List<User> users = this.userService.getAll();
         List<UserDisplayDTO> userDisplay = new ArrayList<>();
-        for (User u : users){
+        for (User u : users) {
             userDisplay.add(u.parseToDisplay());
         }
         return new ResponseEntity<>(userDisplay, HttpStatus.OK);
@@ -114,6 +117,7 @@ public class UserController {
             }
 
             user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+            user.setPasswordCharNumber(changePassword.getNewPassword().length());
             userService.add(user);
 
             return new ResponseEntity<>(new MessageDTO("Password successfully changed!"), HttpStatus.OK);
@@ -153,4 +157,22 @@ public class UserController {
         }
     }
 
+    @DeleteMapping(value = "/delete-owner/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteOwner(@PathVariable("userId") Long userId) {
+        try {
+            userService.getOwner(userId)
+                    .orElseThrow(() -> new NoDataWithId("User not found"));
+            userService.removeOwner(userId);
+
+            System.out.println("AA");
+            return new ResponseEntity<>(new MessageDTO("User deleted successfully"), HttpStatus.OK);
+
+        } catch (NoDataWithId e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    public
 }
