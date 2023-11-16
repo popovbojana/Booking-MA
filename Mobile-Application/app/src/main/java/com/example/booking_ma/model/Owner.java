@@ -18,8 +18,8 @@ public class Owner extends User{
         super(name, surname);
     }
 
-    public Owner(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked, List<RatingComment> ratingComments, List<Accommodation> accommodations) {
-        super(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked);
+    public Owner(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked, List<RatingComment> ratingComments, List<Accommodation> accommodations, int passwordCharNumber) {
+        super(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked, passwordCharNumber);
         this.ratingComments = ratingComments;
         this.accommodations = accommodations;
     }

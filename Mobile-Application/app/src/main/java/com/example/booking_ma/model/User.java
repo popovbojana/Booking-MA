@@ -35,6 +35,8 @@ public class User implements Serializable {
 
     private boolean blocked;
 
+    private int passwordCharNumber;
+
     public User() {
     }
 
@@ -43,7 +45,7 @@ public class User implements Serializable {
         this.surname = surname;
     }
 
-    public User(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked) {
+    public User(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked, int passwordCharNumber) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -57,6 +59,7 @@ public class User implements Serializable {
         this.reported = reported;
         this.reportedReason = reportedReason;
         this.blocked = blocked;
+        this.passwordCharNumber = passwordCharNumber;
     }
 
     public Long getId() {
@@ -161,5 +164,13 @@ public class User implements Serializable {
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+
+    public int getPasswordCharNumber() {
+        return passwordCharNumber;
+    }
+
+    public void setPasswordCharNumber(int passwordCharNumber) {
+        this.passwordCharNumber = passwordCharNumber;
     }
 }

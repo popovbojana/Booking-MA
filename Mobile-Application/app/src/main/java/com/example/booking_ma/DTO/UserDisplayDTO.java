@@ -19,6 +19,7 @@ public class UserDisplayDTO {
     private boolean reported;
     private String reportedReason;
     private boolean blocked;
+    private int passwordCharNumber;
 
     public Long getId() {
         return id;
@@ -124,7 +125,15 @@ public class UserDisplayDTO {
         this.blocked = blocked;
     }
 
-    public UserDisplayDTO(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked) {
+    public int getPasswordCharNumber() {
+        return passwordCharNumber;
+    }
+
+    public void setPasswordCharNumber(int passwordCharNumber) {
+        this.passwordCharNumber = passwordCharNumber;
+    }
+
+    public UserDisplayDTO(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked, int passwordCharNumber) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -138,6 +147,7 @@ public class UserDisplayDTO {
         this.reported = reported;
         this.reportedReason = reportedReason;
         this.blocked = blocked;
+        this.passwordCharNumber = passwordCharNumber;
 
 
     }

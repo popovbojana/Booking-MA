@@ -21,9 +21,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
+import com.example.booking_ma.DTO.UserPasswordDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
 import com.example.booking_ma.service.IAccommodationService;
 import com.example.booking_ma.service.IUserService;
+import com.example.booking_ma.model.User;
 import com.example.booking_ma.service.ServiceUtils;
 
 import retrofit2.Call;
@@ -42,7 +44,8 @@ public class AccountScreen extends AppCompatActivity {
     private EditText editTextName, editTextSurname, editTextPhoneNumber, editTextEmail, editTextPassword;
     private TextView textViewError;
     private String token;
-
+    private SharedPreferences sharedPreferences;
+    private Long myId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,9 @@ public class AccountScreen extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Booking");
+
+        sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        myId = sharedPreferences.getLong("pref_id", 0L);
 
         editTextName = findViewById(R.id.editTextName);
         editTextSurname = findViewById(R.id.editTextSurname);
@@ -127,6 +133,7 @@ public class AccountScreen extends AppCompatActivity {
                 String name = editTextName.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
                 updateUser(token,1L, userUpdateDTO);
+
             }
         });
 
@@ -137,6 +144,7 @@ public class AccountScreen extends AppCompatActivity {
                 String surname = editTextSurname.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
                 updateUser(token,1L, userUpdateDTO);
+
             }
         });
 
@@ -147,6 +155,7 @@ public class AccountScreen extends AppCompatActivity {
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
                 updateUser(token,1L, userUpdateDTO);
+
             }
         });
 
@@ -157,6 +166,7 @@ public class AccountScreen extends AppCompatActivity {
                 String email = editTextEmail.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
                 updateUser(token,1L, userUpdateDTO);
+
             }
         });
 
@@ -213,24 +223,49 @@ public class AccountScreen extends AppCompatActivity {
                 String currentPassword = editTextCurrentPassword.getText().toString();
                 String newPassword = editTextNewPassword.getText().toString();
                 String confirmPassword = editTextConfirmPassword.getText().toString();
+                UserPasswordDTO userPasswordDTO = new UserPasswordDTO(currentPassword);
 
                 Log.i("EditText password", editTextPassword.getText().toString());
                 Log.i("Current password", currentPassword);
 
-                if(!(editTextPassword.getText().toString()).equals(currentPassword)){
-                    Log.i("Error", "Wrong password");
-                    textViewError.setText("Wrong password");
-                }
-                else if(!newPassword.equals(confirmPassword)){
-                    Log.i("Error", "Bad password confirm");
-                    textViewError.setText("Bad password confirm");
-                }
-                else{
-                    Log.i("Success", "Good password");
-                    editTextPassword.setText(newPassword);
-                    changePassword(token,1L, new ChangePasswordDTO(newPassword, currentPassword));
-                    dialog.dismiss();
-                }
+                Call<Boolean> call = ServiceUtils.userService.checkUserPassword(myId, userPasswordDTO);
+                call.enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.isSuccessful()) {
+
+                            if(!response.body().booleanValue()){
+                                Log.i("Error", "Wrong password");
+                                textViewError.setText("Wrong password");
+                            }
+                            else if(!newPassword.equals(confirmPassword)){
+                                Log.i("Error", "Bad password confirm");
+                                textViewError.setText("Bad password confirm");
+                            }
+                            else{
+                                Log.i("Success", "Good password");
+
+                                int numberOfAsterisks = newPassword.length();
+                                StringBuilder passwordStars = new StringBuilder();
+                                for (int i = 0; i < numberOfAsterisks; i++) {
+                                    passwordStars.append("*");
+                                }
+                                editTextPassword.setText(passwordStars);
+                                changePassword(new ChangePasswordDTO(newPassword, currentPassword));
+                                dialog.dismiss();
+                            }
+
+                        } else {
+                            onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Log.d("Fail", t.getMessage());
+                    }
+                });
+
             }
         });
 
@@ -264,6 +299,7 @@ public class AccountScreen extends AppCompatActivity {
 
     private void loadUser(String jwtToken) {
         Call<UserDisplayDTO> call = ServiceUtils.userService(jwtToken).getUserDisplay(1L);
+
         call.enqueue(new Callback<UserDisplayDTO>() {
             @Override
             public void onResponse(Call<UserDisplayDTO> call, Response<UserDisplayDTO> response) {
@@ -283,26 +319,13 @@ public class AccountScreen extends AppCompatActivity {
         });
     }
 
-    private void setDataToEditText(UserDisplayDTO userDisplay) {
-        editTextName.setText(userDisplay.getName());
-        editTextSurname.setText(userDisplay.getSurname());
-        editTextPhoneNumber.setText(userDisplay.getPhoneNumber());
-        editTextEmail.setText(userDisplay.getEmail());
-        editTextPassword.setText("marko123");
-    }
 
-    private void setEditTextsToFalse(){
-        editTextName.setEnabled(false);
-        editTextSurname.setEnabled(false);
-        editTextPhoneNumber.setEnabled(false);
-        editTextEmail.setEnabled(false);
-        editTextPassword.setEnabled(false);
-    }
 
     private void updateUser(String jwtToken, Long userId, UserUpdateDTO userUpdateDTO) {
         IUserService userService = ServiceUtils.userService(jwtToken);
 
         Call<ResponseMessage> call = userService.updateUser(userId, userUpdateDTO);
+
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -323,6 +346,7 @@ public class AccountScreen extends AppCompatActivity {
         IUserService userService = ServiceUtils.userService(jwtToken);
 
         Call<ResponseMessage> call = userService.changePassword(userId, changePasswordDTO);
+
         call.enqueue(new Callback<ResponseMessage>() {
             @Override
             public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -340,6 +364,49 @@ public class AccountScreen extends AppCompatActivity {
             }
         });
     }
+
+//    private void deleteAccount() {
+//        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
+//        call.enqueue(new Callback<ResponseMessage>() {
+//            @Override
+//            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+//                if (!response.isSuccessful()) {
+//                    Log.i("Error", response.message());
+//                };
+//                Log.d("Success", response.body().getMessage());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+//                Log.d("Fail", t.getMessage());
+//            }
+//        });
+//    }
+
+    private void setDataToEditText(UserDisplayDTO userDisplay) {
+
+        int numberOfAsterisks = userDisplay.getPasswordCharNumber();
+        StringBuilder passwordStars = new StringBuilder();
+        for (int i = 0; i < numberOfAsterisks; i++) {
+            passwordStars.append("*");
+        }
+
+        editTextName.setText(userDisplay.getName());
+        editTextSurname.setText(userDisplay.getSurname());
+        editTextPhoneNumber.setText(userDisplay.getPhoneNumber());
+        editTextEmail.setText(userDisplay.getEmail());
+        editTextPassword.setText(passwordStars);
+    }
+
+    private void setEditTextsToFalse(){
+        editTextName.setEnabled(false);
+        editTextSurname.setEnabled(false);
+        editTextPhoneNumber.setEnabled(false);
+        editTextEmail.setEnabled(false);
+        editTextPassword.setEnabled(false);
+    }
+
+
 
 }
 

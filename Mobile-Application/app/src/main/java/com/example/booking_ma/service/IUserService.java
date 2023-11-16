@@ -6,6 +6,7 @@ import com.example.booking_ma.DTO.NewUserDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.TokenDTO;
 import com.example.booking_ma.DTO.UserDisplayDTO;
+import com.example.booking_ma.DTO.UserPasswordDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
 
 import java.util.List;
@@ -42,6 +43,11 @@ public interface IUserService {
 
     @PUT(ServiceUtils.user + "/change-password/{userId}")
     Call<ResponseMessage> changePassword(@Path("userId") Long userId, @Body ChangePasswordDTO u);
+
+    @PUT(ServiceUtils.user + "/check-password/{userId}")
+    Call<Boolean> checkUserPassword(@Path("userId") Long userId, @Body UserPasswordDTO userPassword);
+
+
     
 
 }

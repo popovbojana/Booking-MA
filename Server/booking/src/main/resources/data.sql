@@ -1,13 +1,13 @@
 --admin
-insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked) values (true, 'Bulevar oslobodjenja 12, Novi Sad', 'marko.markovic@gmail.com', 'Marko','$2a$12$nkYUpdFD23kArmZ8MvSiYeXna3nJKhVd.2ZIcSmxSDIugjtTBehyy', '0654598561', 'ADMIN', 'Markovic', false, false)
+insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Bulevar oslobodjenja 12, Novi Sad', 'marko.markovic@gmail.com', 'Marko','$2a$12$nkYUpdFD23kArmZ8MvSiYeXna3nJKhVd.2ZIcSmxSDIugjtTBehyy', '0654598561', 'ADMIN', 'Markovic', false, false, 8)
 insert into ADMIN(id) values (1)
 
 --guests
-insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked) values (true, 'Nikole Tesle 123, Novi Sad', 'jovan.jovanovic@gmail.com', 'Jovan','$2a$12$HmWbFvJaNlSSPQEAI0GHNOJkCpojaeN0hJEYRhrmWJZrEkly95MbK', '0654578561', 'GUEST', 'Jovanovic', false, false)
+insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Nikole Tesle 123, Novi Sad', 'jovan.jovanovic@gmail.com', 'Jovan','$2a$12$HmWbFvJaNlSSPQEAI0GHNOJkCpojaeN0hJEYRhrmWJZrEkly95MbK', '0654578561', 'GUEST', 'Jovanovic', false, false, 8)
 insert into GUESTS(id) values (2)
 
 --owners
-insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked) values (true, 'Milosa Crnjanskog 45, Novi Sad', 'pera.peric@gmail.com', 'Pera','$2a$12$Htpvzxt7KGIgMG5MCstm1e3fap1sOjw/CKuDHRkUiTbZKNpQH.reS', '0638451268', 'OWNER', 'Peric', false, false)
+insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Milosa Crnjanskog 45, Novi Sad', 'pera.peric@gmail.com', 'Pera','$2a$12$Htpvzxt7KGIgMG5MCstm1e3fap1sOjw/CKuDHRkUiTbZKNpQH.reS', '0638451268', 'OWNER', 'Peric', false, false, 7)
 insert into OWNERS(id) values (3)
 
 --accommodations

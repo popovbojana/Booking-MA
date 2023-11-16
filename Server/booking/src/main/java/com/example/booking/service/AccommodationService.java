@@ -205,7 +205,7 @@ public class AccommodationService implements IAccommodationService {
     @Override
     public List<AccommodationDisplayDTO> getAllFavoritesForGuest(Long id) throws NoDataWithId {
         if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST) {
-            Guest guest = this.userRepository.findGuestById(id);
+            Guest guest = this.userRepository.findGuestById(id).get();
             List<AccommodationDisplayDTO> display = new ArrayList<>();
             for (Accommodation a : guest.getFavoriteAccommodations()){
                 display.add(a.parseToDisplay());
