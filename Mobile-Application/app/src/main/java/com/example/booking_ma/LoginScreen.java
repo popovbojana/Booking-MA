@@ -96,7 +96,7 @@ public class LoginScreen extends AppCompatActivity {
                                     setPreferences(id, email, role, tokenDTO);
                                     setTokenPreference(tokenDTO.getAccessToken(), tokenDTO.getRefreshToken());
                                     if(role.equalsIgnoreCase("OWNER")){
-//                                        startActivity(new Intent(LoginScreen.this, HostMainScreen.class));
+                                        startActivity(new Intent(LoginScreen.this, HostMainScreen.class));
                                     }
                                     else if(role.equalsIgnoreCase("GUEST")) {
                                         startActivity(new Intent(LoginScreen.this, GuestMainScreen.class));
