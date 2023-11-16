@@ -52,7 +52,7 @@ public class AccommodationController {
     }
 
     @GetMapping(value = "all-accommodation", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST', 'OWNER')")
     public ResponseEntity<?> getAllAccommodation(){
         List<Accommodation> accommodations = this.accommodationService.getAll();
         List<AccommodationDisplayDTO> accommodationDisplay = new ArrayList<>();
