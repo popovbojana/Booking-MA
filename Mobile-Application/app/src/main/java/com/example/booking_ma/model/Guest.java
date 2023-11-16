@@ -19,8 +19,8 @@ public class Guest extends User {
         super(name, surname);
     }
 
-    public Guest(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked, List<RatingComment> ratingComments, List<Accommodation> favoriteAccommodations) {
-        super(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked);
+    public Guest(Long id, String email, String password, String name, String surname, String address, String phoneNumber, Role role, boolean activated, LocalDateTime activationLinkSent, boolean reported, String reportedReason, boolean blocked, List<RatingComment> ratingComments, List<Accommodation> favoriteAccommodations, int passwordCharNumber) {
+        super(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked, passwordCharNumber);
         this.ratingComments = ratingComments;
         this.favoriteAccommodations = favoriteAccommodations;
     }

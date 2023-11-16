@@ -57,7 +57,9 @@ public class User implements UserDetails {
 
     private boolean blocked;
 
-    public User(String email, String password, String name, String surname, String address, String phoneNumber, Role role){
+    private int passwordCharNumber;
+
+    public User(String email, String password, String name, String surname, String address, String phoneNumber, Role role, int passwordCharNumber){
         this.email = email;
         this.password = password;
         this.name = name;
@@ -70,6 +72,7 @@ public class User implements UserDetails {
         this.reported = false;
         this.reportedReason = null;
         this.blocked = false;
+        this.passwordCharNumber = passwordCharNumber;
     }
 
 
@@ -118,6 +121,6 @@ public class User implements UserDetails {
     }
 
     public UserDisplayDTO parseToDisplay() {
-        return new UserDisplayDTO(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked);
+        return new UserDisplayDTO(id, email, password, name, surname, address, phoneNumber, role, activated, activationLinkSent, reported, reportedReason, blocked, passwordCharNumber);
     }
 }

@@ -19,7 +19,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
+import com.example.booking_ma.DTO.UserPasswordDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
+import com.example.booking_ma.model.User;
 import com.example.booking_ma.service.ServiceUtils;
 
 import retrofit2.Call;
@@ -206,24 +208,48 @@ public class AccountScreen extends AppCompatActivity {
                 String currentPassword = editTextCurrentPassword.getText().toString();
                 String newPassword = editTextNewPassword.getText().toString();
                 String confirmPassword = editTextConfirmPassword.getText().toString();
+                UserPasswordDTO userPasswordDTO = new UserPasswordDTO(currentPassword);
 
                 Log.i("EditText password", editTextPassword.getText().toString());
                 Log.i("Current password", currentPassword);
 
-                if(!(editTextPassword.getText().toString()).equals(currentPassword)){
-                    Log.i("Error", "Wrong password");
-                    textViewError.setText("Wrong password");
-                }
-                else if(!newPassword.equals(confirmPassword)){
-                    Log.i("Error", "Bad password confirm");
-                    textViewError.setText("Bad password confirm");
-                }
-                else{
-                    Log.i("Success", "Good password");
-                    editTextPassword.setText(newPassword);
-                    changePassword(1L, new ChangePasswordDTO(newPassword, currentPassword));
-                    dialog.dismiss();
-                }
+                Call<Boolean> call = ServiceUtils.userService.checkUserPassword(1L, userPasswordDTO);
+                call.enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if (response.isSuccessful()) {
+
+                            if(!response.body().booleanValue()){
+                                Log.i("Error", "Wrong password");
+                                textViewError.setText("Wrong password");
+                            }
+                            else if(!newPassword.equals(confirmPassword)){
+                                Log.i("Error", "Bad password confirm");
+                                textViewError.setText("Bad password confirm");
+                            }
+                            else{
+                                Log.i("Success", "Good password");
+
+                                int numberOfAsterisks = newPassword.length();
+                                StringBuilder passwordStars = new StringBuilder();
+                                for (int i = 0; i < numberOfAsterisks; i++) {
+                                    passwordStars.append("*");
+                                }
+                                editTextPassword.setText(passwordStars);
+                                changePassword(1L, new ChangePasswordDTO(newPassword, currentPassword));
+                                dialog.dismiss();
+                            }
+
+                        } else {
+                            onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Log.d("Fail", t.getMessage());
+                    }
+                });
             }
         });
 
@@ -277,21 +303,6 @@ public class AccountScreen extends AppCompatActivity {
         });
     }
 
-    private void setDataToEditText(UserDisplayDTO userDisplay) {
-        editTextName.setText(userDisplay.getName());
-        editTextSurname.setText(userDisplay.getSurname());
-        editTextPhoneNumber.setText(userDisplay.getPhoneNumber());
-        editTextEmail.setText(userDisplay.getEmail());
-        editTextPassword.setText("marko123");
-    }
-
-    private void setEditTextsToFalse(){
-        editTextName.setEnabled(false);
-        editTextSurname.setEnabled(false);
-        editTextPhoneNumber.setEnabled(false);
-        editTextEmail.setEnabled(false);
-        editTextPassword.setEnabled(false);
-    }
 
     private void updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
         Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
@@ -329,6 +340,29 @@ public class AccountScreen extends AppCompatActivity {
                 Log.d("Fail", t.getMessage());
             }
         });
+    }
+
+    private void setDataToEditText(UserDisplayDTO userDisplay) {
+
+        int numberOfAsterisks = userDisplay.getPasswordCharNumber();
+        StringBuilder passwordStars = new StringBuilder();
+        for (int i = 0; i < numberOfAsterisks; i++) {
+            passwordStars.append("*");
+        }
+
+        editTextName.setText(userDisplay.getName());
+        editTextSurname.setText(userDisplay.getSurname());
+        editTextPhoneNumber.setText(userDisplay.getPhoneNumber());
+        editTextEmail.setText(userDisplay.getEmail());
+        editTextPassword.setText(passwordStars);
+    }
+
+    private void setEditTextsToFalse(){
+        editTextName.setEnabled(false);
+        editTextSurname.setEnabled(false);
+        editTextPhoneNumber.setEnabled(false);
+        editTextEmail.setEnabled(false);
+        editTextPassword.setEnabled(false);
     }
 
 }

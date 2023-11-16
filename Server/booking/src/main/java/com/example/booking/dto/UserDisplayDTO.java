@@ -27,5 +27,6 @@ public class UserDisplayDTO {
     private boolean reported;
     private String reportedReason;
     private boolean blocked;
+    private int passwordCharNumber;
 
 }

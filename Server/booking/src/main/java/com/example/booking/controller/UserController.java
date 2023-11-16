@@ -137,4 +137,20 @@ public class UserController {
         }
     }
 
+    @PutMapping(value = "/check-password/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    //    @PreAuthorize("hasAnyAuthority('GUEST','OWNER','ADMIN')")
+    public ResponseEntity<?> checkUserPassword(@PathVariable("userId") Long userId, @RequestBody UserPasswordDTO userPassword) {
+        try {
+            User user = userService.getUser(userId).orElseThrow(() -> new NoDataWithId("User not found"));
+
+            if (passwordEncoder.matches(userPassword.getPassword(), user.getPassword())) {
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

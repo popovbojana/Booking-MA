@@ -79,7 +79,7 @@ public class UserService implements IUserService {
     }
 
     private boolean addToRepository(NewUserDTO newUserDTO) throws MessagingException, UnsupportedEncodingException {
-        User user = new User(newUserDTO.getEmail(), this.passwordEncoder.encode(newUserDTO.getPassword()), newUserDTO.getName(), newUserDTO.getSurname(), newUserDTO.getAddress(), newUserDTO.getPhoneNumber(), newUserDTO.getRole());
+        User user = new User(newUserDTO.getEmail(), this.passwordEncoder.encode(newUserDTO.getPassword()), newUserDTO.getName(), newUserDTO.getSurname(), newUserDTO.getAddress(), newUserDTO.getPhoneNumber(), newUserDTO.getRole(), newUserDTO.getPassword().length());
         this.userRepository.save(user);
         this.mailService.sendActivationEmail(newUserDTO.getEmail(), this.userRepository.findByEmailAndRole(newUserDTO.getEmail(), newUserDTO.getRole()).get().getId());
         return true;
