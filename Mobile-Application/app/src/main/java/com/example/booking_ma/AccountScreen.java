@@ -46,6 +46,7 @@ public class AccountScreen extends AppCompatActivity {
     private String token;
     private SharedPreferences sharedPreferences;
     private Long myId;
+    private String myRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class AccountScreen extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         myId = sharedPreferences.getLong("pref_id", 0L);
+        token = sharedPreferences.getString("pref_accessToken", "");
+        myRole = sharedPreferences.getString("pref_role", "");
 
         editTextName = findViewById(R.id.editTextName);
         editTextSurname = findViewById(R.id.editTextSurname);
@@ -80,8 +83,6 @@ public class AccountScreen extends AppCompatActivity {
         buttonLogOut = findViewById(R.id.buttonLogOut);
         buttonDeleteAccount = findViewById(R.id.buttonDeleteAccount);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        token = sharedPreferences.getString("pref_accessToken", "");
     }
 
     @Override
@@ -132,7 +133,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextName.setEnabled(false);
                 String name = editTextName.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO(name, "", "", "");
-                updateUser(token,1L, userUpdateDTO);
+                updateUser(token, myId, userUpdateDTO);
 
             }
         });
@@ -143,7 +144,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextSurname.setEnabled(false);
                 String surname = editTextSurname.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", surname, "", "");
-                updateUser(token,1L, userUpdateDTO);
+                updateUser(token, myId, userUpdateDTO);
 
             }
         });
@@ -154,7 +155,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextPhoneNumber.setEnabled(false);
                 String phoneNumber = editTextPhoneNumber.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", phoneNumber, "");
-                updateUser(token,1L, userUpdateDTO);
+                updateUser(token, myId, userUpdateDTO);
 
             }
         });
@@ -165,7 +166,7 @@ public class AccountScreen extends AppCompatActivity {
                 editTextEmail.setEnabled(false);
                 String email = editTextEmail.getText().toString();
                 UserUpdateDTO userUpdateDTO = new UserUpdateDTO("", "", "", email);
-                updateUser(token,1L, userUpdateDTO);
+                updateUser(token,myId, userUpdateDTO);
 
             }
         });
@@ -188,13 +189,123 @@ public class AccountScreen extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_account_screen, menu);
+        if(myRole.equalsIgnoreCase("OWNER")){
+            inflater.inflate(R.menu.menu_host, menu);
+        } else if(myRole.equalsIgnoreCase("GUEST")) {
+            inflater.inflate(R.menu.menu_guest, menu);
+        } else if (myRole.equalsIgnoreCase("ADMIN")) {
+            inflater.inflate(R.menu.menu_admin, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(myRole.equalsIgnoreCase("OWNER")){
+            if (itemId == R.id.itemHostMainScreen) {
+                startActivity(new Intent(this, HostMainScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemHostAccountScreen) {
+                startActivity(new Intent(this, AccountScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemHostAccommodationsScreen) {
+                startActivity(new Intent(this, AccommodationsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemHostReservationsScreen) {
+//            startActivity(new Intent(this, ReservationsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemHostNotificationsScreen) {
+//            startActivity(new Intent(this, HostNotificationsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemLogOut) {
+                deletePreferences();
+                Intent intent = new Intent(this, LoginScreen.class);
+                startActivity(intent);
+                return true;
+
+            }
+        } else if(myRole.equalsIgnoreCase("GUEST")) {
+            if (itemId == R.id.itemGuestMainScreen) {
+                startActivity(new Intent(this, GuestMainScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemGuestAccountScreen) {
+                startActivity(new Intent(this, AccountScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemGuestReservationsScreen) {
+//                startActivity(new Intent(this, GuestReservationsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemGuestNotificationsScreen) {
+//                startActivity(new Intent(this, GuestNotificationsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemLogOut) {
+                deletePreferences();
+                Intent intent = new Intent(this, LoginScreen.class);
+                startActivity(intent);
+                return true;
+
+            }
+        } else if (myRole.equalsIgnoreCase("ADMIN")) {
+            if (itemId == R.id.itemAdminMainScreen) {
+//                startActivity(new Intent(this, AdminMainScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemAdminAccountScreen) {
+                startActivity(new Intent(this, AccountScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemAdminReportedUsersScreen) {
+//                startActivity(new Intent(this, ReportedUsersScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemAdminReportedCommentsScreen) {
+//            startActivity(new Intent(this, ReportedCommentsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemAdminAccommodationsApprovalScreen) {
+//            startActivity(new Intent(this, AccommodationsApprovalScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemLogOut) {
+                deletePreferences();
+                Intent intent = new Intent(this, LoginScreen.class);
+                startActivity(intent);
+                return true;
+
+            }
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deletePreferences(){
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sharedPreferences.edit();
+        spEditor.clear().commit();
     }
 
     private void showPasswordEditDialog() {
@@ -298,7 +409,7 @@ public class AccountScreen extends AppCompatActivity {
     }
 
     private void loadUser(String jwtToken) {
-        Call<UserDisplayDTO> call = ServiceUtils.userService(jwtToken).getUserDisplay(1L);
+        Call<UserDisplayDTO> call = ServiceUtils.userService(jwtToken).getUserDisplay(myId);
 
         call.enqueue(new Callback<UserDisplayDTO>() {
             @Override

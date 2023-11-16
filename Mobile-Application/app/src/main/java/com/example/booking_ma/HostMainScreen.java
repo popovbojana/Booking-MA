@@ -105,7 +105,7 @@ public class HostMainScreen extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_host_main_screen, menu);
+        inflater.inflate(R.menu.menu_host, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -114,39 +114,34 @@ public class HostMainScreen extends AppCompatActivity {
         int itemId = item.getItemId();
 
         if (itemId == R.id.itemHostMainScreen) {
-            Intent intent = new Intent(this, HostMainScreen.class);
-            startActivity(intent);
+            startActivity(new Intent(this, HostMainScreen.class));
             return true;
         }
 
         if (itemId == R.id.itemHostAccountScreen) {
-            Intent intent = new Intent(this, AccountScreen.class);
-            startActivity(intent);
+            startActivity(new Intent(this, AccountScreen.class));
             return true;
         }
 
         if (itemId == R.id.itemHostAccommodationsScreen) {
-            Intent intent = new Intent(this, AccommodationsScreen.class);
-            startActivity(intent);
+            startActivity(new Intent(this, AccommodationsScreen.class));
             return true;
         }
 
         if (itemId == R.id.itemHostReservationsScreen) {
-/*            Intent intent = new Intent(this, ReservationsScreen.class);
-            startActivity(intent);*/
+//            startActivity(new Intent(this, ReservationsScreen.class));
             return true;
         }
 
         if (itemId == R.id.itemHostNotificationsScreen) {
-/*            Intent intent = new Intent(this, HostNotificationsScreen.class);
-            startActivity(intent);*/
+//            startActivity(new Intent(this, HostNotificationsScreen.class));
             return true;
         }
 
         if (itemId == R.id.itemLogOut) {
-/*            deletePreferences();
+            deletePreferences();
             Intent intent = new Intent(this, LoginScreen.class);
-            startActivity(intent);*/
+            startActivity(intent);
             return true;
 
         }

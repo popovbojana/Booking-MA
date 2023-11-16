@@ -16,28 +16,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.booking_ma.adapters.AccommodationAdapter;
 import com.example.booking_ma.fragments.AccommodationsFragment;
-import com.example.booking_ma.model.Accommodation;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class GuestMainScreen extends AppCompatActivity {
@@ -114,7 +105,7 @@ public class GuestMainScreen extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_guest_main_screen, menu);
+        inflater.inflate(R.menu.menu_guest, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -147,9 +138,9 @@ public class GuestMainScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemLogOut) {
-/*            deletePreferences();
+            deletePreferences();
             Intent intent = new Intent(this, LoginScreen.class);
-            startActivity(intent);*/
+            startActivity(intent);
             return true;
 
         }

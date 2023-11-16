@@ -1,6 +1,9 @@
 package com.example.booking_ma;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -53,8 +56,56 @@ public class AccommodationsScreen extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_host, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.itemHostMainScreen) {
+            startActivity(new Intent(this, HostMainScreen.class));
+            return true;
+        }
+
+        if (itemId == R.id.itemHostAccountScreen) {
+            startActivity(new Intent(this, AccountScreen.class));
+            return true;
+        }
+
+        if (itemId == R.id.itemHostAccommodationsScreen) {
+            startActivity(new Intent(this, AccommodationsScreen.class));
+            return true;
+        }
+
+        if (itemId == R.id.itemHostReservationsScreen) {
+//            startActivity(new Intent(this, ReservationsScreen.class));
+            return true;
+        }
+
+        if (itemId == R.id.itemHostNotificationsScreen) {
+//            startActivity(new Intent(this, HostNotificationsScreen.class));
+            return true;
+        }
+
+        if (itemId == R.id.itemLogOut) {
+            deletePreferences();
+            Intent intent = new Intent(this, LoginScreen.class);
+            startActivity(intent);
+            return true;
+
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deletePreferences(){
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sharedPreferences.edit();
+        spEditor.clear().commit();
     }
 
 
