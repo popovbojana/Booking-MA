@@ -22,4 +22,5 @@ public interface IAccommodationService {
     void addToFavorites(FavoriteAccommodationDTO favAccommodation) throws NoDataWithId;
     void removeFromFavorites(FavoriteAccommodationDTO favAccommodation) throws NoDataWithId;
     List<AccommodationDisplayDTO> getAllFavoritesForGuest(Long id) throws NoDataWithId;
+    AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId;
 }

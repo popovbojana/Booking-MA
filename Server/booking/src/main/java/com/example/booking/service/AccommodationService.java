@@ -6,6 +6,7 @@ import com.example.booking.dto.NewAvailabilityPriceDTO;
 import com.example.booking.dto.FavoriteAccommodationDTO;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.model.*;
+import com.example.booking.model.enums.PriceType;
 import com.example.booking.model.enums.Role;
 import com.example.booking.repository.AccommodationChangeRepository;
 import com.example.booking.repository.AccommodationRepository;
@@ -100,13 +101,13 @@ public class AccommodationService implements IAccommodationService {
             Accommodation accommodation = this.accommodationRepository.findById(id).get();
             if (approval){
                 AccommodationChange changes = accommodation.getAccommodationChange();
-                if (changes.getName() != null){
+                if (changes.getName().equals("")){
                     accommodation.setName(changes.getName());
                 }
-                if (changes.getDescription() != null){
+                if (changes.getDescription().equals("")){
                     accommodation.setDescription(changes.getDescription());
                 }
-                if (changes.getAmenities() != null){
+                if (changes.getAmenities().equals("")){
                     accommodation.setAmenities(changes.getAmenities());
                 }
                 if (changes.getMinGuests() != -1){
@@ -115,11 +116,14 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getMaxGuests() != -1){
                     accommodation.setMaxGuests(changes.getMaxGuests());
                 }
-                if (changes.getType() != null){
+                if (changes.getType().equals("")){
                     accommodation.setType(changes.getType());
                 }
-                if (changes.getPriceType() != null){
-                    accommodation.setPriceType(changes.getPriceType());
+                if (changes.getPriceType() == PriceType.PER_GUEST && accommodation.getPriceType() == PriceType.PER_UNIT){
+                    accommodation.setPriceType(PriceType.PER_GUEST);
+                }
+                if (changes.getPriceType() == PriceType.PER_UNIT && accommodation.getPriceType() == PriceType.PER_GUEST){
+                    accommodation.setPriceType(PriceType.PER_UNIT);
                 }
                 if (changes.getAvailabilities() != null && !changes.getAvailabilities().isEmpty()){
                     this.availabilityPriceRepository.deleteAll(accommodation.getAvailabilities());
@@ -134,6 +138,9 @@ public class AccommodationService implements IAccommodationService {
                 }
                 if (changes.getCancellationDeadlineInDays() != -1){
                     accommodation.setCancellationDeadlineInDays(changes.getCancellationDeadlineInDays());
+                }
+                if (changes.getStandardPrice() != -1.0){
+                    accommodation.setStandardPrice(changes.getStandardPrice());
                 }
                 accommodation.setAccommodationChange(null);
                 accommodation.setHasChanges(false);
@@ -213,6 +220,16 @@ public class AccommodationService implements IAccommodationService {
             return display;
         } else {
             throw new NoDataWithId("There is no guest with this id!");
+        }
+    }
+
+    @Override
+    public AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId {
+        if (this.accommodationRepository.findById(id).isPresent()){
+            Accommodation accommodation = this.accommodationRepository.findById(id).get();
+            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice());
+        } else {
+            throw new NoDataWithId("There is no guets with this id!");
         }
     }
 }
