@@ -29,7 +29,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp">
 
-        <!-- Button for "Add New" -->
         <Button
             android:id="@+id/btnAddNew"
             android:layout_width="0dp"
@@ -38,7 +37,6 @@
             android:text="Add New"
             android:layout_marginEnd="8dp" />
 
-        <!-- Button for "Generate Report" -->
         <Button
             android:id="@+id/btnGenerateReport"
             android:layout_width="0dp"

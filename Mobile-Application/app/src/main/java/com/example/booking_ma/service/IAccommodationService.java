@@ -1,13 +1,17 @@
 package com.example.booking_ma.service;
 
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
+import com.example.booking_ma.DTO.NewAccommodationDTO;
+import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface IAccommodationService {
@@ -23,4 +27,6 @@ public interface IAccommodationService {
     @GET(ServiceUtils.accommodation + "/all-accommodation/{ownersId}")
     Call<List<AccommodationDisplayDTO>> getAllAccommodationForOwner(@Path("ownersId") Long ownersId);
 
+    @POST(ServiceUtils.accommodation + "/add-new/{ownersId}")
+    Call<ResponseMessage> addNewAccommodation(@Path("ownersId") Long ownersId, @Body NewAccommodationDTO newAccommodation);
 }
