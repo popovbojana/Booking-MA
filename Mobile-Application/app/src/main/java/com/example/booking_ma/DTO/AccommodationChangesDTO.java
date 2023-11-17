@@ -2,6 +2,7 @@ package com.example.booking_ma.DTO;
 
 import com.example.booking_ma.model.enums.PriceType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccommodationChangesDTO {
@@ -20,15 +21,17 @@ public class AccommodationChangesDTO {
     public AccommodationChangesDTO() {
     }
 
-    public AccommodationChangesDTO(String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<NewAvailabilityPriceDTO> availabilities, int cancellationDeadlineInDays, double standardPrice) {
+    public AccommodationChangesDTO(String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType myPriceType, int cancellationDeadlineInDays, double standardPrice) {
         this.name = name;
         this.description = description;
         this.amenities = amenities;
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
         this.type = type;
-        this.priceType = priceType;
-        this.availabilities = availabilities;
+        if (myPriceType != null){
+            this.priceType = myPriceType;
+        }
+        this.availabilities = new ArrayList<>();
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
         this.standardPrice = standardPrice;
     }

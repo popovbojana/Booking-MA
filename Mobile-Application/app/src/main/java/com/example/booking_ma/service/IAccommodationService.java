@@ -34,6 +34,6 @@ public interface IAccommodationService {
     @GET(ServiceUtils.accommodation + "/accommodation/{id}")
     Call<AccommodationDisplayDTO> getAccommodationById(@Path("id") Long id);
 
-    @POST(ServiceUtils.accommodation + "change-accommodation/{id}")
+    @POST(ServiceUtils.accommodation + "/change-accommodation/{id}")
     Call<ResponseMessage> changeAccommodation(@Path("id") Long id, @Body AccommodationChangesDTO changes);
 }

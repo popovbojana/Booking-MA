@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -185,8 +186,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextName.setEnabled(false);
                 String name = editTextName.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(name, null, null, -1, -1, null, null, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO(name, "", "", -1, -1, "", null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -195,8 +196,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextDescription.setEnabled(false);
                 String description = editTextDescription.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, description, null, -1, -1, null, null, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", description, "", -1, -1, "",null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -205,8 +206,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextAmenities.setEnabled(false);
                 String amenities = editTextAmenities.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, amenities, -1, -1, null, null, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", amenities, -1, -1, "", null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -215,8 +216,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextMinGuests.setEnabled(false);
                 String minGuests = editTextMinGuests.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, null, Integer.parseInt(minGuests), -1, null, null, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", Integer.parseInt(minGuests), -1, "", null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -225,8 +226,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextMaxGuests.setEnabled(false);
                 String maxGuests = editTextMaxGuests.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, null, Integer.parseInt(maxGuests), -1, null, null, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, Integer.parseInt(maxGuests), "", null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -235,8 +236,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextType.setEnabled(false);
                 String type = editTextType.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, null, -1, -1, type, null, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, type,null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -245,8 +246,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextCancellation.setEnabled(false);
                 String cancellation = editTextCancellation.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, null, -1, -1, null, null, null, Integer.parseInt(cancellation), -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, Integer.parseInt(cancellation), -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -255,8 +256,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
             public void onClick(View v) {
                 editTextStandardPrice.setEnabled(false);
                 String standardPrice = editTextStandardPrice.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, null, -1, -1, null, null, null, -1, Double.parseDouble(standardPrice));
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, -1, Double.parseDouble(standardPrice));
+                updateAccommodation(token, accommodationId, changes);
             }
         });
 
@@ -271,8 +272,8 @@ public class EditAccommodationScreen extends AppCompatActivity {
                 } else {
                     price = PriceType.PER_UNIT;
                 }
-                AccommodationChangesDTO changes = new AccommodationChangesDTO(null, null, null, -1, -1, null, price, null, -1, -1);
-                updateAccommodation(token, myId, changes);
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", price, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
             }
         });
     }
@@ -307,6 +308,7 @@ public class EditAccommodationScreen extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     Log.i("Error", response.message());
                 };
+                Toast.makeText(EditAccommodationScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("Success", response.body().getMessage());
             }
 
@@ -322,9 +324,9 @@ public class EditAccommodationScreen extends AppCompatActivity {
         editTextDescription.setText(accommodationDisplay.getDescription());
         editTextAmenities.setText(accommodationDisplay.getAmenities());
         editTextType.setText(accommodationDisplay.getType());
-        editTextMinGuests.setText(accommodationDisplay.getMinGuests());
-        editTextMaxGuests.setText(accommodationDisplay.getMaxGuests());
-        editTextCancellation.setText(accommodationDisplay.getCancellationDeadlineInDays());
+        editTextMinGuests.setText(String.valueOf(accommodationDisplay.getMinGuests()));
+        editTextMaxGuests.setText(String.valueOf(accommodationDisplay.getMaxGuests()));
+        editTextCancellation.setText(String.valueOf(accommodationDisplay.getCancellationDeadlineInDays()));
         editTextStandardPrice.setText(String.valueOf(accommodationDisplay.getStandardPrice()));
         setSpinnerSelectionBasedOnPriceType(accommodationDisplay.getPriceType());
     }
