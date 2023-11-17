@@ -135,6 +135,9 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getCancellationDeadlineInDays() != -1){
                     accommodation.setCancellationDeadlineInDays(changes.getCancellationDeadlineInDays());
                 }
+                if (changes.getStandardPrice() != -1){
+                    accommodation.setStandardPrice(changes.getStandardPrice());
+                }
                 accommodation.setAccommodationChange(null);
                 accommodation.setHasChanges(false);
                 this.accommodationRepository.save(accommodation);
@@ -213,6 +216,16 @@ public class AccommodationService implements IAccommodationService {
             return display;
         } else {
             throw new NoDataWithId("There is no guest with this id!");
+        }
+    }
+
+    @Override
+    public AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId {
+        if (this.accommodationRepository.findById(id).isPresent()){
+            Accommodation accommodation = this.accommodationRepository.findById(id).get();
+            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice());
+        } else {
+            throw new NoDataWithId("There is no guets with this id!");
         }
     }
 }

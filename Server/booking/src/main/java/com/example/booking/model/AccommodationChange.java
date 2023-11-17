@@ -60,6 +60,7 @@ public class AccommodationChange {
         this.priceType = priceType;
         this.availabilities = availabilities;
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
+        this.standardPrice = standardPrice;
     }
 
     public AccommodationChangeDisplayDTO parseToDisplay() {
