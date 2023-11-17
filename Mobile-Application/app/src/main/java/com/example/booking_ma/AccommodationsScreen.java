@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
-import com.example.booking_ma.DTO.UserDisplayDTO;
-import com.example.booking_ma.DTO.UserUpdateDTO;
-import com.example.booking_ma.fragments.AccommodationsFragment;
 import com.example.booking_ma.fragments.HostAccommodationsFragment;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
@@ -41,12 +40,15 @@ public class AccommodationsScreen extends AppCompatActivity {
     private Toolbar toolbar;
     private Button btnAddNew, btnGenerateReport;
 
-    private EditText editTextName, editTextDescription, editTextAmenities, editTextMinGuests, editTextMaxGuests, editTextType, editTextPriceType, editTextStandardPrice, editTextCancellationDeadline, editTextAddress, editTextLatitude, editTextLongitude;
+    private EditText editTextName, editTextDescription, editTextAmenities, editTextMinGuests, editTextMaxGuests, editTextType, editTextStandardPrice, editTextCancellationDeadline, editTextAddress, editTextLatitude, editTextLongitude;
     private TextView textViewSearchError;
     private Button buttonCancel, buttonAdd;
+    private Spinner spinnerPriceType;
 
     private String token;
     private Long myId;
+
+    private String priceType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,23 +152,38 @@ public class AccommodationsScreen extends AppCompatActivity {
         dialog.setContentView(R.layout.popup_add_new_accommodation);
         dialog.show();
 
+        spinnerPriceType = dialog.findViewById(R.id.spinnerPriceType);
+        ArrayAdapter<CharSequence> priceTypeAdapter = ArrayAdapter.createFromResource(this, R.array.price_types, android.R.layout.simple_spinner_item);
+        priceTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPriceType.setAdapter(priceTypeAdapter);
+
         editTextName = dialog.findViewById(R.id.editTextName);
         editTextDescription = dialog.findViewById(R.id.editTextDescription);
         editTextAmenities = dialog.findViewById(R.id.editTextAmenities);
         editTextMinGuests = dialog.findViewById(R.id.editTextMinGuests);
         editTextMaxGuests = dialog.findViewById(R.id.editTextMaxGuests);
         editTextType = dialog.findViewById(R.id.editTextType);
-        editTextPriceType = dialog.findViewById(R.id.editTextPriceType);
         editTextStandardPrice = dialog.findViewById(R.id.editTextStandardPrice);
         editTextCancellationDeadline = dialog.findViewById(R.id.editTextCancellationDeadline);
         editTextAddress = dialog.findViewById(R.id.editTextAddress);
         editTextLatitude = dialog.findViewById(R.id.editTextLatitude);
         editTextLongitude = dialog.findViewById(R.id.editTextLongitude);
-
         textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
 
         buttonCancel = dialog.findViewById(R.id.buttonCancel);
         buttonAdd = dialog.findViewById(R.id.buttonAdd);
+
+        spinnerPriceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                priceType = parentView.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
+
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +196,6 @@ public class AccommodationsScreen extends AppCompatActivity {
                 String minGuests = editTextMinGuests.getText().toString();
                 String maxGuests = editTextMaxGuests.getText().toString();
                 String type = editTextType.getText().toString();
-                String priceType = editTextPriceType.getText().toString();
                 String standardPrice = editTextStandardPrice.getText().toString();
                 String cancellation = editTextCancellationDeadline.getText().toString();
                 String address = editTextAddress.getText().toString();
@@ -201,12 +217,12 @@ public class AccommodationsScreen extends AppCompatActivity {
                 } else if(maxGuests.equals("")) {
                     Log.i("Error", "Max. guests is required");
                     textViewSearchError.setText("Max. guests is required!");
+                } else if (Integer.parseInt(minGuests) > Integer.parseInt(maxGuests)) {
+                    Log.i("Error", "Min. guests larger than max guests");
+                    textViewSearchError.setText("Min. guests can't be larger than max guests!");
                 } else if(type.equals("")) {
                     Log.i("Error", "Type empty");
                     textViewSearchError.setText("Type is required!");
-                } else if(priceType.equals("")) {
-                    Log.i("Error", "Price type empty");
-                    textViewSearchError.setText("Price type is required!");
                 } else if(standardPrice.equals("")) {
                     Log.i("Error", "Standard price empty");
                     textViewSearchError.setText("Standard price is required!");
@@ -225,8 +241,14 @@ public class AccommodationsScreen extends AppCompatActivity {
 //                    textViewSearchError.setText("Longitude is required!");
 //                }
                 else {
-//                    NewAccommodationDTO newAccommodation = new NewAccommodationDTO(name, description, "", amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, Double.parseDouble(latitude), Double.parseDouble(longitude), 0.0, Double.parseDouble(standardPrice));
-                    NewAccommodationDTO newAccommodation = new NewAccommodationDTO(name, description, "", amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
+                    NewAccommodationDTO newAccommodation;
+                    if (priceType.equals("Per guest")) {
+                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
+//                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, Double.parseDouble(latitude), Double.parseDouble(longitude), 0.0, Double.parseDouble(standardPrice));
+                    } else {
+                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_UNIT, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
+//                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_UNIT, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, Double.parseDouble(latitude), Double.parseDouble(longitude), 0.0, Double.parseDouble(standardPrice));
+                    }
 
                     Call<ResponseMessage> call = ServiceUtils.accommodationService(token).addNewAccommodation(myId, newAccommodation);
                     call.enqueue(new Callback<ResponseMessage>() {

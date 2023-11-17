@@ -8,7 +8,6 @@ public class NewAccommodationDTO {
 
     private String name;
     private String description;
-    private String location;
     private String amenities;
     private int minGuests;
     private int maxGuests;
@@ -25,10 +24,9 @@ public class NewAccommodationDTO {
     public NewAccommodationDTO() {
     }
 
-    public NewAccommodationDTO(String name, String description, String location, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<NewAvailabilityPriceDTO> availability, int cancellationDeadlineInDays, String address, double latitude, double longitude, double finalRating, double standardPrice) {
+    public NewAccommodationDTO(String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<NewAvailabilityPriceDTO> availability, int cancellationDeadlineInDays, String address, double latitude, double longitude, double finalRating, double standardPrice) {
         this.name = name;
         this.description = description;
-        this.location = location;
         this.amenities = amenities;
         this.minGuests = minGuests;
         this.maxGuests = maxGuests;
@@ -57,14 +55,6 @@ public class NewAccommodationDTO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getAmenities() {
