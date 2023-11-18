@@ -1,4 +1,5 @@
 package com.example.booking_ma.adapters;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
@@ -16,24 +18,24 @@ import com.example.booking_ma.model.enums.PriceType;
 
 import java.util.List;
 
-public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommodationsAdapter.ViewHolder> {
+public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodationsAdapter.ViewHolder>{
 
     private List<AccommodationDisplayDTO> accommodations;
     private Context context;
 
-    public HostAccommodationsAdapter(Context context, List<AccommodationDisplayDTO> accommodations) {
+    public NewAccommodationsAdapter(Context context, List<AccommodationDisplayDTO> accommodations) {
         this.context = context;
         this.accommodations = accommodations;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_accommodation, parent, false);
-        return new ViewHolder(view);
+    public NewAccommodationsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_new_accommodation, parent, false);
+        return new NewAccommodationsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(NewAccommodationsAdapter.ViewHolder holder, int position) {
         AccommodationDisplayDTO item = accommodations.get(position);
 
 //        holder.accommodationImage.setImageResource(item.getImageResource());
@@ -49,8 +51,6 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
         String cancellation = "Free cancellation up to " + item.getCancellationDeadlineInDays() + " days before check-in";
         holder.accommodationCancellation.setText(cancellation);
         holder.accommodationAddress.setText(item.getAddress());
-        String rating = "Rating: " + item.getFinalRating();
-        holder.accommodationRating.setText(rating);
         String price;
         if (item.getPriceType() == PriceType.PER_GUEST){
             price = item.getStandardPrice() + " per guest";
@@ -59,29 +59,19 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
         }
         holder.accommodationStandardPrice.setText(price);
 
-        holder.commentsButton.setOnClickListener(new View.OnClickListener() {
+        holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO
             }
         });
 
-        holder.getReportButton.setOnClickListener(new View.OnClickListener() {
+        holder.btnDisapprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO
             }
         });
-
-        holder.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, EditAccommodationScreen.class);
-                intent.putExtra("accommodationId", item.getId());
-                context.startActivity(intent);
-            }
-        });
-
     }
 
     @Override
@@ -91,8 +81,8 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice;
-        Button commentsButton, getReportButton, editButton;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationStandardPrice;
+        Button btnApprove, btnDisapprove;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -105,11 +95,9 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             accommodationType = itemView.findViewById(R.id.accommodationType);
             accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
             accommodationAddress = itemView.findViewById(R.id.accommodationAddress);
-            accommodationRating = itemView.findViewById(R.id.accommodationRating);
             accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
-            commentsButton = itemView.findViewById(R.id.commentsButton);
-            getReportButton = itemView.findViewById(R.id.getReportButton);
-            editButton = itemView.findViewById(R.id.editButton);
+            btnApprove = itemView.findViewById(R.id.btnApprove);
+            btnDisapprove = itemView.findViewById(R.id.btnDisapprove);
         }
     }
 }

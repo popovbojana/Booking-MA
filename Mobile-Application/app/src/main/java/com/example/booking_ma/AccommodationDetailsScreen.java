@@ -202,7 +202,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     public void setToolbar(){
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("FAB Car");
+        getSupportActionBar().setTitle("Booking");
     }
 
     public void setMapFragment(){

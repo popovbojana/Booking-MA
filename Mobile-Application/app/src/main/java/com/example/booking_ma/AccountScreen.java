@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,9 +22,7 @@ import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.DTO.UserPasswordDTO;
 import com.example.booking_ma.DTO.UserUpdateDTO;
-import com.example.booking_ma.service.IAccommodationService;
 import com.example.booking_ma.service.IUserService;
-import com.example.booking_ma.model.User;
 import com.example.booking_ma.service.ServiceUtils;
 
 import retrofit2.Call;
@@ -385,7 +382,7 @@ public class AccountScreen extends AppCompatActivity {
 
     private void showDeleteAccountDialog() {
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.popup_are_you_shore);
+        dialog.setContentView(R.layout.popup_are_you_sure);
 
         buttonNo = dialog.findViewById(R.id.buttonNo);
         buttonYes = dialog.findViewById(R.id.buttonYes);

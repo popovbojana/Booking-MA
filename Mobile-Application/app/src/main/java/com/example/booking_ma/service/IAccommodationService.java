@@ -1,5 +1,6 @@
 package com.example.booking_ma.service;
 
+import com.example.booking_ma.DTO.AccommodationChangeDisplayDTO;
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
@@ -36,4 +37,11 @@ public interface IAccommodationService {
 
     @POST(ServiceUtils.accommodation + "/change-accommodation/{id}")
     Call<ResponseMessage> changeAccommodation(@Path("id") Long id, @Body AccommodationChangesDTO changes);
+
+    @GET(ServiceUtils.accommodation + "/all-new-accommodation")
+    Call<List<AccommodationDisplayDTO>> getAllNewAccommodations();
+
+    @GET(ServiceUtils.accommodation + "/all-changes-accommodation")
+    Call<List<AccommodationChangeDisplayDTO>> getAllAccommodationChanges();
+
 }
