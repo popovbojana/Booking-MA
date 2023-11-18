@@ -3,6 +3,7 @@ package com.example.booking_ma.service;
 import com.example.booking_ma.DTO.AccommodationChangeDisplayDTO;
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
+import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
@@ -14,6 +15,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface IAccommodationService {
@@ -43,5 +45,11 @@ public interface IAccommodationService {
 
     @GET(ServiceUtils.accommodation + "/all-changes-accommodation")
     Call<List<AccommodationChangeDisplayDTO>> getAllAccommodationChanges();
+
+    @PUT(ServiceUtils.accommodation + "/approval-new-accommodation/{id}")
+    Call<ResponseMessage> approveNewAccommodation(@Path("id") Long id, @Body ApprovalDTO approvalDTO);
+
+    @PUT(ServiceUtils.accommodation + "/approval-changes-accommodation/{id}")
+    Call<ResponseMessage> approveAccommodationChanges(@Path("id") Long id, @Body ApprovalDTO approvalDTO);
 
 }

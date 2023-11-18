@@ -61,7 +61,7 @@ public class NewAccommodationsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<AccommodationDisplayDTO> accommodations = response.body();
 
-                    NewAccommodationsAdapter adapter = new NewAccommodationsAdapter(getContext(), accommodations);
+                    NewAccommodationsAdapter adapter = new NewAccommodationsAdapter(getContext(), accommodations, token);
                     recyclerViewAccommodations.setAdapter(adapter);
                 } else {
                     Log.e("API Error", "Failed to fetch accommodations: " + response.message());
