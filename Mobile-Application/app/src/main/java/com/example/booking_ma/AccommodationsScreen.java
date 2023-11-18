@@ -89,7 +89,7 @@ public class AccommodationsScreen extends AppCompatActivity {
         btnGenerateReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add reports on server side
+                //todo
             }
         });
     }
@@ -278,5 +278,4 @@ public class AccommodationsScreen extends AppCompatActivity {
         });
 
     }
-
 }

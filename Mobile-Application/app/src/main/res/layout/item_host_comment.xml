@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:layout_centerInParent="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewGuestId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guest ID: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comment: "
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report"
+            android:onClick="onReportButtonClick" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+    </RelativeLayout>
