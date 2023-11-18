@@ -17,14 +17,10 @@ import com.example.booking_ma.AccommodationsApprovalScreen;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
-import com.example.booking_ma.EditAccommodationScreen;
-import com.example.booking_ma.LoginScreen;
 import com.example.booking_ma.R;
-import com.example.booking_ma.RegisterScreen;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;

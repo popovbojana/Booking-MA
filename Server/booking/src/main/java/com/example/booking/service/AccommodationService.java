@@ -101,13 +101,13 @@ public class AccommodationService implements IAccommodationService {
             Accommodation accommodation = this.accommodationRepository.findById(id).get();
             if (approval){
                 AccommodationChange changes = accommodation.getAccommodationChange();
-                if (changes.getName().equals("")){
+                if (!changes.getName().equals("")){
                     accommodation.setName(changes.getName());
                 }
-                if (changes.getDescription().equals("")){
+                if (!changes.getDescription().equals("")){
                     accommodation.setDescription(changes.getDescription());
                 }
-                if (changes.getAmenities().equals("")){
+                if (!changes.getAmenities().equals("")){
                     accommodation.setAmenities(changes.getAmenities());
                 }
                 if (changes.getMinGuests() != -1){
@@ -116,7 +116,7 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getMaxGuests() != -1){
                     accommodation.setMaxGuests(changes.getMaxGuests());
                 }
-                if (changes.getType().equals("")){
+                if (!changes.getType().equals("")){
                     accommodation.setType(changes.getType());
                 }
                 if (changes.getPriceType() == PriceType.PER_GUEST && accommodation.getPriceType() == PriceType.PER_UNIT){
@@ -227,7 +227,7 @@ public class AccommodationService implements IAccommodationService {
     public AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId {
         if (this.accommodationRepository.findById(id).isPresent()){
             Accommodation accommodation = this.accommodationRepository.findById(id).get();
-            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice());
+            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice(), accommodation.getAddress(), accommodation.getAmenities());
         } else {
             throw new NoDataWithId("There is no guets with this id!");
         }

@@ -51,6 +51,13 @@ public class AccommodationsApprovalScreen extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(getTabTitle(position))
         ).attach();
+
+        int selectedTab = getIntent().getIntExtra("selectedTab", 0);
+
+        TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
+        if (tab != null) {
+            tab.select();
+        }
     }
 
     private String getTabTitle(int position) {
