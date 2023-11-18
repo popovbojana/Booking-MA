@@ -111,6 +111,7 @@ public class LoginScreen extends AppCompatActivity {
 
                                     } else if (role.equalsIgnoreCase("ADMIN")) {
 //                                        startActivity(new Intent(LoginScreen.this, AdministratorMainScreen.class));
+                                        startActivity(new Intent(LoginScreen.this, AccommodationsApprovalScreen.class));
                                     }
                                     
                                 } else {

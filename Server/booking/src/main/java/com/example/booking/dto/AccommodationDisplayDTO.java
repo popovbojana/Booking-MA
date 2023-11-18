@@ -31,7 +31,7 @@ public class AccommodationDisplayDTO {
     private double finalRating;
     private double standardPrice;
 
-    public AccommodationDisplayDTO(String name, String description, int minGuests, int maxGuests, String type, PriceType priceType, int cancellationDeadlineInDays, double standardPrice){
+    public AccommodationDisplayDTO(String name, String description, int minGuests, int maxGuests, String type, PriceType priceType, int cancellationDeadlineInDays, double standardPrice, String address, String amenities){
         this.name = name;
         this.description = description;
         this.minGuests = minGuests;
@@ -40,5 +40,7 @@ public class AccommodationDisplayDTO {
         this.priceType = priceType;
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
         this.standardPrice = standardPrice;
+        this.address = address;
+        this.amenities = amenities;
     }
 }

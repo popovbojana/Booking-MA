@@ -14,7 +14,7 @@ public interface AccommodationRepository extends CrudRepository<Accommodation, L
     @Query("select a from Accommodation a where a.approved = false")
     List<Accommodation> findAllNewAccommodation();
 
-    @Query("select a from Accommodation a where a.owner.id = :ownersId")
+    @Query("select a from Accommodation a where a.owner.id = :ownersId and a.approved = true")
     List<Accommodation> findAllAccommodationsForOwner(Long ownersId);
 
     @Query("select a from Accommodation a where a.hasChanges = true ")
