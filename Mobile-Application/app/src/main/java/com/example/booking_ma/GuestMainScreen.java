@@ -55,7 +55,7 @@ public class GuestMainScreen extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("FAB Car");
+        getSupportActionBar().setTitle("Booking");
 
         filterIcon = findViewById(R.id.filterIcon);
         textViewSearchBar = findViewById(R.id.textViewSearchBar);
