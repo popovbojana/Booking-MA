@@ -171,7 +171,9 @@ public class AccountScreen extends AppCompatActivity {
         buttonLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                deletePreferences();
+                Intent intent = new Intent(AccountScreen.this, LoginScreen.class);
+                startActivity(intent);
             }
         });
 
@@ -397,6 +399,7 @@ public class AccountScreen extends AppCompatActivity {
         buttonYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteAccount();
                 Log.i("Account:", "DELETED");
                 dialog.dismiss();
             }
@@ -473,23 +476,26 @@ public class AccountScreen extends AppCompatActivity {
         });
     }
 
-//    private void deleteAccount() {
-//        Call<ResponseMessage> call = ServiceUtils.userService.updateUser(userId, userUpdateDTO);
-//        call.enqueue(new Callback<ResponseMessage>() {
-//            @Override
-//            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-//                if (!response.isSuccessful()) {
-//                    Log.i("Error", response.message());
-//                };
-//                Log.d("Success", response.body().getMessage());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseMessage> call, Throwable t) {
-//                Log.d("Fail", t.getMessage());
-//            }
-//        });
-//    }
+    private void deleteAccount() {
+        Call<ResponseMessage> call = ServiceUtils.userService(token).deleteUser(myId);
+        call.enqueue(new Callback<ResponseMessage>() {
+            @Override
+            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                if (!response.isSuccessful()) {
+                    Log.i("Error", response.message());
+                };
+                Log.d("Success", response.body().getMessage());
+                deletePreferences();
+                Intent intent = new Intent(AccountScreen.this, LoginScreen.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                Log.d("Fail", t.getMessage());
+            }
+        });
+    }
 
     private void setDataToEditText(UserDisplayDTO userDisplay) {
 
@@ -513,6 +519,7 @@ public class AccountScreen extends AppCompatActivity {
         editTextEmail.setEnabled(false);
         editTextPassword.setEnabled(false);
     }
+
 
 
 

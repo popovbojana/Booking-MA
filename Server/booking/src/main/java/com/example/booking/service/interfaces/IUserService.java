@@ -18,8 +18,6 @@ public interface IUserService extends UserDetailsService {
 
     void removeUser(Long id);
 
-    void removeOwner(Long id);
-
     Optional<User> getUser(Long id);
 
     Optional<Guest> getGuest(Long id);

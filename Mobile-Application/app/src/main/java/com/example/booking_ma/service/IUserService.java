@@ -13,6 +13,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -46,6 +47,9 @@ public interface IUserService {
 
     @PUT(ServiceUtils.user + "/check-password/{userId}")
     Call<Boolean> checkUserPassword(@Path("userId") Long userId, @Body UserPasswordDTO userPassword);
+
+    @DELETE(ServiceUtils.user + "/delete-user/{userId}")
+    Call<ResponseMessage> deleteUser(@Path("userId") Long userId);
 
 
     

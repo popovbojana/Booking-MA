@@ -16,15 +16,15 @@ import java.util.List;
 @Table(name = "guests")
 public class Guest extends User{
 
-    @OneToMany(mappedBy = "guest")
+    @OneToMany(mappedBy = "guest", cascade = CascadeType.ALL)
     private List<RatingComment> ratingComments;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Accommodation> favoriteAccommodations;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Accommodation> historyAccommodations;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Accommodation> reservedAccommodations;
 }

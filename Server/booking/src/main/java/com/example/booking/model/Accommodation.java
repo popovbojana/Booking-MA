@@ -43,7 +43,7 @@ public class Accommodation {
     @Enumerated(EnumType.STRING)
     private PriceType priceType;
 
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AvailabilityPrice> availabilities;
 
     private int cancellationDeadlineInDays;
@@ -56,7 +56,7 @@ public class Accommodation {
     @JoinColumn(name = "change_id")
     private AccommodationChange accommodationChange;
 
-    @OneToMany(mappedBy = "accommodation")
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private List<RatingComment> ratingComments;
 
     private String address;

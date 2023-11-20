@@ -7,6 +7,7 @@ import com.example.booking.model.*;
 import com.example.booking.model.enums.Role;
 import com.example.booking.repository.AccommodationRepository;
 import com.example.booking.repository.AvailabilityPriceRepository;
+import com.example.booking.repository.RatingCommentRepository;
 import com.example.booking.repository.UserRepository;
 import com.example.booking.security.TokenUtils;
 import com.example.booking.service.interfaces.IUserService;
@@ -31,6 +32,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
     private final AvailabilityPriceRepository availabilityPriceRepository;
+    private final RatingCommentRepository ratingCommentRepository;
 
     @Autowired
     private MailService mailService;
@@ -46,26 +48,15 @@ public class UserService implements IUserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository, AccommodationRepository accommodationRepository, AvailabilityPriceRepository availabilityPriceRepository){
+    public UserService(UserRepository userRepository, AccommodationRepository accommodationRepository, AvailabilityPriceRepository availabilityPriceRepository, RatingCommentRepository ratingCommentRepository){
         this.userRepository = userRepository;
         this.accommodationRepository = accommodationRepository;
         this.availabilityPriceRepository = availabilityPriceRepository;
+        this.ratingCommentRepository = ratingCommentRepository;
     }
 
     @Override
     public void removeUser(Long id){
-        this.userRepository.deleteById(id);
-    }
-
-    @Override
-    public void removeOwner(Long id){
-        Owner owner = getOwner(id).get();
-        for(Accommodation accommodation : owner.getAccommodations()){
-            for(AvailabilityPrice availabilityPrice : accommodation.getAvailabilities()){
-                availabilityPriceRepository.deleteById(availabilityPrice.getId());
-            }
-            accommodationRepository.deleteById(accommodation.getId());
-        }
         this.userRepository.deleteById(id);
     }
 

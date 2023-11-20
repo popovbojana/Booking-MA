@@ -157,20 +157,19 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(value = "/delete-owner/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteOwner(@PathVariable("userId") Long userId) {
+    @DeleteMapping(value = "/delete-user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
         try {
-            userService.getOwner(userId)
+            userService.getUser(userId)
                     .orElseThrow(() -> new NoDataWithId("User not found"));
-            userService.removeOwner(userId);
+            userService.removeUser(userId);
 
-            System.out.println("AA");
             return new ResponseEntity<>(new MessageDTO("User deleted successfully"), HttpStatus.OK);
 
         } catch (NoDataWithId e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
