@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:textSize="24sp"
+            android:textColor="@color/gray"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp" />
 
@@ -41,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email"
+        android:textColor="@color/gray"
         android:layout_marginTop="8dp" />
 
     <EditText
@@ -48,6 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter email"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/gray"
         android:inputType="textEmailAddress"
         android:layout_marginBottom="16dp" />
 
@@ -55,12 +59,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Password"
+        android:textColor="@color/gray"
         android:layout_marginTop="8dp" />
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
         android:hint="Enter password"
         android:inputType="textPassword"
         android:layout_marginBottom="8dp" />
@@ -82,6 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don't have an account?"
+        android:textColor="@color/gray"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp" />
 

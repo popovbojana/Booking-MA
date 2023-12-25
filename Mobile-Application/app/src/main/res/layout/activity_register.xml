@@ -36,12 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Registration"
+                android:textColor="@color/gray"
                 android:textSize="24sp"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Email" />
 
             <EditText
@@ -49,11 +51,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter email"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
                 android:inputType="textEmailAddress"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Password" />
 
             <EditText
@@ -61,6 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter password"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
                 android:inputType="textPassword"/>
 
             <EditText
@@ -68,44 +75,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Confirm password"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
                 android:inputType="textPassword"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Name" />
 
             <EditText
                 android:id="@+id/editTextName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter name" />
+                android:hint="Enter name"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Surname" />
 
             <EditText
                 android:id="@+id/editTextSurname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
                 android:hint="Enter surname" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Address" />
 
             <EditText
                 android:id="@+id/editTextAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
                 android:hint="Enter address" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Phone Number" />
 
             <EditText
@@ -113,17 +132,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter phone number"
+                android:textColor="@color/gray"
+                android:textColorHint="@color/gray"
                 android:inputType="phone" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Role" />
 
             <Spinner
                 android:id="@+id/spinnerRole"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"/>
 
             <TextView
                 android:id="@+id/textViewError"
@@ -140,6 +163,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/gray"
                 android:text="Already have an account?"
                 android:layout_gravity="center_horizontal" />
 

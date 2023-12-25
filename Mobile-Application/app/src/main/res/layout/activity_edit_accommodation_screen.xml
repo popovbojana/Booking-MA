@@ -51,6 +51,7 @@
                 android:layout_height="match_parent"
                 android:hint="Name"
                 android:background="#FFF"
+                android:textColor="@color/gray"
                 android:layout_weight="1"
                 android:padding="8dp" />
 
@@ -84,6 +85,7 @@
                 android:layout_height="match_parent"
                 android:hint="Description"
                 android:background="#FFF"
+                android:textColor="@color/gray"
                 android:layout_weight="1"
                 android:padding="8dp" />
 
@@ -117,6 +119,7 @@
                 android:layout_height="match_parent"
                 android:hint="Amenities"
                 android:background="#FFF"
+                android:textColor="@color/gray"
                 android:layout_weight="1"
                 android:padding="8dp" />
 
@@ -150,6 +153,7 @@
                 android:text="Min. guests:"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
+                android:textColor="@color/gray"
                 android:paddingRight="8dp"/>
 
             <com.google.android.material.textfield.TextInputEditText
@@ -158,6 +162,7 @@
                 android:layout_height="match_parent"
                 android:hint=""
                 android:background="#FFF"
+                android:textColor="@color/gray"
                 android:layout_weight="1"
                 android:padding="8dp"
                 android:inputType="number" />
@@ -192,6 +197,7 @@
                 android:text="Max. guests:"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
+                android:textColor="@color/gray"
                 android:paddingRight="8dp"/>
 
             <com.google.android.material.textfield.TextInputEditText
@@ -200,6 +206,7 @@
                 android:layout_height="match_parent"
                 android:hint=""
                 android:background="#FFF"
+                android:textColor="@color/gray"
                 android:layout_weight="1"
                 android:padding="8dp"
                 android:inputType="number" />
@@ -233,6 +240,7 @@
                 android:layout_height="match_parent"
                 android:hint="Location"
                 android:background="#FFF"
+                android:textColor="@color/gray"
                 android:layout_weight="1"
                 android:padding="8dp" />
 
