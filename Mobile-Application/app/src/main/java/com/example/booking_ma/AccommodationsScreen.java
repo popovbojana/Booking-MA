@@ -166,8 +166,8 @@ public class AccommodationsScreen extends AppCompatActivity {
         editTextStandardPrice = dialog.findViewById(R.id.editTextStandardPrice);
         editTextCancellationDeadline = dialog.findViewById(R.id.editTextCancellationDeadline);
         editTextAddress = dialog.findViewById(R.id.editTextAddress);
-        editTextLatitude = dialog.findViewById(R.id.editTextLatitude);
-        editTextLongitude = dialog.findViewById(R.id.editTextLongitude);
+//        editTextLatitude = dialog.findViewById(R.id.editTextLatitude);
+//        editTextLongitude = dialog.findViewById(R.id.editTextLongitude);
         textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
 
         buttonCancel = dialog.findViewById(R.id.buttonCancel);
@@ -199,8 +199,8 @@ public class AccommodationsScreen extends AppCompatActivity {
                 String standardPrice = editTextStandardPrice.getText().toString();
                 String cancellation = editTextCancellationDeadline.getText().toString();
                 String address = editTextAddress.getText().toString();
-                String latitude = editTextLatitude.getText().toString();
-                String longitude = editTextLongitude.getText().toString();
+//                String latitude = editTextLatitude.getText().toString();
+//                String longitude = editTextLongitude.getText().toString();
 
                 if (name.equals("")){
                     Log.i("Error", "Name empty");

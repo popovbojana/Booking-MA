@@ -70,24 +70,24 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
         }
         holder.accommodationMaxGuests.setText(maxGuests);
         String type = "New accommodation type: " + item.getNewType();
-        holder.accommodationType.setText(type);
-        String cancellation = "New cancellation deadline: ";
-        if (item.getNewCancellationDeadlineInDays() != -1) {
-            cancellation += item.getNewCancellationDeadlineInDays();
-        }
-        cancellation += " days";
-        holder.accommodationCancellation.setText(cancellation);
-        String standardPrice = "New standard price: ";
-        if (item.getNewStandardPrice() != -1.0){
-            standardPrice += item.getNewStandardPrice();
-        }
-        holder.accommodationStandardPrice.setText(standardPrice);
-        String priceType = "New price type: ";
-        if (item.getNewPriceType() == PriceType.PER_GUEST){
-            priceType += "per guest";
-        } else if (item.getNewPriceType() == PriceType.PER_UNIT){
-            priceType += "per unit";
-        }
+//        holder.accommodationType.setText(type);
+//        String cancellation = "New cancellation deadline: ";
+//        if (item.getNewCancellationDeadlineInDays() != -1) {
+//            cancellation += item.getNewCancellationDeadlineInDays();
+//        }
+//        cancellation += " days";
+//        holder.accommodationCancellation.setText(cancellation);
+//        String standardPrice = "New standard price: ";
+//        if (item.getNewStandardPrice() != -1.0){
+//            standardPrice += item.getNewStandardPrice();
+//        }
+//        holder.accommodationStandardPrice.setText(standardPrice);
+//        String priceType = "New price type: ";
+//        if (item.getNewPriceType() == PriceType.PER_GUEST){
+//            priceType += "per guest";
+//        } else if (item.getNewPriceType() == PriceType.PER_UNIT){
+//            priceType += "per unit";
+//        }
 
         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,10 +246,10 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
             accommodationAmenities = itemView.findViewById(R.id.accommodationAmenities);
             accommodationMinGuests = itemView.findViewById(R.id.accommodationMinGuests);
             accommodationMaxGuests = itemView.findViewById(R.id.accommodationMaxGuests);
-            accommodationType = itemView.findViewById(R.id.accommodationType);
-            accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
-            accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
-            accommodationPriceType = itemView.findViewById(R.id.accommodationPriceType);
+//            accommodationType = itemView.findViewById(R.id.accommodationType);
+//            accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
+//            accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
+//            accommodationPriceType = itemView.findViewById(R.id.accommodationPriceType);
             btnApprove = itemView.findViewById(R.id.btnApprove);
             btnDisapprove = itemView.findViewById(R.id.btnDisapprove);
             currentInfoButton = itemView.findViewById(R.id.currentInfoButton);

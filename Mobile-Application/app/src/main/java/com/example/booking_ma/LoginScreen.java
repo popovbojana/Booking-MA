@@ -44,6 +44,8 @@ public class LoginScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
+        deleteTokenPreferences();
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Booking");

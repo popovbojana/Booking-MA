@@ -68,46 +68,46 @@ public class EditAccommodationScreen extends AppCompatActivity {
         buttonEditAmenities = findViewById(R.id.buttonEditAmenities);
         buttonEditMinGuests = findViewById(R.id.buttonEditMinGuests);
         buttonEditMaxGuests = findViewById(R.id.buttonEditMaxGuests);
-        buttonEditType = findViewById(R.id.buttonEditType);
-        buttonEditCancellation = findViewById(R.id.buttonEditCancellation);
-        buttonEditStandardPrice = findViewById(R.id.buttonEditStandardPrice);
-        buttonEditPriceType = findViewById(R.id.buttonEditPriceType);
+//        buttonEditType = findViewById(R.id.buttonEditType);
+//        buttonEditCancellation = findViewById(R.id.buttonEditCancellation);
+//        buttonEditStandardPrice = findViewById(R.id.buttonEditStandardPrice);
+//        buttonEditPriceType = findViewById(R.id.buttonEditPriceType);
 
         buttonSaveName = findViewById(R.id.buttonSaveName);
         buttonSaveDescription = findViewById(R.id.buttonSaveDescription);
         buttonSaveAmenities = findViewById(R.id.buttonSaveAmenities);
         buttonSaveMinGuests = findViewById(R.id.buttonSaveMinGuests);
         buttonSaveMaxGuests = findViewById(R.id.buttonSaveMaxGuests);
-        buttonSaveType = findViewById(R.id.buttonSaveType);
-        buttonSaveCancellation = findViewById(R.id.buttonSaveCancellation);
-        buttonSaveStandardPrice = findViewById(R.id.buttonSaveStandardPrice);
-        buttonSavePriceType = findViewById(R.id.buttonSavePriceType);
+//        buttonSaveType = findViewById(R.id.buttonSaveType);
+//        buttonSaveCancellation = findViewById(R.id.buttonSaveCancellation);
+//        buttonSaveStandardPrice = findViewById(R.id.buttonSaveStandardPrice);
+//        buttonSavePriceType = findViewById(R.id.buttonSavePriceType);
 
         editTextName = findViewById(R.id.editTextName);
         editTextDescription = findViewById(R.id.editTextDescription);
         editTextAmenities = findViewById(R.id.editTextAmenities);
-        editTextType = findViewById(R.id.editTextType);
+//        editTextType = findViewById(R.id.editTextType);
 
         editTextMinGuests = findViewById(R.id.editTextMinGuests);
         editTextMaxGuests = findViewById(R.id.editTextMaxGuests);
-        editTextCancellation = findViewById(R.id.editTextCancellation);
-        editTextStandardPrice = findViewById(R.id.editTextStandardPrice);
+//        editTextCancellation = findViewById(R.id.editTextCancellation);
+//        editTextStandardPrice = findViewById(R.id.editTextStandardPrice);
 
-        spinnerPriceType = findViewById(R.id.spinnerPriceType);
-        ArrayAdapter<CharSequence> priceTypeAdapter = ArrayAdapter.createFromResource(this, R.array.price_types, android.R.layout.simple_spinner_item);
-        priceTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPriceType.setAdapter(priceTypeAdapter);
+//        spinnerPriceType = findViewById(R.id.spinnerPriceType);
+//        ArrayAdapter<CharSequence> priceTypeAdapter = ArrayAdapter.createFromResource(this, R.array.price_types, android.R.layout.simple_spinner_item);
+//        priceTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerPriceType.setAdapter(priceTypeAdapter);
 
-        spinnerPriceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                priceType = parentView.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
+//        spinnerPriceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//                priceType = parentView.getItemAtPosition(position).toString();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//            }
+//        });
 
     }
 
@@ -153,33 +153,33 @@ public class EditAccommodationScreen extends AppCompatActivity {
             }
         });
 
-        buttonEditType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextType.setEnabled(true);
-            }
-        });
+//        buttonEditType.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                editTextType.setEnabled(true);
+//            }
+//        });
 
-        buttonEditCancellation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextCancellation.setEnabled(true);
-            }
-        });
+//        buttonEditCancellation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                editTextCancellation.setEnabled(true);
+//            }
+//        });
 
-        buttonEditStandardPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextStandardPrice.setEnabled(true);
-            }
-        });
+//        buttonEditStandardPrice.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                editTextStandardPrice.setEnabled(true);
+//            }
+//        });
 
-        buttonEditPriceType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinnerPriceType.setEnabled(true);
-            }
-        });
+//        buttonEditPriceType.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                spinnerPriceType.setEnabled(true);
+//            }
+//        });
 
         buttonSaveName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,51 +231,51 @@ public class EditAccommodationScreen extends AppCompatActivity {
             }
         });
 
-        buttonSaveType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextType.setEnabled(false);
-                String type = editTextType.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, type,null, -1, -1);
-                updateAccommodation(token, accommodationId, changes);
-            }
-        });
+//        buttonSaveType.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                editTextType.setEnabled(false);
+//                String type = editTextType.getText().toString();
+//                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, type,null, -1, -1);
+//                updateAccommodation(token, accommodationId, changes);
+//            }
+//        });
 
-        buttonSaveCancellation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextCancellation.setEnabled(false);
-                String cancellation = editTextCancellation.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, Integer.parseInt(cancellation), -1);
-                updateAccommodation(token, accommodationId, changes);
-            }
-        });
+//        buttonSaveCancellation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                editTextCancellation.setEnabled(false);
+//                String cancellation = editTextCancellation.getText().toString();
+//                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, Integer.parseInt(cancellation), -1);
+//                updateAccommodation(token, accommodationId, changes);
+//            }
+//        });
 
-        buttonSaveStandardPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editTextStandardPrice.setEnabled(false);
-                String standardPrice = editTextStandardPrice.getText().toString();
-                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, -1, Double.parseDouble(standardPrice));
-                updateAccommodation(token, accommodationId, changes);
-            }
-        });
+//        buttonSaveStandardPrice.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                editTextStandardPrice.setEnabled(false);
+//                String standardPrice = editTextStandardPrice.getText().toString();
+//                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, -1, Double.parseDouble(standardPrice));
+//                updateAccommodation(token, accommodationId, changes);
+//            }
+//        });
 
-        buttonSavePriceType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinnerPriceType.setEnabled(false);
-                PriceType price;
-                priceType = spinnerPriceType.getSelectedItem().toString();
-                if (priceType.equals("Per guest")){
-                    price = PriceType.PER_GUEST;
-                } else {
-                    price = PriceType.PER_UNIT;
-                }
-                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", price, -1, -1);
-                updateAccommodation(token, accommodationId, changes);
-            }
-        });
+//        buttonSavePriceType.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                spinnerPriceType.setEnabled(false);
+//                PriceType price;
+//                priceType = spinnerPriceType.getSelectedItem().toString();
+//                if (priceType.equals("Per guest")){
+//                    price = PriceType.PER_GUEST;
+//                } else {
+//                    price = PriceType.PER_UNIT;
+//                }
+//                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", price, -1, -1);
+//                updateAccommodation(token, accommodationId, changes);
+//            }
+//        });
     }
 
     private void loadAccommodation(String jwtToken) {
@@ -323,39 +323,39 @@ public class EditAccommodationScreen extends AppCompatActivity {
         editTextName.setText(accommodationDisplay.getName());
         editTextDescription.setText(accommodationDisplay.getDescription());
         editTextAmenities.setText(accommodationDisplay.getAmenities());
-        editTextType.setText(accommodationDisplay.getType());
+//        editTextType.setText(accommodationDisplay.getType());
         editTextMinGuests.setText(String.valueOf(accommodationDisplay.getMinGuests()));
         editTextMaxGuests.setText(String.valueOf(accommodationDisplay.getMaxGuests()));
-        editTextCancellation.setText(String.valueOf(accommodationDisplay.getCancellationDeadlineInDays()));
-        editTextStandardPrice.setText(String.valueOf(accommodationDisplay.getStandardPrice()));
-        setSpinnerSelectionBasedOnPriceType(accommodationDisplay.getPriceType());
+//        editTextCancellation.setText(String.valueOf(accommodationDisplay.getCancellationDeadlineInDays()));
+//        editTextStandardPrice.setText(String.valueOf(accommodationDisplay.getStandardPrice()));
+//        setSpinnerSelectionBasedOnPriceType(accommodationDisplay.getPriceType());
     }
 
-    private void setSpinnerSelectionBasedOnPriceType(PriceType priceType) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.price_types, android.R.layout.simple_spinner_item);
-        for (int i = 0; i < adapter.getCount(); i++) {
-            String spinnerItem = adapter.getItem(i).toString();
-            if (priceType == PriceType.PER_GUEST && spinnerItem.equals("PER_GUEST")) {
-                spinnerPriceType.setSelection(i);
-                return;
-            } else if (priceType == PriceType.PER_UNIT && spinnerItem.equals("PER_UNIT")) {
-                spinnerPriceType.setSelection(i);
-                return;
-            }
-        }
-        spinnerPriceType.setSelection(0);
-    }
+//    private void setSpinnerSelectionBasedOnPriceType(PriceType priceType) {
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.price_types, android.R.layout.simple_spinner_item);
+//        for (int i = 0; i < adapter.getCount(); i++) {
+//            String spinnerItem = adapter.getItem(i).toString();
+//            if (priceType == PriceType.PER_GUEST && spinnerItem.equals("PER_GUEST")) {
+//                spinnerPriceType.setSelection(i);
+//                return;
+//            } else if (priceType == PriceType.PER_UNIT && spinnerItem.equals("PER_UNIT")) {
+//                spinnerPriceType.setSelection(i);
+//                return;
+//            }
+//        }
+//        spinnerPriceType.setSelection(0);
+//    }
 
     private void setEditTextsToFalse(){
         editTextName.setEnabled(false);
         editTextDescription.setEnabled(false);
         editTextAmenities.setEnabled(false);
-        editTextType.setEnabled(false);
+//        editTextType.setEnabled(false);
         editTextMinGuests.setEnabled(false);
         editTextMaxGuests.setEnabled(false);
-        editTextCancellation.setEnabled(false);
-        editTextStandardPrice.setEnabled(false);
-        spinnerPriceType.setEnabled(false);
+//        editTextCancellation.setEnabled(false);
+//        editTextStandardPrice.setEnabled(false);
+//        spinnerPriceType.setEnabled(false);
     }
 
     @Override
