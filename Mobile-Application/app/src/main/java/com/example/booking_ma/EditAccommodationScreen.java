@@ -34,9 +34,10 @@ public class EditAccommodationScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    private Button buttonEditName, buttonEditDescription, buttonEditAmenities, buttonEditMinGuests, buttonEditMaxGuests, buttonEditType, buttonEditCancellation, buttonEditStandardPrice, buttonEditPriceType;
-    private Button buttonSaveName, buttonSaveDescription, buttonSaveAmenities, buttonSaveMinGuests, buttonSaveMaxGuests, buttonSaveType, buttonSaveCancellation, buttonSaveStandardPrice, buttonSavePriceType;
-    private EditText editTextName, editTextDescription, editTextAmenities, editTextType;
+    private Button buttonEditName, buttonEditDescription, buttonEditAmenities, buttonEditMinGuests, buttonEditMaxGuests, buttonEditType, buttonEditCancellation, buttonEditStandardPrice, buttonEditPriceType, buttonEditLocation;
+    private Button buttonSaveName, buttonSaveDescription, buttonSaveAmenities, buttonSaveMinGuests, buttonSaveMaxGuests, buttonSaveType, buttonSaveCancellation, buttonSaveStandardPrice, buttonSavePriceType, buttonSaveLocation;
+    private Button buttonAvailabilityPrice;
+    private EditText editTextName, editTextDescription, editTextAmenities, editTextType, editTextLocation;
     private TextInputEditText editTextMinGuests, editTextMaxGuests, editTextCancellation, editTextStandardPrice;
     private Spinner spinnerPriceType;
 
@@ -68,6 +69,7 @@ public class EditAccommodationScreen extends AppCompatActivity {
         buttonEditAmenities = findViewById(R.id.buttonEditAmenities);
         buttonEditMinGuests = findViewById(R.id.buttonEditMinGuests);
         buttonEditMaxGuests = findViewById(R.id.buttonEditMaxGuests);
+        buttonEditLocation = findViewById(R.id.buttonEditLocation);
 //        buttonEditType = findViewById(R.id.buttonEditType);
 //        buttonEditCancellation = findViewById(R.id.buttonEditCancellation);
 //        buttonEditStandardPrice = findViewById(R.id.buttonEditStandardPrice);
@@ -78,18 +80,21 @@ public class EditAccommodationScreen extends AppCompatActivity {
         buttonSaveAmenities = findViewById(R.id.buttonSaveAmenities);
         buttonSaveMinGuests = findViewById(R.id.buttonSaveMinGuests);
         buttonSaveMaxGuests = findViewById(R.id.buttonSaveMaxGuests);
+        buttonSaveLocation = findViewById(R.id.buttonSaveLocation);
 //        buttonSaveType = findViewById(R.id.buttonSaveType);
 //        buttonSaveCancellation = findViewById(R.id.buttonSaveCancellation);
 //        buttonSaveStandardPrice = findViewById(R.id.buttonSaveStandardPrice);
 //        buttonSavePriceType = findViewById(R.id.buttonSavePriceType);
 
+        buttonAvailabilityPrice = findViewById(R.id.buttonEditAvailabilityAndPrice);
+
         editTextName = findViewById(R.id.editTextName);
         editTextDescription = findViewById(R.id.editTextDescription);
         editTextAmenities = findViewById(R.id.editTextAmenities);
 //        editTextType = findViewById(R.id.editTextType);
-
         editTextMinGuests = findViewById(R.id.editTextMinGuests);
         editTextMaxGuests = findViewById(R.id.editTextMaxGuests);
+        editTextLocation = findViewById(R.id.editTextLocation);
 //        editTextCancellation = findViewById(R.id.editTextCancellation);
 //        editTextStandardPrice = findViewById(R.id.editTextStandardPrice);
 
@@ -150,6 +155,13 @@ public class EditAccommodationScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editTextMaxGuests.setEnabled(true);
+            }
+        });
+
+        buttonEditLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextLocation.setEnabled(true);
             }
         });
 
@@ -230,6 +242,23 @@ public class EditAccommodationScreen extends AppCompatActivity {
                 updateAccommodation(token, accommodationId, changes);
             }
         });
+//TODO location!!!!!!!
+        buttonSaveLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextLocation.setEnabled(false);
+                String location = editTextLocation.getText().toString();
+                AccommodationChangesDTO changes = new AccommodationChangesDTO("", "", "", -1, -1, "", null, -1, -1);
+                updateAccommodation(token, accommodationId, changes);
+            }
+        });
+
+        buttonAvailabilityPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
 
 //        buttonSaveType.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -276,6 +305,9 @@ public class EditAccommodationScreen extends AppCompatActivity {
 //                updateAccommodation(token, accommodationId, changes);
 //            }
 //        });
+    }
+
+    private void showDialog() {
     }
 
     private void loadAccommodation(String jwtToken) {
@@ -326,6 +358,7 @@ public class EditAccommodationScreen extends AppCompatActivity {
 //        editTextType.setText(accommodationDisplay.getType());
         editTextMinGuests.setText(String.valueOf(accommodationDisplay.getMinGuests()));
         editTextMaxGuests.setText(String.valueOf(accommodationDisplay.getMaxGuests()));
+        editTextLocation.setText(accommodationDisplay.getAddress());
 //        editTextCancellation.setText(String.valueOf(accommodationDisplay.getCancellationDeadlineInDays()));
 //        editTextStandardPrice.setText(String.valueOf(accommodationDisplay.getStandardPrice()));
 //        setSpinnerSelectionBasedOnPriceType(accommodationDisplay.getPriceType());
@@ -353,6 +386,7 @@ public class EditAccommodationScreen extends AppCompatActivity {
 //        editTextType.setEnabled(false);
         editTextMinGuests.setEnabled(false);
         editTextMaxGuests.setEnabled(false);
+        editTextLocation.setEnabled(false);
 //        editTextCancellation.setEnabled(false);
 //        editTextStandardPrice.setEnabled(false);
 //        spinnerPriceType.setEnabled(false);
