@@ -230,10 +230,10 @@ public class AccommodationsScreen extends AppCompatActivity {
                     Log.i("Error", "Cancellation deadline empty");
                     textViewSearchError.setText("Cancellation deadline is required!");
                 }
-//                else if(address.equals("")) {
-//                    Log.i("Error", "Address empty");
-//                    textViewSearchError.setText("Address is required!");
-//                }
+                else if(address.equals("")) {
+                    Log.i("Error", "Address empty");
+                    textViewSearchError.setText("Address is required!");
+                }
 //                else if(latitude.equals("")) {
 //                    Log.i("Error", "Latitude empty");
 //                    textViewSearchError.setText("Latitude is required!");
@@ -244,10 +244,10 @@ public class AccommodationsScreen extends AppCompatActivity {
                 else {
                     NewAccommodationDTO newAccommodation;
                     if (priceType.equals("Per guest")) {
-                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), "ADRESA", 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
+                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
 //                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_GUEST, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, Double.parseDouble(latitude), Double.parseDouble(longitude), 0.0, Double.parseDouble(standardPrice));
                     } else {
-                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_UNIT, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), "ADRESA", 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
+                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_UNIT, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, 45.2, 25.2, 0.0, Double.parseDouble(standardPrice));
 //                        newAccommodation = new NewAccommodationDTO(name, description, amenities, Integer.parseInt(minGuests), Integer.parseInt(maxGuests), type, PriceType.PER_UNIT, new ArrayList<NewAvailabilityPriceDTO>(), Integer.parseInt(cancellation), address, Double.parseDouble(latitude), Double.parseDouble(longitude), 0.0, Double.parseDouble(standardPrice));
                     }
 
