@@ -31,6 +31,7 @@ public class ServiceUtils {
     protected static final String accommodation = "accommodation";
     protected static final String user = "user";
     protected static final String ratingComment = "rating-comment";
+    protected static final String reservations = "reservations";
 
     public static OkHttpClient.Builder httpClientBuilder(String authToken) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -72,5 +73,9 @@ public class ServiceUtils {
 
     public static IRatingCommentService ratingCommentService(String authToken) {
         return retrofit(authToken).create(IRatingCommentService.class);
+    }
+
+    public static IReservationService reservationService(String authToken) {
+        return retrofit(authToken).create(IReservationService.class);
     }
 }

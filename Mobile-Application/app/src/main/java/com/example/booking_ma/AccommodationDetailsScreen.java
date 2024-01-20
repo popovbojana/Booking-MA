@@ -1,5 +1,6 @@
 package com.example.booking_ma;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,13 +27,24 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.booking_ma.DTO.ReservationDTO;
+import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.adapters.AccommodationAmentiteAdapter;
 import com.example.booking_ma.adapters.AccommodationRatingCommentAdapter;
 import com.example.booking_ma.fragments.MapFragment;
 import com.example.booking_ma.model.RatingComment;
+import com.example.booking_ma.service.ServiceUtils;
 import com.example.booking_ma.tools.FragmentTransition;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationDetailsScreen extends AppCompatActivity {
 
@@ -40,6 +55,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private String aName, aImg, aDescription, aLocationName, aLocationLat, aLocationLong, aReservedDates, aFreeDates, aAmentities;
     private ArrayList<RatingComment> aComments;
     private double aPrice, aStars;
+    private Long aOwnerId, aAccommodationId;
     private ImageView imageViewAccommodationPic;
     private TextView textViewAccommodationName, textViewAccommodationDesc, textViewAccommodationPrice, textViewAccommodationAmenities;
     private RatingBar ratingBarAccommodationStars;
@@ -49,7 +65,17 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private AccommodationRatingCommentAdapter commentAdapter;
     private AccommodationAmentiteAdapter amentiteAdapter;
 
+    private ImageView imageViewReserveCheckIn, imageViewReserveCheckOut;
+    private EditText editTextReserveGuests, editTextReserveCheckIn, editTextReserveCheckOut;
+    private Button buttonReservationDialogCancel, buttonReservationDialogReserve;
+    private TextView textViewReservationError;
+    private LocalDate checkInDate, checkOutDate;
+
     private String myRole;
+    private String token;
+    private Long myId;
+
+
 
 
     @Override
@@ -72,6 +98,12 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     protected void onResume() {
 
         super.onResume();
+        buttonReserveAccommodation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReservationDialog();
+            }
+        });
     
     }
 
@@ -229,6 +261,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
 
     public void getExtras(Intent intent){
 
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         aName = intent.getStringExtra("a_name");
         aImg = intent.getStringExtra("a_img");
         aDescription = intent.getStringExtra("a_description");
@@ -241,6 +274,12 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         aReservedDates = intent.getStringExtra("a_reserved_dates");
         aFreeDates = intent.getStringExtra("a_free_dates");
         aAmentities = intent.getStringExtra("a_amentites");
+        aOwnerId = intent.getLongExtra("a_owner_id", 0L);
+        aAccommodationId = intent.getLongExtra("a_accommodation_id", 0L);
+        token = sharedPreferences.getString("pref_accessToken", "");
+        myId = sharedPreferences.getLong("pref_id", 0L);
+
+
     }
 
     public void setPageParts(){
@@ -265,70 +304,155 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
 
     private void showReservationDialog() {
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.popup_search_accommodation);
-/*
-        imageViewCheckIn = dialog.findViewById(R.id.imageViewCheckIn);
-        imageViewCheckOut = dialog.findViewById(R.id.imageViewCheckOut);
-        editTextLocation = dialog.findViewById(R.id.editTextSearchLocation);
-        editTextGuests = dialog.findViewById(R.id.editTextSearchGuests);
-        editTextCheckIn = dialog.findViewById(R.id.editTextSearchCheckIn);
-        editTextCheckOut = dialog.findViewById(R.id.editTextSearchCheckOut);
-        buttonSearchDialogCancel = dialog.findViewById(R.id.buttonSearchDialogCancel);
-        buttonSearchDialogSearch = dialog.findViewById(R.id.buttonSearchDialogSearch);
-        textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
+        dialog.setContentView(R.layout.popup_reserve_accommodation);
 
-        imageViewCheckIn.setOnClickListener(new View.OnClickListener() {
+        imageViewReserveCheckIn = dialog.findViewById(R.id.imageViewReserveCheckIn);
+        imageViewReserveCheckOut = dialog.findViewById(R.id.imageViewReserveCheckOut);
+        editTextReserveGuests = dialog.findViewById(R.id.editTextReserveGuests);
+        editTextReserveCheckIn = dialog.findViewById(R.id.editTextReserveCheckIn);
+        editTextReserveCheckOut = dialog.findViewById(R.id.editTextReserveCheckOut);
+        buttonReservationDialogCancel = dialog.findViewById(R.id.buttonReservationDialogCancel);
+        buttonReservationDialogReserve = dialog.findViewById(R.id.buttonReservationDialogReserve);
+        textViewReservationError = dialog.findViewById(R.id.textViewReservationError);
+
+        imageViewReserveCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCheckInDatePickerDialog(dialog);
             }
         });
 
-        imageViewCheckOut.setOnClickListener(new View.OnClickListener() {
+        imageViewReserveCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCheckOutDatePickerDialog(dialog);
             }
         });
 
-        buttonSearchDialogCancel.setOnClickListener(new View.OnClickListener() {
+        buttonReservationDialogCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        buttonSearchDialogSearch.setOnClickListener(new View.OnClickListener() {
+/*        buttonReservationDialogReserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editTextLocation.getText().toString().equals("")){
-                    Log.e("Invalid:", "Location input");
-                    textViewSearchError.setText("Invalid location input");
+                Call<ResponseMessage> call = ServiceUtils.reservationService(token).createReservation(new ReservationDTO(myId, aOwnerId, aAccommodationId, checkInDate, checkOutDate, Integer.parseInt(editTextReserveGuests.getText().toString()), 0));
+                call.enqueue(new Callback<ResponseMessage>() {
+                    @Override
+                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                        if (response.isSuccessful()) {
+                            Log.i("Success", response.body().getMessage());
+                            Toast.makeText(AccommodationDetailsScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                        Log.i("Fail", t.getMessage());
+                    }
+                });
+//                if(textViewReservationError.getText().toString().equals("")){
+//                    Log.e("Invalid:", "Location input");
+//                    textViewSearchError.setText("Invalid location input");
+//                    return;
+//                }
+//                else if(editTextGuests.getText().toString().equals("") || editTextGuests.getText().toString().equals("0")){
+//                    Log.e("Invalid:", "Guests input");
+//                    textViewSearchError.setText("Invalid guests input");
+//                    return;
+//                }
+//                else if(editTextCheckIn.getText().toString().equals("")){
+//                    Log.e("Invalid:", "Check in input");
+//                    textViewSearchError.setText("Invalid check in input");
+//                    return;
+//                }
+//                else if(editTextCheckOut.getText().toString().equals("")){
+//                    Log.e("Invalid:", "Check out input");
+//                    textViewSearchError.setText("Invalid check out input");
+//                    return;
+//                }
+//                else{
+//                    textViewSearchBar.setText(editTextLocation.getText().toString());
+//                    dialog.dismiss();
+//                }
+            }
+        });*/
+
+        dialog.show();
+    }
+
+    private void showCheckInDatePickerDialog(Dialog dialog) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, day);
+
+                checkInDate = LocalDate.of(year, month, day);
+                if (selectedDate.compareTo(Calendar.getInstance()) < 0) {
+                    Log.e("DatePicker", "Selected date is in the past.");
+                    textViewReservationError = dialog.findViewById(R.id.textViewSearchError);
+                    textViewReservationError.setText("Incorrect date");
                     return;
                 }
-                else if(editTextGuests.getText().toString().equals("") || editTextGuests.getText().toString().equals("0")){
-                    Log.e("Invalid:", "Guests input");
-                    textViewSearchError.setText("Invalid guests input");
-                    return;
-                }
-                else if(editTextCheckIn.getText().toString().equals("")){
-                    Log.e("Invalid:", "Check in input");
-                    textViewSearchError.setText("Invalid check in input");
-                    return;
-                }
-                else if(editTextCheckOut.getText().toString().equals("")){
-                    Log.e("Invalid:", "Check out input");
-                    textViewSearchError.setText("Invalid check out input");
-                    return;
-                }
-                else{
-                    textViewSearchBar.setText(editTextLocation.getText().toString());
-                    dialog.dismiss();
+
+                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
+
+                editTextReserveCheckIn = dialog.findViewById(R.id.editTextSearchCheckIn);
+                if (editTextReserveCheckIn != null) {
+                    textViewReservationError.setText("");
+                    editTextReserveCheckIn.setText(formattedDate);
                 }
             }
-        });
+        }, year, month, day);
 
-        dialog.show();*/
+        datePickerDialog.show();
+    }
+
+    private void showCheckOutDatePickerDialog(Dialog dialog) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, day);
+
+                checkOutDate = LocalDate.of(year, month, day);
+                if (checkInDate == null) {
+                    Log.e("DatePicker", "First select the check in date");
+                    textViewReservationError.setText("First select the check in date");
+                    return;
+                }
+
+                if (checkOutDate.isBefore(checkInDate.plusDays(1))) {
+                    Log.e("DatePicker", "Selected date is before check in");
+                    textViewReservationError = dialog.findViewById(R.id.textViewSearchError);
+                    textViewReservationError.setText("Selected date is before check in");
+                    return;
+                }
+
+                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
+                editTextReserveCheckOut = dialog.findViewById(R.id.editTextSearchCheckOut);
+                if (editTextReserveCheckOut != null) {
+                    editTextReserveCheckOut.setText(formattedDate);
+                }
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
 }

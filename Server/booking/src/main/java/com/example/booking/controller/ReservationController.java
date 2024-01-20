@@ -25,7 +25,7 @@ public class ReservationController {
 
 
     @PostMapping(value = "reservation", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAuthority('GUEST')")
+    @PreAuthorize("hasAuthority('GUEST')")
     public ResponseEntity<?> createReservation(@RequestBody ReservationDTO reservation) {
         try{
             this.reservationService.createReservation(reservation);
