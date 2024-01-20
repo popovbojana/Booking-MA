@@ -6,17 +6,16 @@ import com.example.booking.dto.RateCommentDTO;
 import com.example.booking.dto.RatingCommentDisplayDTO;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.RequirementNotSatisfied;
-import com.example.booking.model.Accommodation;
-import com.example.booking.model.Guest;
-import com.example.booking.model.Owner;
-import com.example.booking.model.RatingComment;
+import com.example.booking.model.*;
 import com.example.booking.model.enums.RatingCommentType;
+import com.example.booking.model.enums.ReservationState;
 import com.example.booking.model.enums.Role;
 import com.example.booking.repository.*;
 import com.example.booking.service.interfaces.IRatingCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,21 +25,38 @@ public class RatingCommentService implements IRatingCommentService {
     private final RatingCommentRepository ratingCommentRepository;
     private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
+    private final ReservationRepository reservationRepository;
 
     @Autowired
-    public RatingCommentService(RatingCommentRepository ratingCommentRepository, UserRepository userRepository, AccommodationRepository accommodationRepository) {
+    public RatingCommentService(RatingCommentRepository ratingCommentRepository, UserRepository userRepository, AccommodationRepository accommodationRepository, ReservationRepository reservationRepository) {
         this.ratingCommentRepository = ratingCommentRepository;
         this.userRepository = userRepository;
         this.accommodationRepository = accommodationRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
-    public void rateComment(RateCommentDTO rateCommentDTO) throws NoDataWithId {
+    public void rateComment(RateCommentDTO rateCommentDTO) throws NoDataWithId, RequirementNotSatisfied {
         if (this.userRepository.findById(rateCommentDTO.getGuestsId()).isPresent() && this.userRepository.findById(rateCommentDTO.getGuestsId()).get().getRole() == Role.GUEST){
             Guest guest = (Guest) this.userRepository.findById(rateCommentDTO.getGuestsId()).get();
             if (rateCommentDTO.getType() == RatingCommentType.FOR_OWNER) {
                 if (this.userRepository.findById(rateCommentDTO.getOwnersId()).isPresent() && this.userRepository.findById(rateCommentDTO.getOwnersId()).get().getRole() == Role.OWNER){
-                    //TODO: proveriti da li je imao bar jednu rezervaciju u proslosti koju nije otkazao
+                    //TODO: proveriti jel radi
+
+                    boolean canComment = false;
+                    List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
+                    for (Reservation r : allGuestsReservations){
+                        LocalDateTime currentTime = LocalDateTime.now();
+                        if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED){
+                            canComment = true;
+                        }
+                    }
+
+                    if (!canComment) {
+                        throw new RequirementNotSatisfied("Can not leave rating and comment on this owner!");
+                    }
+
+                    //
                     Owner owner = (Owner) this.userRepository.findById(rateCommentDTO.getOwnersId()).get();
                     RatingComment ratingComment = new RatingComment(rateCommentDTO.getType(), guest, owner, null, rateCommentDTO.getRating(), rateCommentDTO.getComment());
                     this.ratingCommentRepository.save(ratingComment);
@@ -53,7 +69,22 @@ public class RatingCommentService implements IRatingCommentService {
                 }
             } else {
                 if (this.accommodationRepository.findById(rateCommentDTO.getAccommodationsId()).isPresent()){
-                    //TODO: proveriti da li je odseo bar jednom u proslosti i da nije proslo vise od 7 dana od toga
+                    //TODO: proveriti jel radi
+
+                    boolean canComment = false;
+                    List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
+                    for (Reservation r : allGuestsReservations){
+                        LocalDateTime currentTime = LocalDateTime.now();
+                        if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED && currentTime.isBefore(r.getCheckOut().plusDays(7))) {
+                            canComment = true;
+                        }
+                    }
+
+                    if (!canComment) {
+                        throw new RequirementNotSatisfied("Can not leave rating and comment on this accommodation!");
+                    }
+
+                    //
                     Accommodation accommodation = this.accommodationRepository.findById(rateCommentDTO.getAccommodationsId()).get();
                     RatingComment ratingComment = new RatingComment(rateCommentDTO.getType(), guest, null, accommodation, rateCommentDTO.getRating(), rateCommentDTO.getComment());
                     this.ratingCommentRepository.save(ratingComment);

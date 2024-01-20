@@ -36,7 +36,7 @@ public interface IUserService extends UserDetailsService {
 
     void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId;
 
-    void reportOwner(Long id, ReportedUserReasonDTO reason) throws NoDataWithId;
+    void reportOwner(Long ownerId, ReportedUserReasonDTO reason, Long guestId) throws NoDataWithId;
 
     void update(Long userId, UserUpdateDTO userUpdate) throws NoDataWithId;
 

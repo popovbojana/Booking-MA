@@ -156,6 +156,23 @@ public class UserService implements IUserService {
     public void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
         if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST){
             User guest = this.userRepository.findById(id).get();
+            // todo proveriti da li radi
+
+            boolean canComment = false;
+            List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
+            for (Reservation r : allGuestsReservations){
+                LocalDateTime currentTime = LocalDateTime.now();
+                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED){
+                    canComment = true;
+                }
+            }
+
+            if (!canComment) {
+                throw new RequirementNotSatisfied("Can not leave rating and comment on this owner!");
+            }
+
+            //
+
             guest.setReported(true);
             guest.setReportedReason(reason.getReason());
             this.userRepository.save(guest);
@@ -165,9 +182,26 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void reportOwner(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
-        if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.OWNER){
-            User owner = this.userRepository.findById(id).get();
+    public void reportOwner(Long ownerId, ReportedUserReasonDTO reason, Long guestsId) throws NoDataWithId {
+        if (this.userRepository.findById(ownerId).isPresent() && this.userRepository.findById(ownerId).get().getRole() == Role.OWNER){
+            //todo proveriti jel radi
+
+            boolean canComment = false;
+            List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guestsId);
+            for (Reservation r : allGuestsReservations){
+                LocalDateTime currentTime = LocalDateTime.now();
+                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED){
+                    canComment = true;
+                }
+            }
+
+            if (!canComment) {
+                throw new RequirementNotSatisfied("Can not leave rating and comment on this owner!");
+            }
+
+            //
+
+            User owner = this.userRepository.findById(ownerId).get();
             owner.setReported(true);
             owner.setReportedReason(reason.getReason());
             this.userRepository.save(owner);
