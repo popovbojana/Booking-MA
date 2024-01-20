@@ -41,22 +41,23 @@ public class RatingCommentService implements IRatingCommentService {
             Guest guest = (Guest) this.userRepository.findById(rateCommentDTO.getGuestsId()).get();
             if (rateCommentDTO.getType() == RatingCommentType.FOR_OWNER) {
                 if (this.userRepository.findById(rateCommentDTO.getOwnersId()).isPresent() && this.userRepository.findById(rateCommentDTO.getOwnersId()).get().getRole() == Role.OWNER){
-                    //TODO: proveriti jel radi
 
                     boolean canComment = false;
                     List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
                     for (Reservation r : allGuestsReservations){
+                        System.out.println("Checkout:" + r.getCheckOut());
                         LocalDateTime currentTime = LocalDateTime.now();
-                        if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED){
+                        System.out.println("Current time: " + currentTime);
+                        if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() == ReservationState.APPROVED){
                             canComment = true;
                         }
+                        System.out.println(canComment);
                     }
 
                     if (!canComment) {
-                        throw new RequirementNotSatisfied("Can not leave rating and comment on this owner!");
+                        throw new RequirementNotSatisfied("You must have at least one approved reservation in the past with this owner to be able to leave rating and comment!");
                     }
 
-                    //
                     Owner owner = (Owner) this.userRepository.findById(rateCommentDTO.getOwnersId()).get();
                     RatingComment ratingComment = new RatingComment(rateCommentDTO.getType(), guest, owner, null, rateCommentDTO.getRating(), rateCommentDTO.getComment());
                     this.ratingCommentRepository.save(ratingComment);
@@ -69,22 +70,22 @@ public class RatingCommentService implements IRatingCommentService {
                 }
             } else {
                 if (this.accommodationRepository.findById(rateCommentDTO.getAccommodationsId()).isPresent()){
-                    //TODO: proveriti jel radi
 
                     boolean canComment = false;
                     List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
                     for (Reservation r : allGuestsReservations){
                         LocalDateTime currentTime = LocalDateTime.now();
-                        if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED && currentTime.isBefore(r.getCheckOut().plusDays(7))) {
-                            canComment = true;
+                        if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() == ReservationState.APPROVED && currentTime.isBefore(r.getCheckOut().plusDays(7))) {
+                            if (r.getAccommodation().getId() == rateCommentDTO.getAccommodationsId()){
+                                canComment = true;
+                            }
                         }
                     }
 
                     if (!canComment) {
-                        throw new RequirementNotSatisfied("Can not leave rating and comment on this accommodation!");
+                        throw new RequirementNotSatisfied("You must have at least one approved reservation in the past for this accommodation to be able to leave rating and comment!");
                     }
 
-                    //
                     Accommodation accommodation = this.accommodationRepository.findById(rateCommentDTO.getAccommodationsId()).get();
                     RatingComment ratingComment = new RatingComment(rateCommentDTO.getType(), guest, null, accommodation, rateCommentDTO.getRating(), rateCommentDTO.getComment());
                     this.ratingCommentRepository.save(ratingComment);

@@ -85,7 +85,7 @@ public class ReservationService implements IReservationService {
             reservationState = ReservationState.PENDING;
         }
 
-        LocalDateTime cancelationDeadline = reservationRequest.getCheckOut().minusDays(3);
+        LocalDateTime cancelationDeadline = reservationRequest.getCheckIn().minusDays(accommodation.getCancellationDeadlineInDays());
         Reservation reservation = new Reservation(guest, owner, accommodation, reservationRequest.getCheckIn(), reservationRequest.getCheckOut(), reservationRequest.getGuestsNumber(), reservationRequest.getTotalCost(), reservationState, cancelationDeadline, guest.getCancelationsNumber());
         this.reservationRepository.save(reservation);
 

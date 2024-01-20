@@ -156,19 +156,19 @@ public class UserService implements IUserService {
     public void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
         if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST){
             User guest = this.userRepository.findById(id).get();
-            // todo proveriti da li radi
+            // TODO proveriti da li radi
 
             boolean canComment = false;
             List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
             for (Reservation r : allGuestsReservations){
                 LocalDateTime currentTime = LocalDateTime.now();
-                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED){
+                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() == ReservationState.APPROVED){
                     canComment = true;
                 }
             }
 
             if (!canComment) {
-                throw new RequirementNotSatisfied("Can not leave rating and comment on this owner!");
+                throw new RequirementNotSatisfied("Can not report this guest!");
             }
 
             //
@@ -190,13 +190,13 @@ public class UserService implements IUserService {
             List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guestsId);
             for (Reservation r : allGuestsReservations){
                 LocalDateTime currentTime = LocalDateTime.now();
-                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() != ReservationState.APPROVED){
+                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() == ReservationState.APPROVED){
                     canComment = true;
                 }
             }
 
             if (!canComment) {
-                throw new RequirementNotSatisfied("Can not leave rating and comment on this owner!");
+                throw new RequirementNotSatisfied("Can not report this owner!");
             }
 
             //
