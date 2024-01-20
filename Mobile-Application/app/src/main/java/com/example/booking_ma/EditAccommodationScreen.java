@@ -1,5 +1,7 @@
 package com.example.booking_ma;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +14,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,16 +25,28 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
+import com.example.booking_ma.DTO.NewAccommodationDTO;
+import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditAccommodationScreen extends AppCompatActivity {
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HH:mm");
+
 
     private Toolbar toolbar;
 
@@ -47,6 +63,9 @@ public class EditAccommodationScreen extends AppCompatActivity {
 
     private String priceType;
     private Long accommodationId;
+
+//    private EditText editTextDateFrom;
+//    private EditText editTextDateTo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,6 +327,109 @@ public class EditAccommodationScreen extends AppCompatActivity {
     }
 
     private void showDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_availability_price);
+        dialog.show();
+
+        EditText editTextPrice = dialog.findViewById(R.id.editTextPrice);
+        EditText editTextDateFrom = dialog.findViewById(R.id.editTextDateFrom);
+        EditText editTextDateTo = dialog.findViewById(R.id.editTextDateTo);
+
+        Button buttonAdd = dialog.findViewById(R.id.buttonAdd);
+        Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
+
+        TextView textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
+
+        editTextDateFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(editTextDateFrom);
+            }
+        });
+
+        editTextDateTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(editTextDateTo);
+            }
+        });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewSearchError.setText("");
+
+                String price = editTextPrice.getText().toString();
+                String dateFrom = editTextDateFrom.getText().toString();
+                String dateUntil = editTextDateTo.getText().toString();
+
+                if (price.equals("")){
+                    Log.i("Error", "Price empty");
+                    textViewSearchError.setText("Price is required!");
+                } else if (dateFrom.equals("")) {
+                    Log.i("Error", "Date from empty");
+                    textViewSearchError.setText("Date from required!");
+                } else if (dateUntil.equals("")) {
+                    Log.i("Error", "Date until empty");
+                    textViewSearchError.setText("Date until is required!");
+                }
+                else {
+                    LocalDateTime dateTimeFrom = LocalDateTime.parse(dateFrom + " 00:00", dateTimeFormatter);
+                    LocalDateTime dateTimeTo = LocalDateTime.parse(dateUntil + " 00:00", dateTimeFormatter);
+
+                    if (dateTimeFrom.isBefore(LocalDateTime.now().minusDays(1))) {
+                        Log.i("Error", "Date from is before today");
+                        textViewSearchError.setText("Date from must be today or later!");
+                    } else if (dateTimeTo.isBefore(LocalDateTime.now().minusDays(1))) {
+                        Log.i("Error", "Date until is before today");
+                        textViewSearchError.setText("Date until must be today or later!");
+                    } else if (dateTimeFrom.isAfter(dateTimeTo)) {
+                        Log.i("Error", "Date from is after date until");
+                        textViewSearchError.setText("Date from must be before Date until!");
+                    } else {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                        String formattedDateTimeFrom = dateTimeFrom.format(formatter);
+                        String formattedDateTimeTo = dateTimeTo.format(formatter);
+
+                        AccommodationChangesDTO changes = new AccommodationChangesDTO(formattedDateTimeFrom, formattedDateTimeTo, Double.parseDouble(price));
+                        updateAccommodation(token, accommodationId, changes);
+                        dialog.dismiss();
+                    }
+                }
+            }
+
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+
+    private void showDatePickerDialog(final EditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        String selectedDate = day + "/" + (month + 1) + "/" + year;
+                        editText.setText(selectedDate);
+                    }
+                },
+                year,
+                month,
+                day);
+
+        datePickerDialog.show();
     }
 
     private void loadAccommodation(String jwtToken) {

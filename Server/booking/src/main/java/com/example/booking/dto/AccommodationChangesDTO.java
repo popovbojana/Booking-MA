@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -20,8 +21,10 @@ public class AccommodationChangesDTO {
     private int maxGuests;
     private String type;
     private PriceType priceType;
-    private List<NewAvailabilityPriceDTO> availabilities;
     private int cancellationDeadlineInDays;
     private double standardPrice;
+    private LocalDateTime dateFrom;
+    private LocalDateTime dateUntil;
+    private double amount;
 
 }

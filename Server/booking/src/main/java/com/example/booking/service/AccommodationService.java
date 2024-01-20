@@ -48,7 +48,7 @@ public class AccommodationService implements IAccommodationService {
         this.accommodationRepository.save(accommodation);
 
         for (NewAvailabilityPriceDTO ap : newAccommodationDTO.getAvailability()){
-            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, null, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
+            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
             availabilityPrices.add(availabilityPrice);
             this.availabilityPriceRepository.save(availabilityPrice);
         }
@@ -123,16 +123,11 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getPriceType() == PriceType.PER_UNIT && accommodation.getPriceType() == PriceType.PER_GUEST){
                     accommodation.setPriceType(PriceType.PER_UNIT);
                 }
-                if (changes.getAvailabilities() != null && !changes.getAvailabilities().isEmpty()){
-                    this.availabilityPriceRepository.deleteAll(accommodation.getAvailabilities());
-                    List<AvailabilityPrice> newAvailabilityPrices = new ArrayList<>();
-                    for (AvailabilityPrice ap : changes.getAvailabilities()){
-                        this.availabilityPriceRepository.delete(ap);
-                        AvailabilityPrice newAp = new AvailabilityPrice(ap.getAccommodation(), null, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
-                        newAvailabilityPrices.add(newAp);
-                    }
-                    accommodation.setAvailabilities(newAvailabilityPrices);
-                    this.availabilityPriceRepository.saveAll(newAvailabilityPrices);
+                if (changes.getDateFrom() != null && changes.getDateUntil() != null && changes.getAmount() != -1.0){
+                    AvailabilityPrice newAvailability = new AvailabilityPrice(accommodation, changes.getAmount(), changes.getDateFrom(), changes.getDateUntil());
+                    this.availabilityPriceRepository.save(newAvailability);
+                    List<AvailabilityPrice> accommodationAvailabilities = accommodation.getAvailabilities();
+                    accommodationAvailabilities.add(newAvailability);
                 }
                 if (changes.getCancellationDeadlineInDays() != -1){
                     accommodation.setCancellationDeadlineInDays(changes.getCancellationDeadlineInDays());
@@ -231,9 +226,13 @@ public class AccommodationService implements IAccommodationService {
                     reservationDisplayDTOS.add(new ReservationDisplayDTO(r.getId(), r.getGuest().getId(), r.getOwner().getId(),r.getAccommodation().getId(),r.getCheckIn(),r.getCheckOut(),r.getGuestsNumber(),r.getTotalCost(),r.getReservationState(),r.getCancelationDeadline(), r.getGuestCancelationsNumber()));
                 }
             }
-            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice(), accommodation.getAddress(), accommodation.getAmenities(), reservationDisplayDTOS, accommodation.isAutoApprove());
+            List<AvailabilityDisplayDTO> availabilities = new ArrayList<>();
+            for (AvailabilityPrice ap : accommodation.getAvailabilities()){
+                availabilities.add(ap.parseToDisplay());
+            }
+            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice(), accommodation.getAddress(), accommodation.getAmenities(), reservationDisplayDTOS, accommodation.isAutoApprove(), availabilities);
         } else {
-            throw new NoDataWithId("There is no guets with this id!");
+            throw new NoDataWithId("There is no guests with this id!");
         }
     }
 }

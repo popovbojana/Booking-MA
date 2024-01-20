@@ -198,6 +198,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/accommodationAvailabilities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonAvailabilityPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add availability and price" />
+
+
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content">-->

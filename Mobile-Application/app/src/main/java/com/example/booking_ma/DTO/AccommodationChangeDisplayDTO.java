@@ -2,6 +2,7 @@ package com.example.booking_ma.DTO;
 
 import com.example.booking_ma.model.enums.PriceType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AccommodationChangeDisplayDTO {
@@ -13,14 +14,16 @@ public class AccommodationChangeDisplayDTO {
     private int newMaxGuests;
     private String newType;
     private PriceType newPriceType;
-    private List<AvailabilityDisplayDTO> availabilities;
     private int newCancellationDeadlineInDays;
     private double newStandardPrice;
+    private LocalDateTime newDateFrom;
+    private LocalDateTime newDateUntil;
+    private double newAmount;
 
     public AccommodationChangeDisplayDTO() {
     }
 
-    public AccommodationChangeDisplayDTO(Long accommodationId, String newName, String newDescription, String newAmenities, int newMinGuests, int newMaxGuests, String newType, PriceType newPriceType, List<AvailabilityDisplayDTO> availabilities, int newCancellationDeadlineInDays, double newStandardPrice) {
+    public AccommodationChangeDisplayDTO(Long accommodationId, String newName, String newDescription, String newAmenities, int newMinGuests, int newMaxGuests, String newType, PriceType newPriceType, int newCancellationDeadlineInDays, double newStandardPrice) {
         this.accommodationId = accommodationId;
         this.newName = newName;
         this.newDescription = newDescription;
@@ -29,7 +32,6 @@ public class AccommodationChangeDisplayDTO {
         this.newMaxGuests = newMaxGuests;
         this.newType = newType;
         this.newPriceType = newPriceType;
-        this.availabilities = availabilities;
         this.newCancellationDeadlineInDays = newCancellationDeadlineInDays;
         this.newStandardPrice = newStandardPrice;
     }
@@ -98,14 +100,6 @@ public class AccommodationChangeDisplayDTO {
         this.newPriceType = newPriceType;
     }
 
-    public List<AvailabilityDisplayDTO> getAvailabilities() {
-        return availabilities;
-    }
-
-    public void setAvailabilities(List<AvailabilityDisplayDTO> availabilities) {
-        this.availabilities = availabilities;
-    }
-
     public int getNewCancellationDeadlineInDays() {
         return newCancellationDeadlineInDays;
     }
@@ -120,6 +114,30 @@ public class AccommodationChangeDisplayDTO {
 
     public void setNewStandardPrice(double newStandardPrice) {
         this.newStandardPrice = newStandardPrice;
+    }
+
+    public LocalDateTime getNewDateFrom() {
+        return newDateFrom;
+    }
+
+    public void setNewDateFrom(LocalDateTime newDateFrom) {
+        this.newDateFrom = newDateFrom;
+    }
+
+    public LocalDateTime getNewDateUntil() {
+        return newDateUntil;
+    }
+
+    public void setNewDateUntil(LocalDateTime newDateUntil) {
+        this.newDateUntil = newDateUntil;
+    }
+
+    public double getNewAmount() {
+        return newAmount;
+    }
+
+    public void setNewAmount(double newAmount) {
+        this.newAmount = newAmount;
     }
 }
 

@@ -51,6 +51,7 @@ public class AccommodationController {
         return new ResponseEntity<>(new MessageDTO("Accommodation changes saved! Waiting for admin to approve them."), HttpStatus.OK);
     }
 
+
     @GetMapping(value = "all-accommodation", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST', 'OWNER')")
     public ResponseEntity<?> getAllAccommodation(){

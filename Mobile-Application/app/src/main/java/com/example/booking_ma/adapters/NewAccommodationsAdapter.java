@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.booking_ma.AccommodationsApprovalScreen;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.ApprovalDTO;
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.R;
 import com.example.booking_ma.model.enums.PriceType;
@@ -69,6 +70,13 @@ public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodat
             price = item.getStandardPrice() + " per unit";
         }
         holder.accommodationStandardPrice.setText(price);
+
+//        accommodationAvailabilities
+        String availabilities = "Available: \n";
+        for (AvailabilityDisplayDTO a : item.getAvailabilities()){
+            availabilities += a.toString();
+        }
+        holder.accommodationAvailabilities.setText(availabilities);
 
         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +140,7 @@ public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationStandardPrice;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationStandardPrice, accommodationAvailabilities;
         Button btnApprove, btnDisapprove;
 
         public ViewHolder(View itemView) {
@@ -147,6 +155,7 @@ public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodat
             accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
             accommodationAddress = itemView.findViewById(R.id.accommodationAddress);
             accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
+            accommodationAvailabilities = itemView.findViewById(R.id.accommodationAvailabilities);
             btnApprove = itemView.findViewById(R.id.btnApprove);
             btnDisapprove = itemView.findViewById(R.id.btnDisapprove);
         }

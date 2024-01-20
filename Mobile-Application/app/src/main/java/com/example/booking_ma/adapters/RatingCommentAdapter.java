@@ -1,19 +1,30 @@
 package com.example.booking_ma.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.booking_ma.AccommodationsApprovalScreen;
+import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
+import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.R;
+import com.example.booking_ma.service.ServiceUtils;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdapter.CommentViewHolder> {
 
@@ -44,8 +55,8 @@ public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdap
         if (comments != null) {
             RatingCommentDisplayDTO comment = comments.get(position);
 
-            String guest = "Guest ID: " + comment.getGuestsId();
-            holder.textViewGuestId.setText(guest);
+            String guest = "Guest: " + comment.getGuest();
+            holder.textViewGuest.setText(guest);
             String time = "Time: " + comment.getTime();
             holder.textViewTime.setText(time);
             String rating = "Rating: " + comment.getRating();
@@ -53,8 +64,28 @@ public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdap
             String commentText = "Comment: " + comment.getComment();
             holder.textViewComment.setText(commentText);
 
-            holder.buttonReport.setOnClickListener(v -> {
-                //todo
+            holder.buttonReport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Call<ResponseMessage> call = ServiceUtils.ratingCommentService(token).report(comment.getId());
+                    call.enqueue(new Callback<ResponseMessage>() {
+                        @Override
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            if(response.isSuccessful()) {
+                                Log.i("Success", response.body().getMessage());
+                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            Log.i("Fail", t.getMessage());
+                        }
+                    });
+
+                }
             });
         }
     }
@@ -65,7 +96,7 @@ public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdap
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewGuestId;
+        TextView textViewGuest;
         TextView textViewTime;
         TextView textViewRating;
         TextView textViewComment;
@@ -73,7 +104,7 @@ public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdap
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewGuestId = itemView.findViewById(R.id.textViewGuestId);
+            textViewGuest = itemView.findViewById(R.id.textViewGuest);
             textViewTime = itemView.findViewById(R.id.textViewTime);
             textViewRating = itemView.findViewById(R.id.textViewRating);
             textViewComment = itemView.findViewById(R.id.textViewComment);

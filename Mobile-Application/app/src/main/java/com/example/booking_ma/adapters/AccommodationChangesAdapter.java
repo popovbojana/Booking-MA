@@ -18,11 +18,13 @@ import com.example.booking_ma.AccommodationsApprovalScreen;
 import com.example.booking_ma.DTO.AccommodationChangeDisplayDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.ApprovalDTO;
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.R;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import retrofit2.Call;
@@ -69,7 +71,15 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
             maxGuests += item.getNewMaxGuests();
         }
         holder.accommodationMaxGuests.setText(maxGuests);
-        String type = "New accommodation type: " + item.getNewType();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDateTimeFrom = item.getNewDateFrom().format(formatter);
+        String formattedDateTimeUntil = item.getNewDateUntil().format(formatter);
+        String dateFrom = "New date from: " + formattedDateTimeFrom;
+        holder.accommodationDateFrom.setText(dateFrom);
+        String dateUntil = "New date until: " + formattedDateTimeUntil;
+        holder.accommodationDateUntil.setText(dateUntil);
+        String price = "New price: " + item.getNewAmount();
+        holder.accommodationPrice.setText(price);
 //        holder.accommodationType.setText(type);
 //        String cancellation = "New cancellation deadline: ";
 //        if (item.getNewCancellationDeadlineInDays() != -1) {
@@ -193,6 +203,13 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
             price += " per unit";
         }
         accommodationStandardPrice.setText(price);
+//        accommodationAvailabilities
+        TextView accommodationAvailabilities = dialog.findViewById(R.id.accommodationAvailabilities);
+        String availabilities = "Available: \n";
+        for (AvailabilityDisplayDTO a : accommodationDisplay.getAvailabilities()){
+            availabilities += a.toString();
+        }
+        accommodationAvailabilities.setText(availabilities);
 
         Button btnClose = dialog.findViewById(R.id.btnClose);
         btnClose.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +231,6 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
                 if (response.isSuccessful()) {
                     Log.i("Success", response.message());
                     accommodationDisplay = response.body();
-                    // Pozivamo dijalog tek kada su podaci dostupni
                     showAccommodationInfoDialog();
                 } else {
                     onFailure(call, new Throwable("API call failed with status code: " + response.code()));
@@ -235,7 +251,7 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationStandardPrice, accommodationPriceType;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationStandardPrice, accommodationPriceType, accommodationDateFrom, accommodationDateUntil, accommodationPrice;
         Button btnApprove, btnDisapprove, currentInfoButton;
 
         public ViewHolder(View itemView) {
@@ -246,6 +262,9 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
             accommodationAmenities = itemView.findViewById(R.id.accommodationAmenities);
             accommodationMinGuests = itemView.findViewById(R.id.accommodationMinGuests);
             accommodationMaxGuests = itemView.findViewById(R.id.accommodationMaxGuests);
+            accommodationDateFrom = itemView.findViewById(R.id.accommodationDateFrom);
+            accommodationDateUntil = itemView.findViewById(R.id.accommodationDateUntil);
+            accommodationPrice = itemView.findViewById(R.id.accommodationPrice);
 //            accommodationType = itemView.findViewById(R.id.accommodationType);
 //            accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
 //            accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.AllRatingsDisplay;
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.EditAccommodationScreen;
 import com.example.booking_ma.R;
@@ -68,6 +69,11 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             price = item.getStandardPrice() + " per unit";
         }
         holder.accommodationStandardPrice.setText(price);
+        String availabilities = "Available: \n";
+        for (AvailabilityDisplayDTO a : item.getAvailabilities()){
+            availabilities += a.toString();
+        }
+        holder.accommodationAvailabilities.setText(availabilities);
 
         holder.commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +106,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice, accommodationAvailabilities;
         Button commentsButton, getReportButton, editButton;
 
         public ViewHolder(View itemView) {
@@ -116,6 +122,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             accommodationAddress = itemView.findViewById(R.id.accommodationAddress);
             accommodationRating = itemView.findViewById(R.id.accommodationRating);
             accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
+            accommodationAvailabilities = itemView.findViewById(R.id.accommodationAvailabilities);
             commentsButton = itemView.findViewById(R.id.commentsButton);
             getReportButton = itemView.findViewById(R.id.getReportButton);
             editButton = itemView.findViewById(R.id.editButton);
@@ -152,7 +159,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             public void onResponse(Call<AllRatingsDisplay> call, Response<AllRatingsDisplay> response) {
                 if (response.isSuccessful()) {
                     List<RatingCommentDisplayDTO> updatedComments = response.body().getAllRatingComments();
-                    adapter.setComments(updatedComments); // Postavi nove komentare u adapter
+                    adapter.setComments(updatedComments);
                 } else {
                     Log.e("API Error", "Failed to fetch comments: " + response.message());
                     // Handle the error, for example, show a toast message

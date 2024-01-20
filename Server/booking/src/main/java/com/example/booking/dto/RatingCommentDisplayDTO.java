@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RatingCommentDisplayDTO {
+    private Long id;
     private Long guestsId;
+    private String guest;
     private RatingCommentType type;
     private Long ownersId;
     private Long accommodationsId;
-    private int rating;
+    private float rating;
     private String comment;
     private LocalDateTime time;
 }

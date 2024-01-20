@@ -2,6 +2,7 @@ package com.example.booking_ma.DTO;
 
 import com.example.booking_ma.model.enums.PriceType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,12 @@ public class AccommodationChangesDTO {
     private int maxGuests;
     private String type;
     private PriceType priceType;
-    private List<NewAvailabilityPriceDTO> availabilities;
     private int cancellationDeadlineInDays;
     private double standardPrice;
+    private String dateFrom;
+    private String dateUntil;
+    private double amount;
+
 
     public AccommodationChangesDTO() {
     }
@@ -31,9 +35,24 @@ public class AccommodationChangesDTO {
         if (myPriceType != null){
             this.priceType = myPriceType;
         }
-        this.availabilities = new ArrayList<>();
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
         this.standardPrice = standardPrice;
+    }
+
+    public AccommodationChangesDTO(String dateFrom, String dateUntil, double amount) {
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
+        this.amount = amount;
+
+        this.name = "";
+        this.description = "";
+        this.amenities = "";
+        this.minGuests = -1;
+        this.maxGuests = -1;
+        this.type = "";
+        this.priceType = null;
+        this.standardPrice = -1;
+        this.cancellationDeadlineInDays = -1;
     }
 
     public String getName() {
@@ -92,14 +111,6 @@ public class AccommodationChangesDTO {
         this.priceType = priceType;
     }
 
-    public List<NewAvailabilityPriceDTO> getAvailabilities() {
-        return availabilities;
-    }
-
-    public void setAvailabilities(List<NewAvailabilityPriceDTO> availabilities) {
-        this.availabilities = availabilities;
-    }
-
     public int getCancellationDeadlineInDays() {
         return cancellationDeadlineInDays;
     }
@@ -114,5 +125,29 @@ public class AccommodationChangesDTO {
 
     public void setStandardPrice(double standardPrice) {
         this.standardPrice = standardPrice;
+    }
+
+    public String getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(String dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public String getDateUntil() {
+        return dateUntil;
+    }
+
+    public void setDateUntil(String dateUntil) {
+        this.dateUntil = dateUntil;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

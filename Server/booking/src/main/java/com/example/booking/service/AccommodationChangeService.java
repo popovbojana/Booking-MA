@@ -32,14 +32,8 @@ public class AccommodationChangeService implements IAccommodationChangeService {
     @Override
     public void addAccommodationChange(Long id, AccommodationChangesDTO changes) {
         Accommodation accommodation = this.accommodationRepository.findById(id).get();
-        List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
-        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), availabilityPrices, changes.getCancellationDeadlineInDays(), changes.getStandardPrice());
+        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), changes.getCancellationDeadlineInDays(), changes.getStandardPrice(), changes.getDateFrom(), changes.getDateUntil(), changes.getAmount());
         this.accommodationChangeRepository.save(accommodationChange);
-        for (NewAvailabilityPriceDTO dto : changes.getAvailabilities()){
-            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, accommodationChange, dto.getAmount(), dto.getDateFrom(), dto.getDateUntil());
-            this.availabilityPriceRepository.save(availabilityPrice);
-            availabilityPrices.add(availabilityPrice);
-        }
         accommodation.setHasChanges(true);
         accommodation.setAccommodationChange(accommodationChange);
         this.accommodationRepository.save(accommodation);
@@ -49,4 +43,5 @@ public class AccommodationChangeService implements IAccommodationChangeService {
     public List<AccommodationChange> getAll() {
         return this.accommodationChangeRepository.findAll();
     }
+
 }
