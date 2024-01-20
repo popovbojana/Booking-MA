@@ -71,12 +71,16 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
             maxGuests += item.getNewMaxGuests();
         }
         holder.accommodationMaxGuests.setText(maxGuests);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedDateTimeFrom = item.getNewDateFrom().format(formatter);
-        String formattedDateTimeUntil = item.getNewDateUntil().format(formatter);
-        String dateFrom = "New date from: " + formattedDateTimeFrom;
+        String dateFrom = "New date from: ";
+        String dateUntil = "New date until: ";
+        if (item.getNewDateFrom() != null && item.getNewDateUntil() != null){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String formattedDateTimeFrom = item.getNewDateFrom().format(formatter);
+            String formattedDateTimeUntil = item.getNewDateUntil().format(formatter);
+            dateFrom += formattedDateTimeFrom;
+            dateUntil += formattedDateTimeUntil;
+        }
         holder.accommodationDateFrom.setText(dateFrom);
-        String dateUntil = "New date until: " + formattedDateTimeUntil;
         holder.accommodationDateUntil.setText(dateUntil);
         String price = "New price: " + item.getNewAmount();
         holder.accommodationPrice.setText(price);
