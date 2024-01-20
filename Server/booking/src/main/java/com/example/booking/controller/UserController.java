@@ -173,5 +173,12 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "guest/{guestId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('GUEST','OWNER','ADMIN')")
+    public ResponseEntity<?> getGuest(@PathVariable("guestId") Long guestId) {
+        Guest guest = this.userService.getGuest(guestId).get();
+        return new ResponseEntity<>(guest.parseToDisplayGuest(), HttpStatus.OK);
+    }
+
 //    public
 }

@@ -1,10 +1,12 @@
 package com.example.booking_ma;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -259,6 +261,74 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
 
         commentAdapter = new AccommodationRatingCommentAdapter(this, aComments);
         recyclerViewAccommodationComments.setAdapter(commentAdapter);
+    }
+
+    private void showReservationDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_search_accommodation);
+/*
+        imageViewCheckIn = dialog.findViewById(R.id.imageViewCheckIn);
+        imageViewCheckOut = dialog.findViewById(R.id.imageViewCheckOut);
+        editTextLocation = dialog.findViewById(R.id.editTextSearchLocation);
+        editTextGuests = dialog.findViewById(R.id.editTextSearchGuests);
+        editTextCheckIn = dialog.findViewById(R.id.editTextSearchCheckIn);
+        editTextCheckOut = dialog.findViewById(R.id.editTextSearchCheckOut);
+        buttonSearchDialogCancel = dialog.findViewById(R.id.buttonSearchDialogCancel);
+        buttonSearchDialogSearch = dialog.findViewById(R.id.buttonSearchDialogSearch);
+        textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
+
+        imageViewCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCheckInDatePickerDialog(dialog);
+            }
+        });
+
+        imageViewCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCheckOutDatePickerDialog(dialog);
+            }
+        });
+
+        buttonSearchDialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        buttonSearchDialogSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editTextLocation.getText().toString().equals("")){
+                    Log.e("Invalid:", "Location input");
+                    textViewSearchError.setText("Invalid location input");
+                    return;
+                }
+                else if(editTextGuests.getText().toString().equals("") || editTextGuests.getText().toString().equals("0")){
+                    Log.e("Invalid:", "Guests input");
+                    textViewSearchError.setText("Invalid guests input");
+                    return;
+                }
+                else if(editTextCheckIn.getText().toString().equals("")){
+                    Log.e("Invalid:", "Check in input");
+                    textViewSearchError.setText("Invalid check in input");
+                    return;
+                }
+                else if(editTextCheckOut.getText().toString().equals("")){
+                    Log.e("Invalid:", "Check out input");
+                    textViewSearchError.setText("Invalid check out input");
+                    return;
+                }
+                else{
+                    textViewSearchBar.setText(editTextLocation.getText().toString());
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog.show();*/
     }
 
 }

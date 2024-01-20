@@ -1,17 +1,12 @@
 package com.example.booking.service;
 
-import com.example.booking.dto.AccommodationDisplayDTO;
-import com.example.booking.dto.NewAccommodationDTO;
-import com.example.booking.dto.NewAvailabilityPriceDTO;
-import com.example.booking.dto.FavoriteAccommodationDTO;
+import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.model.*;
 import com.example.booking.model.enums.PriceType;
+import com.example.booking.model.enums.ReservationState;
 import com.example.booking.model.enums.Role;
-import com.example.booking.repository.AccommodationChangeRepository;
-import com.example.booking.repository.AccommodationRepository;
-import com.example.booking.repository.AvailabilityPriceRepository;
-import com.example.booking.repository.UserRepository;
+import com.example.booking.repository.*;
 import com.example.booking.service.interfaces.IAccommodationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +21,15 @@ public class AccommodationService implements IAccommodationService {
     private final UserRepository userRepository;
     private final AccommodationChangeRepository accommodationChangeRepository;
     private final AvailabilityPriceRepository availabilityPriceRepository;
+    private final ReservationRepository reservationRepository;
 
     @Autowired
-    public AccommodationService(AccommodationRepository accommodationRepository, UserRepository userRepository, AccommodationChangeRepository accommodationChangeRepository, AvailabilityPriceRepository availabilityPriceRepository) {
+    public AccommodationService(AccommodationRepository accommodationRepository, UserRepository userRepository, AccommodationChangeRepository accommodationChangeRepository, AvailabilityPriceRepository availabilityPriceRepository, ReservationRepository reservationRepository) {
         this.accommodationRepository = accommodationRepository;
         this.userRepository = userRepository;
         this.accommodationChangeRepository = accommodationChangeRepository;
         this.availabilityPriceRepository = availabilityPriceRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -46,7 +43,8 @@ public class AccommodationService implements IAccommodationService {
 
         List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
 
-        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays(), newAccommodationDTO.getAddress(), newAccommodationDTO.getLatitude(), newAccommodationDTO.getLongitude(), newAccommodationDTO.getFinalRating(), newAccommodationDTO.getStandardPrice());
+        boolean autoApprove = false;
+        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays(), newAccommodationDTO.getAddress(), newAccommodationDTO.getLatitude(), newAccommodationDTO.getLongitude(), newAccommodationDTO.getFinalRating(), newAccommodationDTO.getStandardPrice(), autoApprove);
         this.accommodationRepository.save(accommodation);
 
         for (NewAvailabilityPriceDTO ap : newAccommodationDTO.getAvailability()){
@@ -227,7 +225,13 @@ public class AccommodationService implements IAccommodationService {
     public AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId {
         if (this.accommodationRepository.findById(id).isPresent()){
             Accommodation accommodation = this.accommodationRepository.findById(id).get();
-            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice(), accommodation.getAddress(), accommodation.getAmenities());
+            List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+            if(!accommodation.getReservations().isEmpty()){
+                for(Reservation r : accommodation.getReservations()){
+                    reservationDisplayDTOS.add(new ReservationDisplayDTO(r.getId(), r.getGuest().getId(), r.getOwner().getId(),r.getAccommodation().getId(),r.getCheckIn(),r.getCheckOut(),r.getGuestsNumber(),r.getTotalCost(),r.getReservationState(),r.getCancelationDeadline(), r.getGuestCancelationsNumber()));
+                }
+            }
+            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice(), accommodation.getAddress(), accommodation.getAmenities(), reservationDisplayDTOS, accommodation.isAutoApprove());
         } else {
             throw new NoDataWithId("There is no guets with this id!");
         }
