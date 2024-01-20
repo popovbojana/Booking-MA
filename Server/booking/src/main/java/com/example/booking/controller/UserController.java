@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,7 +78,8 @@ public class UserController {
     @PreAuthorize("hasAuthority('GUEST')")
     public ResponseEntity<?> reportOwner(@PathVariable("id") Long id, @RequestBody ReportedUserReasonDTO reason) {
         try {
-            this.userService.reportOwner(id, reason);
+            Long guestId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            this.userService.reportOwner(id, reason, guestId);
             return new ResponseEntity<>(new MessageDTO("Successfully reported owner!"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);

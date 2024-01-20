@@ -11,7 +11,7 @@ import com.example.booking.model.RatingComment;
 import java.util.List;
 
 public interface IRatingCommentService {
-    void rateComment(RateCommentDTO rateCommentDTO) throws NoDataWithId;
+    void rateComment(RateCommentDTO rateCommentDTO) throws NoDataWithId, RequirementNotSatisfied;
     void deleteRatingComment(Long id) throws NoDataWithId;
 
     List<RatingCommentDisplayDTO> getAllForGuest(Long id);
