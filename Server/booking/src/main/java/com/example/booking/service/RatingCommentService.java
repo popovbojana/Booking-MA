@@ -1,6 +1,7 @@
 package com.example.booking.service;
 
 import com.example.booking.dto.AllRatingsDisplay;
+import com.example.booking.dto.ApprovalDTO;
 import com.example.booking.dto.RateCommentDTO;
 import com.example.booking.dto.RatingCommentDisplayDTO;
 import com.example.booking.exceptions.NoDataWithId;
@@ -133,6 +134,45 @@ public class RatingCommentService implements IRatingCommentService {
             RatingComment ratingComment = this.ratingCommentRepository.findById(id).get();
             ratingComment.setReported(true);
             this.ratingCommentRepository.save(ratingComment);
+        } else {
+            throw new NoDataWithId("There is no rating and comment with this id!");
+        }
+    }
+
+    @Override
+    public float calculateAverageRating(List<RatingComment> allRatings) {
+        float sum = 0;
+        for (RatingComment rt : allRatings) {
+            sum += rt.getRating();
+        }
+        return sum/allRatings.size();
+    }
+
+    @Override
+    public List<RatingCommentDisplayDTO> getAllUnapproved() {
+        List<RatingComment> all = this.ratingCommentRepository.getAllUnapproved();
+        List<RatingCommentDisplayDTO> allForDisplay = new ArrayList<>();
+        double total = 0;
+        for (RatingComment rc : all){
+            allForDisplay.add(rc.parseToDisplay());
+            total += rc.getRating();
+        }
+        return allForDisplay;
+    }
+
+    @Override
+    public void approve(Long id, boolean approval) throws NoDataWithId {
+        if (this.ratingCommentRepository.findById(id).isPresent()){
+            RatingComment ratingComment = this.ratingCommentRepository.findById(id).get();
+            if (approval){
+                ratingComment.setApproved(true);
+                this.ratingCommentRepository.save(ratingComment);
+                Accommodation accommodation = ratingComment.getAccommodation();
+                accommodation.setFinalRating(calculateAverageRating(accommodation.getRatingComments()));
+                this.accommodationRepository.save(accommodation);
+            } else {
+                this.ratingCommentRepository.delete(ratingComment);
+            }
         } else {
             throw new NoDataWithId("There is no rating and comment with this id!");
         }
