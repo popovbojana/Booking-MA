@@ -116,4 +116,25 @@ public class RatingCommentController {
         }
     }
 
+    @GetMapping(value = "all-reported-comments/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getReportedComments(@PathVariable("id") Long id){
+        try {
+            return new ResponseEntity<>(this.ratingCommentService.getReportedComments(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "delete-reported-comments/{ratingCommentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> handleReportedComment(@PathVariable("id") Long ratingCommentId, @RequestBody ApprovalDTO approvalDTO){
+        try {
+            this.ratingCommentService.handleReportedComment(ratingCommentId, approvalDTO);
+            return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ import com.example.booking.dto.ApprovalDTO;
 import com.example.booking.dto.RateCommentDTO;
 import com.example.booking.dto.RatingCommentDisplayDTO;
 import com.example.booking.exceptions.NoDataWithId;
+import com.example.booking.exceptions.RequirementNotSatisfied;
 import com.example.booking.model.Accommodation;
 import com.example.booking.model.Guest;
 import com.example.booking.model.Owner;
@@ -136,6 +137,34 @@ public class RatingCommentService implements IRatingCommentService {
             this.ratingCommentRepository.save(ratingComment);
         } else {
             throw new NoDataWithId("There is no rating and comment with this id!");
+        }
+    }
+
+    @Override
+    public List<RatingCommentDisplayDTO> getReportedComments() throws NoDataWithId {
+        List<RatingComment> reportedComments = this.ratingCommentRepository.findAllReportedComments();
+        List<RatingCommentDisplayDTO> reportedCommentDisplayDTOS = new ArrayList<>();
+        for(RatingComment r : reportedComments){
+            reportedCommentDisplayDTOS.add(r.parseToDisplay());
+        }
+        return reportedCommentDisplayDTOS;
+    }
+
+    @Override
+    public void handleReportedComment(Long ratingCommentId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
+        if(!this.ratingCommentRepository.findById(ratingCommentId).isPresent()){
+            throw new NoDataWithId("There is no rating and comment with this id!");
+        }
+        RatingComment reportedComment = this.ratingCommentRepository.findById(ratingCommentId).get();
+        if(!reportedComment.isReported()){
+            throw new RequirementNotSatisfied("Cant delete unreported comment");
+        }
+        if(approval.isApproval()){
+            this.ratingCommentRepository.delete(reportedComment);
+        }
+        else{
+            reportedComment.setReported(false);
+            this.ratingCommentRepository.save(reportedComment);
         }
     }
 

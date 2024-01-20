@@ -3,6 +3,7 @@ package com.example.booking.service.interfaces;
 import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
+import com.example.booking.exceptions.RequirementNotSatisfied;
 import com.example.booking.model.Guest;
 import com.example.booking.model.Owner;
 import com.example.booking.model.User;
@@ -40,4 +41,8 @@ public interface IUserService extends UserDetailsService {
     void update(Long userId, UserUpdateDTO userUpdate) throws NoDataWithId;
 
     String convertPasswordToStars(String password);
+
+    List<UserDisplayDTO> getReportedUsers();
+
+    void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied;
 }
