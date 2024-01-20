@@ -3,12 +3,11 @@ package com.example.booking.service;
 import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
+import com.example.booking.exceptions.RequirementNotSatisfied;
 import com.example.booking.model.*;
+import com.example.booking.model.enums.ReservationState;
 import com.example.booking.model.enums.Role;
-import com.example.booking.repository.AccommodationRepository;
-import com.example.booking.repository.AvailabilityPriceRepository;
-import com.example.booking.repository.RatingCommentRepository;
-import com.example.booking.repository.UserRepository;
+import com.example.booking.repository.*;
 import com.example.booking.security.TokenUtils;
 import com.example.booking.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +33,8 @@ public class UserService implements IUserService {
     private final AccommodationRepository accommodationRepository;
     private final AvailabilityPriceRepository availabilityPriceRepository;
     private final RatingCommentRepository ratingCommentRepository;
+
+    private final ReservationRepository reservationRepository;
 
     @Autowired
     private MailService mailService;
@@ -48,11 +50,12 @@ public class UserService implements IUserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository, AccommodationRepository accommodationRepository, AvailabilityPriceRepository availabilityPriceRepository, RatingCommentRepository ratingCommentRepository){
+    public UserService(UserRepository userRepository, AccommodationRepository accommodationRepository, AvailabilityPriceRepository availabilityPriceRepository, RatingCommentRepository ratingCommentRepository, ReservationRepository reservationRepository){
         this.userRepository = userRepository;
         this.accommodationRepository = accommodationRepository;
         this.availabilityPriceRepository = availabilityPriceRepository;
         this.ratingCommentRepository = ratingCommentRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -212,5 +215,42 @@ public class UserService implements IUserService {
             passwordStars.append("*");
         }
         return passwordStars.toString();
+    }
+
+    @Override
+    public List<UserDisplayDTO> getReportedUsers(){
+        List<User> users = this.userRepository.findAll();
+        List<UserDisplayDTO> reportedUserDisplayDTOS = new ArrayList<>();
+        if(!users.isEmpty()){
+            for(User u : users){
+                if(u.isReported()){
+                    reportedUserDisplayDTOS.add(u.parseToDisplay());
+                }
+            }
+        }
+        return reportedUserDisplayDTOS;
+    }
+
+    @Override
+    public void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
+        if(!this.userRepository.findById(userId).isPresent()){
+            throw new NoDataWithId("There is no user with this id!");
+        }
+        User user = this.userRepository.findById(userId).get();
+        if(!user.isReported()){
+            throw new RequirementNotSatisfied("Cant delete unreported comment");
+        }
+        if(user.getRole() == Role.GUEST) {
+            if (approval.isApproval()) {
+                user.setBlocked(true);
+                List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
+                for (Reservation r : pendingReservations) {
+                    r.setReservationState(ReservationState.CANCELED);
+                    this.reservationRepository.save(r);
+                }
+            } else {
+                user.setBlocked(false);
+            }
+        }
     }
 }

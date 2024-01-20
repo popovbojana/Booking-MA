@@ -18,4 +18,7 @@ public interface RatingCommentRepository extends CrudRepository<RatingComment, L
 
     @Query("select rc from RatingComment rc where rc.approved = false")
     List<RatingComment> getAllUnapproved();
+
+    @Query("select rc from RatingComment rc where rc.reported = true")
+    List<RatingComment> findAllReportedComments();
 }

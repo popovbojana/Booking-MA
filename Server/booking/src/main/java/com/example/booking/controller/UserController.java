@@ -180,5 +180,23 @@ public class UserController {
         return new ResponseEntity<>(guest.parseToDisplayGuest(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "all-reported-users", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getReportedUsers() {
+        return new ResponseEntity<>(this.userService.getReportedUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "handle-reported-user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> handleReportedUser(@PathVariable("id") Long userId, @RequestBody ApprovalDTO approvalDTO) {
+        try {
+            this.userService.handleReportedUser(userId, approvalDTO);
+            return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully deleted"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 //    public
 }
