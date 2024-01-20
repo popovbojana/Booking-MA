@@ -5,13 +5,15 @@ import java.time.LocalDateTime;
 public class NewAvailabilityPriceDTO {
 
     private double amount;
-    private LocalDateTime dateFrom;
-    private LocalDateTime dateUntil;
+//    private LocalDateTime dateFrom;
+    private String dateFrom;
+//    private LocalDateTime dateUntil;
+    private String dateUntil;
 
     public NewAvailabilityPriceDTO() {
     }
 
-    public NewAvailabilityPriceDTO(double amount, LocalDateTime dateFrom, LocalDateTime dateUntil) {
+    public NewAvailabilityPriceDTO(double amount, String dateFrom, String dateUntil) {
         this.amount = amount;
         this.dateFrom = dateFrom;
         this.dateUntil = dateUntil;
@@ -25,19 +27,19 @@ public class NewAvailabilityPriceDTO {
         this.amount = amount;
     }
 
-    public LocalDateTime getDateFrom() {
+    public String getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(LocalDateTime dateFrom) {
+    public void setDateFrom(String dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public LocalDateTime getDateUntil() {
+    public String getDateUntil() {
         return dateUntil;
     }
 
-    public void setDateUntil(LocalDateTime dateUntil) {
+    public void setDateUntil(String dateUntil) {
         this.dateUntil = dateUntil;
     }
 }

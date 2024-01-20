@@ -49,4 +49,14 @@ public class AccommodationChangeService implements IAccommodationChangeService {
     public List<AccommodationChange> getAll() {
         return this.accommodationChangeRepository.findAll();
     }
+
+    @Override
+    public void addAvailabilityPrice(Long id, NewAvailabilityPriceDTO newAvailabilityPrice) {
+        Accommodation accommodation = this.accommodationRepository.findById(id).get();
+        List<AvailabilityPrice> availabilityPriceList = accommodation.getAvailabilities();
+        AvailabilityPrice newAvailability = new AvailabilityPrice(accommodation, null, newAvailabilityPrice.getAmount(), newAvailabilityPrice.getDateFrom(), newAvailabilityPrice.getDateUntil());
+        this.availabilityPriceRepository.save(newAvailability);
+        availabilityPriceList.add(newAvailability);
+        this.accommodationRepository.save(accommodation);
+    }
 }

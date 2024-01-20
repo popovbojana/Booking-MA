@@ -25,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
@@ -32,6 +33,8 @@ import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -40,6 +43,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditAccommodationScreen extends AppCompatActivity {
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HH:mm");
+
 
     private Toolbar toolbar;
 
@@ -366,8 +372,44 @@ public class EditAccommodationScreen extends AppCompatActivity {
                     Log.i("Error", "Date until empty");
                     textViewSearchError.setText("Date until is required!");
                 }
-//                else {
-//                }
+                else {
+                    LocalDateTime dateTimeFrom = LocalDateTime.parse(dateFrom + " 00:00", dateTimeFormatter);
+                    LocalDateTime dateTimeTo = LocalDateTime.parse(dateUntil + " 00:00", dateTimeFormatter);
+
+                    if (dateTimeFrom.isBefore(LocalDateTime.now().minusDays(1))) {
+                        Log.i("Error", "Date from is before today");
+                        textViewSearchError.setText("Date from must be today or later!");
+                    } else if (dateTimeTo.isBefore(LocalDateTime.now().minusDays(1))) {
+                        Log.i("Error", "Date until is before today");
+                        textViewSearchError.setText("Date until must be today or later!");
+                    } else if (dateTimeFrom.isAfter(dateTimeTo)) {
+                        Log.i("Error", "Date from is after date until");
+                        textViewSearchError.setText("Date from must be before Date until!");
+                    } else {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                        String formattedDateTimeFrom = dateTimeFrom.format(formatter);
+                        String formattedDateTimeTo = dateTimeTo.format(formatter);
+                        NewAvailabilityPriceDTO availabilityPriceDTO = new NewAvailabilityPriceDTO(Double.parseDouble(price), formattedDateTimeFrom, formattedDateTimeTo);
+                        Call<ResponseMessage> call = ServiceUtils.accommodationService(token).addAvailabilityPrice(accommodationId, availabilityPriceDTO);
+                        call.enqueue(new Callback<ResponseMessage>() {
+                            @Override
+                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.i("Error", response.message());
+                                };
+                                Toast.makeText(EditAccommodationScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("Success", response.body().getMessage());
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                                Log.d("Fail", t.getMessage());
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                }
             }
 
         });

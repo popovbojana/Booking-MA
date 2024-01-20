@@ -5,6 +5,7 @@ import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
+import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 
@@ -51,5 +52,8 @@ public interface IAccommodationService {
 
     @PUT(ServiceUtils.accommodation + "/approval-changes-accommodation/{id}")
     Call<ResponseMessage> approveAccommodationChanges(@Path("id") Long id, @Body ApprovalDTO approvalDTO);
+
+    @POST(ServiceUtils.accommodation + "/new-availability-price/{id}")
+    Call<ResponseMessage> addAvailabilityPrice(@Path("id") Long id, @Body NewAvailabilityPriceDTO newAvailabilityPriceDTO);
 
 }
