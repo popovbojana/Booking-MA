@@ -32,14 +32,8 @@ public class AccommodationChangeService implements IAccommodationChangeService {
     @Override
     public void addAccommodationChange(Long id, AccommodationChangesDTO changes) {
         Accommodation accommodation = this.accommodationRepository.findById(id).get();
-        List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
-        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), availabilityPrices, changes.getCancellationDeadlineInDays(), changes.getStandardPrice());
+        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), changes.getCancellationDeadlineInDays(), changes.getStandardPrice(), changes.getDateFrom(), changes.getDateUntil(), changes.getAmount());
         this.accommodationChangeRepository.save(accommodationChange);
-        for (NewAvailabilityPriceDTO dto : changes.getAvailabilities()){
-            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, accommodationChange, dto.getAmount(), dto.getDateFrom(), dto.getDateUntil());
-            this.availabilityPriceRepository.save(availabilityPrice);
-            availabilityPrices.add(availabilityPrice);
-        }
         accommodation.setHasChanges(true);
         accommodation.setAccommodationChange(accommodationChange);
         this.accommodationRepository.save(accommodation);
@@ -50,13 +44,4 @@ public class AccommodationChangeService implements IAccommodationChangeService {
         return this.accommodationChangeRepository.findAll();
     }
 
-    @Override
-    public void addAvailabilityPrice(Long id, NewAvailabilityPriceDTO newAvailabilityPrice) {
-        Accommodation accommodation = this.accommodationRepository.findById(id).get();
-        List<AvailabilityPrice> availabilityPriceList = accommodation.getAvailabilities();
-        AvailabilityPrice newAvailability = new AvailabilityPrice(accommodation, null, newAvailabilityPrice.getAmount(), newAvailabilityPrice.getDateFrom(), newAvailabilityPrice.getDateUntil());
-        this.availabilityPriceRepository.save(newAvailability);
-        availabilityPriceList.add(newAvailability);
-        this.accommodationRepository.save(accommodation);
-    }
 }

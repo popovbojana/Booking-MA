@@ -1,5 +1,6 @@
 package com.example.booking.model;
 
+import com.example.booking.dto.AvailabilityDisplayDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,21 +25,20 @@ public class AvailabilityPrice {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "change_id")
-    private AccommodationChange accommodationChange;
-
     private double amount;
 
     private LocalDateTime dateFrom;
 
     private LocalDateTime dateUntil;
 
-    public AvailabilityPrice(Accommodation accommodation, AccommodationChange accommodationChange, double amount, LocalDateTime dateFrom, LocalDateTime dateUntil){
+    public AvailabilityPrice(Accommodation accommodation, double amount, LocalDateTime dateFrom, LocalDateTime dateUntil){
         this.accommodation = accommodation;
-        this.accommodationChange = accommodationChange;
         this.amount = amount;
         this.dateFrom = dateFrom;
         this.dateUntil = dateUntil;
+    }
+
+    public AvailabilityDisplayDTO parseToDisplay() {
+        return new AvailabilityDisplayDTO(amount, dateFrom, dateUntil);
     }
 }

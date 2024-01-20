@@ -51,12 +51,6 @@ public class AccommodationController {
         return new ResponseEntity<>(new MessageDTO("Accommodation changes saved! Waiting for admin to approve them."), HttpStatus.OK);
     }
 
-    @PostMapping(value = "new-availability-price/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('OWNER')")
-    public ResponseEntity<?> addAvailabilityPrice(@PathVariable("id") Long id, @RequestBody NewAvailabilityPriceDTO newAvailabilityPrice){
-        this.accommodationChangeService.addAvailabilityPrice(id, newAvailabilityPrice);
-        return new ResponseEntity<>(new MessageDTO("Successfully added new availability range and price!"), HttpStatus.OK);
-    }
 
     @GetMapping(value = "all-accommodation", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST', 'OWNER')")

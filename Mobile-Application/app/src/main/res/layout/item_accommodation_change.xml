@@ -62,6 +62,25 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/accommodationDateFrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date from:" />
+
+            <TextView
+                android:id="@+id/accommodationDateUntil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date until:" />
+
+            <TextView
+                android:id="@+id/accommodationPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Price:" />
+
+
 <!--            <TextView-->
 <!--                android:id="@+id/accommodationType"-->
 <!--                android:layout_width="match_parent"-->

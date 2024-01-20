@@ -11,5 +11,4 @@ public interface IAccommodationChangeService {
 
     List<AccommodationChange> getAll();
 
-    void addAvailabilityPrice(Long id, NewAvailabilityPriceDTO newAvailabilityPrice);
 }

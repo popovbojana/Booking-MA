@@ -1,6 +1,7 @@
 package com.example.booking_ma.DTO;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AvailabilityDisplayDTO {
 
@@ -39,5 +40,13 @@ public class AvailabilityDisplayDTO {
 
     public void setDateUntil(LocalDateTime dateUntil) {
         this.dateUntil = dateUntil;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDateTimeFrom = dateFrom.format(formatter);
+        String formattedDateTimeUntil = dateUntil.format(formatter);
+        return formattedDateTimeFrom + " - " + formattedDateTimeUntil + ", price: " + amount + "\n";
     }
 }

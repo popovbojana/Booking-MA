@@ -37,6 +37,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -389,25 +390,10 @@ public class EditAccommodationScreen extends AppCompatActivity {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
                         String formattedDateTimeFrom = dateTimeFrom.format(formatter);
                         String formattedDateTimeTo = dateTimeTo.format(formatter);
-                        NewAvailabilityPriceDTO availabilityPriceDTO = new NewAvailabilityPriceDTO(Double.parseDouble(price), formattedDateTimeFrom, formattedDateTimeTo);
-                        Call<ResponseMessage> call = ServiceUtils.accommodationService(token).addAvailabilityPrice(accommodationId, availabilityPriceDTO);
-                        call.enqueue(new Callback<ResponseMessage>() {
-                            @Override
-                            public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
-                                if (!response.isSuccessful()) {
-                                    Log.i("Error", response.message());
-                                };
-                                Toast.makeText(EditAccommodationScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d("Success", response.body().getMessage());
-                                dialog.dismiss();
-                            }
 
-                            @Override
-                            public void onFailure(Call<ResponseMessage> call, Throwable t) {
-                                Log.d("Fail", t.getMessage());
-                                dialog.dismiss();
-                            }
-                        });
+                        AccommodationChangesDTO changes = new AccommodationChangesDTO(formattedDateTimeFrom, formattedDateTimeTo, Double.parseDouble(price));
+                        updateAccommodation(token, accommodationId, changes);
+                        dialog.dismiss();
                     }
                 }
             }

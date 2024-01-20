@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +43,14 @@ public class AccommodationChange {
     @Enumerated(EnumType.STRING)
     private PriceType priceType;
 
-    @OneToMany(mappedBy = "accommodationChange")
-    private List<AvailabilityPrice> availabilities;
-
     private int cancellationDeadlineInDays;
 
     private double standardPrice;
+    private LocalDateTime dateFrom;
+    private LocalDateTime dateUntil;
+    private double amount;
 
-    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, double standardPrice){
+    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, int cancellationDeadlineInDays, double standardPrice, LocalDateTime dateFrom, LocalDateTime dateUntil, double amount){
         this.accommodation = accommodation;
         this.name = name;
         this.description = description;
@@ -58,16 +59,15 @@ public class AccommodationChange {
         this.maxGuests = maxGuests;
         this.type = type;
         this.priceType = priceType;
-        this.availabilities = availabilities;
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
         this.standardPrice = standardPrice;
+        this.dateFrom = dateFrom;
+        this.dateUntil = dateUntil;
+        this.amount = amount;
     }
 
     public AccommodationChangeDisplayDTO parseToDisplay() {
         List<AvailabilityDisplayDTO> availabilityDisplayDTOS = new ArrayList<>();
-        for (AvailabilityPrice ap : availabilities){
-            availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
-        }
-        return new AccommodationChangeDisplayDTO(accommodation.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, standardPrice);
+        return new AccommodationChangeDisplayDTO(accommodation.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, cancellationDeadlineInDays, standardPrice, dateFrom, dateUntil, amount);
     }
 }
