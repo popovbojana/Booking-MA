@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/itemAdminReportedCommentsScreen"
-        android:title="Reported comments"
+        android:title="Comments approval"
         app:showAsAction="never" />
 
     <item

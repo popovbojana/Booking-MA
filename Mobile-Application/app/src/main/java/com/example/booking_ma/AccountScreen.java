@@ -281,12 +281,12 @@ public class AccountScreen extends AppCompatActivity {
             }
 
             if (itemId == R.id.itemAdminReportedCommentsScreen) {
-//            startActivity(new Intent(this, ReportedCommentsScreen.class));
+            startActivity(new Intent(this, CommentsApprovalScreen.class));
                 return true;
             }
 
             if (itemId == R.id.itemAdminAccommodationsApprovalScreen) {
-//            startActivity(new Intent(this, AccommodationsApprovalScreen.class));
+            startActivity(new Intent(this, AccommodationsApprovalScreen.class));
                 return true;
             }
 

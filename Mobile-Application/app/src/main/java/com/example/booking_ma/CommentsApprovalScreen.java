@@ -16,11 +16,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.booking_ma.fragments.AccommodationChangesFragment;
+import com.example.booking_ma.fragments.AccommodationCommentsFragment;
 import com.example.booking_ma.fragments.NewAccommodationsFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class AccommodationsApprovalScreen extends AppCompatActivity {
+public class CommentsApprovalScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ViewPager2 viewPager;
@@ -63,9 +64,9 @@ public class AccommodationsApprovalScreen extends AppCompatActivity {
     private String getTabTitle(int position) {
         switch (position) {
             case 0:
-                return "New Accommodations";
+                return "Accommodation comments";
             case 1:
-                return "Accommodation Changes";
+                return "Reported comments";
             default:
                 return "";
         }
@@ -82,9 +83,10 @@ public class AccommodationsApprovalScreen extends AppCompatActivity {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return new NewAccommodationsFragment();
+                    return new AccommodationCommentsFragment();
                 case 1:
-                    return new AccommodationChangesFragment();
+                    //TODO FICA reported comments
+//                    return new AccommodationChangesFragment();
                 default:
                     throw new IllegalArgumentException("Invalid position");
             }
