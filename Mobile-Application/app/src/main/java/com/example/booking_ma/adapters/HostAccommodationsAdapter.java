@@ -159,7 +159,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             public void onResponse(Call<AllRatingsDisplay> call, Response<AllRatingsDisplay> response) {
                 if (response.isSuccessful()) {
                     List<RatingCommentDisplayDTO> updatedComments = response.body().getAllRatingComments();
-                    adapter.setComments(updatedComments); // Postavi nove komentare u adapter
+                    adapter.setComments(updatedComments);
                 } else {
                     Log.e("API Error", "Failed to fetch comments: " + response.message());
                     // Handle the error, for example, show a toast message

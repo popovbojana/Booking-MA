@@ -105,7 +105,7 @@ public class RatingCommentService implements IRatingCommentService {
                 allForDisplay.add(rc.parseToDisplay());
                 total += rc.getRating();
             }
-            return new AllRatingsDisplay(total/all.size(), allForDisplay);
+            return new AllRatingsDisplay((float)total/all.size(), allForDisplay);
         } else {
             throw new NoDataWithId("There is no owner with this id!");
         }
@@ -121,7 +121,7 @@ public class RatingCommentService implements IRatingCommentService {
                 allForDisplay.add(rc.parseToDisplay());
                 total += rc.getRating();
             }
-            return new AllRatingsDisplay(total/all.size(), allForDisplay);
+            return new AllRatingsDisplay((float)total/all.size(), allForDisplay);
         } else {
             throw new NoDataWithId("There is no accommodation with this id!");
         }

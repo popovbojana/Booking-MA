@@ -36,7 +36,7 @@ public class RatingComment {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    private int rating;
+    private float rating;
 
     private String comment;
 
@@ -46,7 +46,7 @@ public class RatingComment {
 
     private boolean reported;
 
-    public RatingComment(RatingCommentType type, Guest guest, Owner owner, Accommodation accommodation, int rating, String comment){
+    public RatingComment(RatingCommentType type, Guest guest, Owner owner, Accommodation accommodation, float rating, String comment){
         this.type = type;
         if (type == RatingCommentType.FOR_OWNER){
             this.approved = true;
@@ -64,9 +64,9 @@ public class RatingComment {
 
     public RatingCommentDisplayDTO parseToDisplay(){
         if (type == RatingCommentType.FOR_OWNER){
-            return new RatingCommentDisplayDTO(guest.getId(), type, owner.getId(), null, rating, comment, time);
+            return new RatingCommentDisplayDTO(id, guest.getId(), guest.getName() + guest.getSurname(), type, owner.getId(), null, rating, comment, time);
         }
-        return new RatingCommentDisplayDTO(guest.getId(), type, null, accommodation.getId(), rating, comment, time);
+        return new RatingCommentDisplayDTO(id, guest.getId(), guest.getName() + " " + guest.getSurname(), type, null, accommodation.getId(), rating, comment, time);
     }
 
 }

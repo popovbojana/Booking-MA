@@ -13,6 +13,6 @@ public class RateCommentDTO {
     private RatingCommentType type;
     private Long ownersId;
     private Long accommodationsId;
-    private int rating;
+    private float rating;
     private String comment;
 }
