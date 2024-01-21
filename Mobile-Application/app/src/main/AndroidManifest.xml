@@ -125,7 +125,7 @@
         </activity>
 
         <activity
-            android:name=".HostCommentsActivity"
+            android:name=".HostCommentsScreen"
             android:exported="true">
 
             <meta-data
@@ -133,6 +133,14 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".FavoriteAccommodationsScreen"
+            android:exported="true">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
     </application>
 

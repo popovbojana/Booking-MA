@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.booking_ma.fragments.HostCommentsFragment;
 
-public class HostCommentsActivity extends AppCompatActivity {
+public class HostCommentsScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
 
@@ -80,7 +80,7 @@ public class HostCommentsActivity extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostCommentsScreen) {
-            startActivity(new Intent(this, HostCommentsActivity.class));
+            startActivity(new Intent(this, HostCommentsScreen.class));
             return true;
         }
 

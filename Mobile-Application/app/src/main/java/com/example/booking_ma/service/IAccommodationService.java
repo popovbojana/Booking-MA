@@ -4,6 +4,7 @@ import com.example.booking_ma.DTO.AccommodationChangeDisplayDTO;
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.ApprovalDTO;
+import com.example.booking_ma.DTO.FavoriteAccommodationDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -55,5 +57,14 @@ public interface IAccommodationService {
 
     @POST(ServiceUtils.accommodation + "/new-availability-price/{id}")
     Call<ResponseMessage> addAvailabilityPrice(@Path("id") Long id, @Body NewAvailabilityPriceDTO newAvailabilityPriceDTO);
+
+    @PUT(ServiceUtils.accommodation + "/add-to-favorites")
+    Call<ResponseMessage> addToFavorites(@Body FavoriteAccommodationDTO favAccommodation);
+
+    @PUT(ServiceUtils.accommodation + "/remove-from-favorites")
+    Call<ResponseMessage> removeFromFavorites(@Body FavoriteAccommodationDTO favAccommodation);
+
+    @GET(ServiceUtils.accommodation + "/all-favorites/{id}")
+    Call<List<AccommodationDisplayDTO>> getAllFavoritesForGuest(@Path("id") Long id);
 
 }

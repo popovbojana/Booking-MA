@@ -138,6 +138,14 @@
                     android:padding="16dp"
                     android:text="Report host" />
 
+                <Button
+                    android:id="@+id/buttonAddToFavorites"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="16dp"
+                    android:text="Add to favorites" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -116,18 +116,18 @@ public class AccommodationController {
             this.accommodationService.addToFavorites(favAccommodation);
             return new ResponseEntity<>(new MessageDTO("Successfully added accommodation to your favorites!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping(value = "remove-from-favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "remove-from-favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('GUEST')")
     public ResponseEntity<?> removeFromFavorites(@RequestBody FavoriteAccommodationDTO favAccommodation){
         try{
             this.accommodationService.removeFromFavorites(favAccommodation);
             return new ResponseEntity<>(new MessageDTO("Successfully removed accommodation to your favorites!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

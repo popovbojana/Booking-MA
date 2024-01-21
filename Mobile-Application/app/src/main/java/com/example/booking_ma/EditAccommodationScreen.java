@@ -11,12 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,19 +22,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
-import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
-import com.example.booking_ma.DTO.NewAccommodationDTO;
-import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
-import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -496,7 +487,7 @@ public class EditAccommodationScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostCommentsScreen) {
-            startActivity(new Intent(this, HostCommentsActivity.class));
+            startActivity(new Intent(this, HostCommentsScreen.class));
             return true;
         }
 

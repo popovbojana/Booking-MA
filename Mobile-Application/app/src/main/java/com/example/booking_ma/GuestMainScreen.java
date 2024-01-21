@@ -137,6 +137,12 @@ public class GuestMainScreen extends AppCompatActivity {
             return true;
         }
 
+        if (itemId == R.id.itemGuestFavoriteAccommodations) {
+            Intent intent = new Intent(this, FavoriteAccommodationsScreen.class);
+            startActivity(intent);
+            return true;
+        }
+
         if (itemId == R.id.itemLogOut) {
             deletePreferences();
             Intent intent = new Intent(this, LoginScreen.class);

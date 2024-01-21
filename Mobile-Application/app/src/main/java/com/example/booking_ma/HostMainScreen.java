@@ -140,7 +140,7 @@ public class HostMainScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostCommentsScreen) {
-            startActivity(new Intent(this, HostCommentsActivity.class));
+            startActivity(new Intent(this, HostCommentsScreen.class));
             return true;
         }
 

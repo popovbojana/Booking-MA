@@ -27,12 +27,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.booking_ma.DTO.FavoriteAccommodationDTO;
 import com.example.booking_ma.DTO.RateCommentDTO;
 import com.example.booking_ma.DTO.ReportedUserReasonDTO;
 import com.example.booking_ma.DTO.ReservationDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.adapters.AccommodationAmentiteAdapter;
 import com.example.booking_ma.adapters.AccommodationRatingCommentAdapter;
+import com.example.booking_ma.adapters.FavoriteAccommodationsAdapter;
 import com.example.booking_ma.fragments.MapFragment;
 import com.example.booking_ma.model.RatingComment;
 import com.example.booking_ma.service.ServiceUtils;
@@ -79,7 +81,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private Long myId;
 
     //bojana
-    private Button buttonRateAccommodation, buttonRateOwner, buttonReportOwner;
+    private Button buttonRateAccommodation, buttonRateOwner, buttonReportOwner, buttonAddToFavorites;
 
 
     @Override
@@ -127,6 +129,35 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDialogReportOwner();
+            }
+        });
+
+        buttonAddToFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FavoriteAccommodationDTO favoriteAccommodationDTO = new FavoriteAccommodationDTO(myId, aAccommodationId);
+                Call<ResponseMessage> call = ServiceUtils.accommodationService(token).addToFavorites(favoriteAccommodationDTO);
+                call.enqueue(new Callback<ResponseMessage>() {
+                    @Override
+                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                        if(response.isSuccessful()) {
+                            Log.i("Success", response.body().getMessage());
+                            Toast.makeText(AccommodationDetailsScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                onFailure(call, new Throwable(response.errorBody().string()));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                        Log.i("Fail", t.getMessage());
+                        Toast.makeText(AccommodationDetailsScreen.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         });
     
@@ -362,6 +393,11 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
                 return true;
             }
 
+            if (itemId == R.id.itemHostCommentsScreen) {
+                startActivity(new Intent(this, HostCommentsScreen.class));
+                return true;
+            }
+
             if (itemId == R.id.itemLogOut) {
                 deletePreferences();
                 Intent intent = new Intent(this, LoginScreen.class);
@@ -382,6 +418,12 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
 
             if (itemId == R.id.itemGuestReservationsScreen) {
 //                startActivity(new Intent(this, GuestReservationsScreen.class));
+                return true;
+            }
+
+            if (itemId == R.id.itemGuestFavoriteAccommodations) {
+                Intent intent = new Intent(this, FavoriteAccommodationsScreen.class);
+                startActivity(intent);
                 return true;
             }
 
@@ -473,6 +515,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         buttonRateAccommodation = findViewById(R.id.buttonRateAccommodation);
         buttonRateOwner = findViewById(R.id.buttonRateOwner);
         buttonReportOwner = findViewById(R.id.buttonReportOwner);
+        buttonAddToFavorites = findViewById(R.id.buttonAddToFavorites);
 
     }
 

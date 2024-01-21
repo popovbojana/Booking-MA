@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
@@ -141,7 +140,7 @@ public class AccommodationsScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostCommentsScreen) {
-            startActivity(new Intent(this, HostCommentsActivity.class));
+            startActivity(new Intent(this, HostCommentsScreen.class));
             return true;
         }
 
