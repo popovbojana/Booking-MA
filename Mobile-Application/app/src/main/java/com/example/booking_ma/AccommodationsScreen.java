@@ -153,7 +153,7 @@ public class AccommodationsScreen extends AppCompatActivity {
                         Log.i("Error", "Date from is after date until");
                         textViewSearchError.setText("Date from must be before Date until!");
                     } else {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
                         String formattedDateTimeFrom = dateTimeFrom.format(formatter);
                         String formattedDateTimeTo = dateTimeTo.format(formatter);
                         Intent intent = new Intent(AccommodationsScreen.this, AllAccommodationsReportScreen.class);
