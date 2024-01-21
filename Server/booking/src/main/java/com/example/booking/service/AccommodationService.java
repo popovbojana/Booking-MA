@@ -1,16 +1,12 @@
 package com.example.booking.service;
 
-import com.example.booking.dto.AccommodationDisplayDTO;
-import com.example.booking.dto.NewAccommodationDTO;
-import com.example.booking.dto.NewAvailabilityPriceDTO;
-import com.example.booking.dto.FavoriteAccommodationDTO;
+import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.model.*;
+import com.example.booking.model.enums.PriceType;
+import com.example.booking.model.enums.ReservationState;
 import com.example.booking.model.enums.Role;
-import com.example.booking.repository.AccommodationChangeRepository;
-import com.example.booking.repository.AccommodationRepository;
-import com.example.booking.repository.AvailabilityPriceRepository;
-import com.example.booking.repository.UserRepository;
+import com.example.booking.repository.*;
 import com.example.booking.service.interfaces.IAccommodationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +21,15 @@ public class AccommodationService implements IAccommodationService {
     private final UserRepository userRepository;
     private final AccommodationChangeRepository accommodationChangeRepository;
     private final AvailabilityPriceRepository availabilityPriceRepository;
+    private final ReservationRepository reservationRepository;
 
     @Autowired
-    public AccommodationService(AccommodationRepository accommodationRepository, UserRepository userRepository, AccommodationChangeRepository accommodationChangeRepository, AvailabilityPriceRepository availabilityPriceRepository) {
+    public AccommodationService(AccommodationRepository accommodationRepository, UserRepository userRepository, AccommodationChangeRepository accommodationChangeRepository, AvailabilityPriceRepository availabilityPriceRepository, ReservationRepository reservationRepository) {
         this.accommodationRepository = accommodationRepository;
         this.userRepository = userRepository;
         this.accommodationChangeRepository = accommodationChangeRepository;
         this.availabilityPriceRepository = availabilityPriceRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -45,11 +43,12 @@ public class AccommodationService implements IAccommodationService {
 
         List<AvailabilityPrice> availabilityPrices = new ArrayList<>();
 
-        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays(), newAccommodationDTO.getAddress(), newAccommodationDTO.getLatitude(), newAccommodationDTO.getLongitude(), newAccommodationDTO.getFinalRating(), newAccommodationDTO.getStandardPrice());
+        boolean autoApprove = false;
+        Accommodation accommodation = new Accommodation(owner, newAccommodationDTO.getName(), newAccommodationDTO.getDescription(), newAccommodationDTO.getAmenities(), newAccommodationDTO.getMinGuests(), newAccommodationDTO.getMaxGuests(), newAccommodationDTO.getType(), newAccommodationDTO.getPriceType(), availabilityPrices, newAccommodationDTO.getCancellationDeadlineInDays(), newAccommodationDTO.getAddress(), newAccommodationDTO.getLatitude(), newAccommodationDTO.getLongitude(), newAccommodationDTO.getFinalRating(), newAccommodationDTO.getStandardPrice(), autoApprove);
         this.accommodationRepository.save(accommodation);
 
         for (NewAvailabilityPriceDTO ap : newAccommodationDTO.getAvailability()){
-            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, null, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
+            AvailabilityPrice availabilityPrice = new AvailabilityPrice(accommodation, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
             availabilityPrices.add(availabilityPrice);
             this.availabilityPriceRepository.save(availabilityPrice);
         }
@@ -100,13 +99,13 @@ public class AccommodationService implements IAccommodationService {
             Accommodation accommodation = this.accommodationRepository.findById(id).get();
             if (approval){
                 AccommodationChange changes = accommodation.getAccommodationChange();
-                if (changes.getName() != null){
+                if (!changes.getName().equals("")){
                     accommodation.setName(changes.getName());
                 }
-                if (changes.getDescription() != null){
+                if (!changes.getDescription().equals("")){
                     accommodation.setDescription(changes.getDescription());
                 }
-                if (changes.getAmenities() != null){
+                if (!changes.getAmenities().equals("")){
                     accommodation.setAmenities(changes.getAmenities());
                 }
                 if (changes.getMinGuests() != -1){
@@ -115,25 +114,29 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getMaxGuests() != -1){
                     accommodation.setMaxGuests(changes.getMaxGuests());
                 }
-                if (changes.getType() != null){
+                if (!changes.getType().equals("")){
                     accommodation.setType(changes.getType());
                 }
-                if (changes.getPriceType() != null){
-                    accommodation.setPriceType(changes.getPriceType());
+                if (changes.getPriceType() == PriceType.PER_GUEST && accommodation.getPriceType() == PriceType.PER_UNIT){
+                    accommodation.setPriceType(PriceType.PER_GUEST);
                 }
-                if (changes.getAvailabilities() != null && !changes.getAvailabilities().isEmpty()){
-                    this.availabilityPriceRepository.deleteAll(accommodation.getAvailabilities());
-                    List<AvailabilityPrice> newAvailabilityPrices = new ArrayList<>();
-                    for (AvailabilityPrice ap : changes.getAvailabilities()){
-                        this.availabilityPriceRepository.delete(ap);
-                        AvailabilityPrice newAp = new AvailabilityPrice(ap.getAccommodation(), null, ap.getAmount(), ap.getDateFrom(), ap.getDateUntil());
-                        newAvailabilityPrices.add(newAp);
-                    }
-                    accommodation.setAvailabilities(newAvailabilityPrices);
-                    this.availabilityPriceRepository.saveAll(newAvailabilityPrices);
+                if (changes.getPriceType() == PriceType.PER_UNIT && accommodation.getPriceType() == PriceType.PER_GUEST){
+                    accommodation.setPriceType(PriceType.PER_UNIT);
+                }
+                if (changes.getDateFrom() != null && changes.getDateUntil() != null && changes.getAmount() != -1.0){
+                    AvailabilityPrice newAvailability = new AvailabilityPrice(accommodation, changes.getAmount(), changes.getDateFrom(), changes.getDateUntil());
+                    this.availabilityPriceRepository.save(newAvailability);
+                    List<AvailabilityPrice> accommodationAvailabilities = accommodation.getAvailabilities();
+                    accommodationAvailabilities.add(newAvailability);
                 }
                 if (changes.getCancellationDeadlineInDays() != -1){
                     accommodation.setCancellationDeadlineInDays(changes.getCancellationDeadlineInDays());
+                }
+                if (changes.getStandardPrice() != -1.0){
+                    accommodation.setStandardPrice(changes.getStandardPrice());
+                }
+                if (changes.isAutoApprove() != accommodation.isAutoApprove()){
+                    accommodation.setAutoApprove(changes.isAutoApprove());
                 }
                 accommodation.setAccommodationChange(null);
                 accommodation.setHasChanges(false);
@@ -205,7 +208,7 @@ public class AccommodationService implements IAccommodationService {
     @Override
     public List<AccommodationDisplayDTO> getAllFavoritesForGuest(Long id) throws NoDataWithId {
         if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST) {
-            Guest guest = this.userRepository.findGuestById(id);
+            Guest guest = this.userRepository.findGuestById(id).get();
             List<AccommodationDisplayDTO> display = new ArrayList<>();
             for (Accommodation a : guest.getFavoriteAccommodations()){
                 display.add(a.parseToDisplay());
@@ -213,6 +216,26 @@ public class AccommodationService implements IAccommodationService {
             return display;
         } else {
             throw new NoDataWithId("There is no guest with this id!");
+        }
+    }
+
+    @Override
+    public AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId {
+        if (this.accommodationRepository.findById(id).isPresent()){
+            Accommodation accommodation = this.accommodationRepository.findById(id).get();
+            List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+            if(!accommodation.getReservations().isEmpty()){
+                for(Reservation r : accommodation.getReservations()){
+                    reservationDisplayDTOS.add(new ReservationDisplayDTO(r.getId(), r.getGuest().getId(), r.getOwner().getId(),r.getAccommodation().getId(),r.getCheckIn(),r.getCheckOut(),r.getGuestsNumber(),r.getTotalCost(),r.getReservationState(),r.getCancelationDeadline(), r.getGuestCancelationsNumber()));
+                }
+            }
+            List<AvailabilityDisplayDTO> availabilities = new ArrayList<>();
+            for (AvailabilityPrice ap : accommodation.getAvailabilities()){
+                availabilities.add(ap.parseToDisplay());
+            }
+            return new AccommodationDisplayDTO(accommodation.getName(), accommodation.getDescription(), accommodation.getMinGuests(), accommodation.getMaxGuests(), accommodation.getType(), accommodation.getPriceType(), accommodation.getCancellationDeadlineInDays(), accommodation.getStandardPrice(), accommodation.getAddress(), accommodation.getAmenities(), reservationDisplayDTOS, accommodation.isAutoApprove(), availabilities);
+        } else {
+            throw new NoDataWithId("There is no guests with this id!");
         }
     }
 }

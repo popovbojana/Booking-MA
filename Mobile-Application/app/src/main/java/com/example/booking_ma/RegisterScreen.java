@@ -1,6 +1,8 @@
 package com.example.booking_ma;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.example.booking_ma.model.enums.Role;
 import com.example.booking_ma.service.ServiceUtils;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +36,9 @@ public class RegisterScreen extends AppCompatActivity {
     private Spinner spinnerRole;
     private TextView textViewError;
     private Button buttonRegister, buttonLogin;
+
+    private String token;
+    private String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +63,26 @@ public class RegisterScreen extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerRole.setAdapter(adapter);
 
+        spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedRole = parentView.getItemAtPosition(position).toString();
+                role = selectedRole;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.i("Error", "Role empty");
+            }
+        });
         textViewError = findViewById(R.id.textViewError);
 
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonLogin = findViewById(R.id.buttonLogin);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("pref_accessToken", "");
+
     }
 
     @Override
@@ -79,21 +101,6 @@ public class RegisterScreen extends AppCompatActivity {
                 String surname = editTextSurname.getText().toString();
                 String address = editTextAddress.getText().toString();
                 String phoneNumber = editTextPhoneNumber.getText().toString();
-                String role = "";
-
-                spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                        String selectedRole = parentView.getItemAtPosition(position).toString();
-                        Toast.makeText(RegisterScreen.this, "Role: " + selectedRole, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parentView) {
-                        Log.i("Error", "Role empty");
-                        textViewError.setText("Role is required!");
-                    }
-                });
 
                 if (email.equals("")){
                     Log.i("Error", "Email empty");
@@ -120,8 +127,14 @@ public class RegisterScreen extends AppCompatActivity {
                     Log.i("Error", "Phone number empty");
                     textViewError.setText("Phone number is required!");
                 } else {
-                    NewUserDTO newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
-                    Call<ResponseMessage> call = ServiceUtils.userService.registration(newUser);
+                    Log.i("ROLE", role);
+                    NewUserDTO newUser;
+                    if (role.equals("Host")) {
+                        newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.OWNER);
+                    } else {
+                        newUser = new NewUserDTO(email, password, name, surname, address, phoneNumber, Role.GUEST);
+                    }
+                    Call<ResponseMessage> call = ServiceUtils.userService(token).registration(newUser);
                     call.enqueue(new Callback<ResponseMessage>() {
                         @Override
                         public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {

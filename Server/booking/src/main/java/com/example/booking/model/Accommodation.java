@@ -2,13 +2,16 @@ package com.example.booking.model;
 
 import com.example.booking.dto.AccommodationDisplayDTO;
 import com.example.booking.dto.AvailabilityDisplayDTO;
+import com.example.booking.dto.ReservationDisplayDTO;
 import com.example.booking.model.enums.PriceType;
+import com.example.booking.model.enums.ReservationState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +46,7 @@ public class Accommodation {
     @Enumerated(EnumType.STRING)
     private PriceType priceType;
 
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AvailabilityPrice> availabilities;
 
     private int cancellationDeadlineInDays;
@@ -56,7 +59,7 @@ public class Accommodation {
     @JoinColumn(name = "change_id")
     private AccommodationChange accommodationChange;
 
-    @OneToMany(mappedBy = "accommodation")
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private List<RatingComment> ratingComments;
 
     private String address;
@@ -69,8 +72,13 @@ public class Accommodation {
 
     private double standardPrice;
 
+    @OneToMany(mappedBy = "accommodation")
+    private List<Reservation> reservations;
 
-    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, String address, double latitude, double longitude, double finalRating, double standardPrice){
+    private boolean autoApprove;
+
+
+    public Accommodation(Owner owner, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityPrice> availabilities, int cancellationDeadlineInDays, String address, double latitude, double longitude, double finalRating, double standardPrice, boolean autoApprove){
         this.owner = owner;
         this.name = name;
         this.description = description;
@@ -89,6 +97,8 @@ public class Accommodation {
         this.longitude = longitude;
         this.finalRating = finalRating;
         this.standardPrice = standardPrice;
+        this.autoApprove = autoApprove;
+
     }
 
     public AccommodationDisplayDTO parseToDisplay() {
@@ -96,6 +106,11 @@ public class Accommodation {
         for (AvailabilityPrice ap : availabilities){
             availabilityDisplayDTOS.add(new AvailabilityDisplayDTO(ap.getAmount(), ap.getDateFrom(), ap.getDateUntil()));
         }
-        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges, address, longitude, latitude, finalRating, standardPrice);
+
+        List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+        for (Reservation r : reservations){
+            reservationDisplayDTOS.add(new ReservationDisplayDTO(r.getId(), r.getGuest().getId(), r.getOwner().getId(),r.getAccommodation().getId(),r.getCheckIn(),r.getCheckOut(),r.getGuestsNumber(),r.getTotalCost(),r.getReservationState(),r.getCancelationDeadline(), r.getGuestCancelationsNumber()));
+        }
+        return new AccommodationDisplayDTO(id, owner.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, availabilityDisplayDTOS, cancellationDeadlineInDays, approved, hasChanges, address, longitude, latitude, finalRating, standardPrice, reservationDisplayDTOS, autoApprove);
     }
 }

@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/itemHostMainScreen"
+        android:id="@+id/itemGuestMainScreen"
         android:title="Home"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/itemHostAccountScreen"
+        android:id="@+id/itemGuestAccountScreen"
         android:title="Account"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/itemHostAccommodationsScreen"
-        android:title="Accommodations"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/itemHostReservationsScreen"
+        android:id="@+id/itemGuestReservationsScreen"
         android:title="Reservations"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/itemHostNotificationsScreen"
+        android:id="@+id/itemGuestFavoriteAccommodations"
+        android:title="Favorite Accommodations"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/itemGuestNotificationsScreen"
         android:title="Notifications"
         app:showAsAction="never" />
 

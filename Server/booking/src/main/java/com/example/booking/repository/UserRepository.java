@@ -23,10 +23,19 @@ public interface UserRepository extends CrudRepository<User, Long> {
     public Optional<User> findByEmailAndRole(String Email, Role role);
     public Optional<User> findByEmail(String email);
 
+//    @Query("select u from User u where u.id = :id and u.role = 'GUEST'")
+//    Guest findGuestById(@Param("id") Long id);
+//
+//    @Query("select u from User u where u.id = :id and u.role = 'OWNER'")
+//    Owner findOwnerById(@Param("id") Long id);
+
     @Query("select u from User u where u.id = :id and u.role = 'GUEST'")
-    Guest findGuestById(@Param("id") Long id);
+    Optional<Guest> findGuestById(@Param("id") Long id);
 
     @Query("select u from User u where u.id = :id and u.role = 'OWNER'")
-    Owner findOwnerById(@Param("id") Long id);
+    Optional<Owner> findOwnerById(@Param("id") Long id);
+
+    @Query("delete from User u where u.id = :id and u.role = 'OWNER'")
+    void deleteOwnerById(@Param("id") Long id);
 
 }

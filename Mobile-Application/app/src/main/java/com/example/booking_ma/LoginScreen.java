@@ -19,6 +19,7 @@ import com.auth0.android.jwt.JWT;
 import com.example.booking_ma.DTO.LoginDTO;
 import com.example.booking_ma.DTO.Token;
 import com.example.booking_ma.DTO.TokenDTO;
+import com.example.booking_ma.service.IUserService;
 import com.example.booking_ma.service.ServiceUtils;
 
 import java.io.IOException;
@@ -35,12 +36,15 @@ public class LoginScreen extends AppCompatActivity {
     private TextView textViewError;
 
     private SharedPreferences sharedPreferences;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        deleteTokenPreferences();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,6 +57,9 @@ public class LoginScreen extends AppCompatActivity {
         buttonRegister = findViewById(R.id.buttonRegister);
 
         textViewError = findViewById(R.id.textViewError);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        token = sharedPreferences.getString("pref_accessToken", "");
     }
 
     @Override
@@ -75,7 +82,8 @@ public class LoginScreen extends AppCompatActivity {
                     textViewError.setText("Password is required!");
                 } else {
                     LoginDTO loginDTO = new LoginDTO(email, password);
-                    Call<TokenDTO> call = ServiceUtils.userService.login(loginDTO);
+                    IUserService userService = ServiceUtils.userService(token);
+                    Call<TokenDTO> call = userService.login(loginDTO);
                     call.enqueue(new Callback<TokenDTO>() {
                         @Override
                         public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
@@ -95,14 +103,19 @@ public class LoginScreen extends AppCompatActivity {
                                     setToken(tokenDTO);
                                     setPreferences(id, email, role, tokenDTO);
                                     setTokenPreference(tokenDTO.getAccessToken(), tokenDTO.getRefreshToken());
+
                                     if(role.equalsIgnoreCase("OWNER")){
-//                                        startActivity(new Intent(LoginScreen.this, HostMainScreen.class));
+                                        startActivity(new Intent(LoginScreen.this, HostMainScreen.class));
                                     }
+
                                     else if(role.equalsIgnoreCase("GUEST")) {
                                         startActivity(new Intent(LoginScreen.this, GuestMainScreen.class));
+
                                     } else if (role.equalsIgnoreCase("ADMIN")) {
 //                                        startActivity(new Intent(LoginScreen.this, AdministratorMainScreen.class));
+                                        startActivity(new Intent(LoginScreen.this, AccommodationsApprovalScreen.class));
                                     }
+                                    
                                 } else {
                                     Log.e("Error", "Login failed.");
                                     Toast.makeText(LoginScreen.this, "Login failed. Invalid server response.", Toast.LENGTH_SHORT).show();
@@ -159,6 +172,7 @@ public class LoginScreen extends AppCompatActivity {
         SharedPreferences.Editor spEditor = this.sharedPreferences.edit();
         spEditor.putString("pref_accessToken", token);
         spEditor.putString("pref_refreshToken", refreshToken);
+        spEditor.apply();
     }
 
     private void setSharedPreferences(Long id, String email, String role){

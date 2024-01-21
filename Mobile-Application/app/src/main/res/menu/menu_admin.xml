@@ -2,24 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<item
-        android:id="@+id/itemGuestMainScreen"
+    <item
+        android:id="@+id/itemAdminMainScreen"
         android:title="Home"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/itemGuestAccountScreen"
+        android:id="@+id/itemAdminAccountScreen"
         android:title="Account"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/itemGuestReservationsScreen"
-        android:title="Reservations"
+        android:id="@+id/itemAdminReportedUsersScreen"
+        android:title="Reported users"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/itemGuestNotificationsScreen"
-        android:title="Notifications"
+        android:id="@+id/itemAdminReportedCommentsScreen"
+        android:title="Comments approval"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/itemAdminAccommodationsApprovalScreen"
+        android:title="Accommodations approval"
         app:showAsAction="never" />
 
     <item

@@ -1,5 +1,6 @@
 package com.example.booking.controller;
 
+import com.example.booking.dto.ApprovalDTO;
 import com.example.booking.dto.MessageDTO;
 import com.example.booking.dto.RateCommentDTO;
 import com.example.booking.service.interfaces.IAccommodationService;
@@ -33,7 +34,7 @@ public class RatingCommentController {
             this.ratingCommentService.rateComment(rateCommentDTO);
             return new ResponseEntity<>(new MessageDTO("Successfully added new rating and comment!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -74,7 +75,33 @@ public class RatingCommentController {
         try {
             return new ResponseEntity<>(this.ratingCommentService.getAllForAccommodation(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "all-unapproved", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllUnapproved(){
+        try {
+            return new ResponseEntity<>(this.ratingCommentService.getAllUnapproved(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "approve/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> approve(@PathVariable("id") Long id, @RequestBody ApprovalDTO approval){
+        try {
+            if(approval.isApproval()){
+                this.ratingCommentService.approve(id, true);
+                return new ResponseEntity<>(new MessageDTO("Successfully approved rating and comment!"), HttpStatus.OK);
+            } else {
+                this.ratingCommentService.approve(id, false);
+                return new ResponseEntity<>(new MessageDTO("Successfully disapproved rating and comment!"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -84,6 +111,27 @@ public class RatingCommentController {
         try {
             this.ratingCommentService.report(id);
             return new ResponseEntity<>(new MessageDTO("Successfully reported rating and comment!"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "all-reported-comments/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getReportedComments(@PathVariable("id") Long id){
+        try {
+            return new ResponseEntity<>(this.ratingCommentService.getReportedComments(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "delete-reported-comments/{ratingCommentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> handleReportedComment(@PathVariable("id") Long ratingCommentId, @RequestBody ApprovalDTO approvalDTO){
+        try {
+            this.ratingCommentService.handleReportedComment(ratingCommentId, approvalDTO);
+            return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully deleted"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

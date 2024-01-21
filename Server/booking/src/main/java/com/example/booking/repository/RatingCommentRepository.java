@@ -15,4 +15,10 @@ public interface RatingCommentRepository extends CrudRepository<RatingComment, L
 
     @Query("select rc from RatingComment rc where rc.accommodation.id = :id and rc.approved = true")
     List<RatingComment> findAllForAccommodation(Long id);
+
+    @Query("select rc from RatingComment rc where rc.approved = false")
+    List<RatingComment> getAllUnapproved();
+
+    @Query("select rc from RatingComment rc where rc.reported = true")
+    List<RatingComment> findAllReportedComments();
 }

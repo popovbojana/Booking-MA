@@ -10,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AllRatingsDisplay {
-    private double averageRating;
+    private float averageRating;
     private List<RatingCommentDisplayDTO> allRatingComments;
 }

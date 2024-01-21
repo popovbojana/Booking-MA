@@ -1,45 +1,61 @@
 package com.example.booking_ma.service;
 
+import android.util.Log;
+
 import com.example.booking_ma.tools.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceUtils {
 
-    //OVDE UNESI SVOJ LOKALHOST (MOJ JE 192.168.1.24) u cmd kucas ipconfig
-    //fica
-    private static final String SERVICE_API_PATH = "http://192.168.1.25:8081/api/";
-    //bojana
-//    private static final String SERVICE_API_PATH = "http://172.20.10.4:8081/api/";
+    private static final String SERVICE_API_PATH = "http://192.168.1.8:8081/api/";
+//    private static final String SERVICE_API_PATH = "http://192.168.1.13:8081/api/";
 
     protected static final String accommodation = "accommodation";
     protected static final String user = "user";
     protected static final String ratingComment = "rating-comment";
+    protected static final String reservations = "reservations";
 
-    public static OkHttpClient test(){
+    public static OkHttpClient.Builder httpClientBuilder(String authToken) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(120, TimeUnit.SECONDS)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
-                .addInterceptor(interceptor).build();
-        return client;
+                .addInterceptor(interceptor);
+
+        AuthInterceptor authInterceptor = new AuthInterceptor(authToken);
+        builder.addInterceptor(authInterceptor);
+
+        return builder;
     }
 
-    public static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(SERVICE_API_PATH)
-            .addConverterFactory(GsonConverterFactory.create(getCustomGson()))
-            .client(test())
-            .build();
+    public static Retrofit retrofit(String authToken) {
+        return new Retrofit.Builder()
+                .baseUrl(SERVICE_API_PATH)
+                .addConverterFactory(GsonConverterFactory.create(getCustomGson()))
+                .client(httpClientBuilder(authToken).build())
+                .build();
+    }
 
     private static Gson getCustomGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -47,8 +63,19 @@ public class ServiceUtils {
         return gsonBuilder.create();
     }
 
-    public static IAccommodationService accommodationService = retrofit.create(IAccommodationService.class);
-    public static IUserService userService = retrofit.create(IUserService.class);
-    public static IRatingCommentService ratingCommentService = retrofit.create(IRatingCommentService.class);
+    public static IAccommodationService accommodationService(String authToken) {
+        return retrofit(authToken).create(IAccommodationService.class);
+    }
 
+    public static IUserService userService(String authToken) {
+        return retrofit(authToken).create(IUserService.class);
+    }
+
+    public static IRatingCommentService ratingCommentService(String authToken) {
+        return retrofit(authToken).create(IRatingCommentService.class);
+    }
+
+    public static IReservationService reservationService(String authToken) {
+        return retrofit(authToken).create(IReservationService.class);
+    }
 }

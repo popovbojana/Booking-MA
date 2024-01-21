@@ -3,9 +3,11 @@ package com.example.booking.service;
 import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.NotActivatedException;
-import com.example.booking.model.User;
+import com.example.booking.exceptions.RequirementNotSatisfied;
+import com.example.booking.model.*;
+import com.example.booking.model.enums.ReservationState;
 import com.example.booking.model.enums.Role;
-import com.example.booking.repository.UserRepository;
+import com.example.booking.repository.*;
 import com.example.booking.security.TokenUtils;
 import com.example.booking.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +22,19 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final AccommodationRepository accommodationRepository;
+    private final AvailabilityPriceRepository availabilityPriceRepository;
+    private final RatingCommentRepository ratingCommentRepository;
+
+    private final ReservationRepository reservationRepository;
 
     @Autowired
     private MailService mailService;
@@ -43,13 +50,32 @@ public class UserService implements IUserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, AccommodationRepository accommodationRepository, AvailabilityPriceRepository availabilityPriceRepository, RatingCommentRepository ratingCommentRepository, ReservationRepository reservationRepository){
         this.userRepository = userRepository;
+        this.accommodationRepository = accommodationRepository;
+        this.availabilityPriceRepository = availabilityPriceRepository;
+        this.ratingCommentRepository = ratingCommentRepository;
+        this.reservationRepository = reservationRepository;
+    }
+
+    @Override
+    public void removeUser(Long id){
+        this.userRepository.deleteById(id);
     }
 
     @Override
     public Optional<User> getUser(Long id){
         return this.userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Guest> getGuest(Long id){
+        return this.userRepository.findGuestById(id);
+    }
+
+    @Override
+    public Optional<Owner> getOwner(Long id){
+        return this.userRepository.findOwnerById(id);
     }
 
     @Override
@@ -79,7 +105,7 @@ public class UserService implements IUserService {
     }
 
     private boolean addToRepository(NewUserDTO newUserDTO) throws MessagingException, UnsupportedEncodingException {
-        User user = new User(newUserDTO.getEmail(), this.passwordEncoder.encode(newUserDTO.getPassword()), newUserDTO.getName(), newUserDTO.getSurname(), newUserDTO.getAddress(), newUserDTO.getPhoneNumber(), newUserDTO.getRole());
+        User user = new User(newUserDTO.getEmail(), this.passwordEncoder.encode(newUserDTO.getPassword()), newUserDTO.getName(), newUserDTO.getSurname(), newUserDTO.getAddress(), newUserDTO.getPhoneNumber(), newUserDTO.getRole(), newUserDTO.getPassword().length());
         this.userRepository.save(user);
         this.mailService.sendActivationEmail(newUserDTO.getEmail(), this.userRepository.findByEmailAndRole(newUserDTO.getEmail(), newUserDTO.getRole()).get().getId());
         return true;
@@ -130,6 +156,23 @@ public class UserService implements IUserService {
     public void reportGuest(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
         if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.GUEST){
             User guest = this.userRepository.findById(id).get();
+            // TODO proveriti da li radi
+
+            boolean canComment = false;
+            List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guest.getId());
+            for (Reservation r : allGuestsReservations){
+                LocalDateTime currentTime = LocalDateTime.now();
+                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() == ReservationState.APPROVED){
+                    canComment = true;
+                }
+            }
+
+            if (!canComment) {
+                throw new RequirementNotSatisfied("Can not report this guest!");
+            }
+
+            //
+
             guest.setReported(true);
             guest.setReportedReason(reason.getReason());
             this.userRepository.save(guest);
@@ -139,9 +182,26 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void reportOwner(Long id, ReportedUserReasonDTO reason) throws NoDataWithId {
-        if (this.userRepository.findById(id).isPresent() && this.userRepository.findById(id).get().getRole() == Role.OWNER){
-            User owner = this.userRepository.findById(id).get();
+    public void reportOwner(Long ownerId, ReportedUserReasonDTO reason, Long guestsId) throws NoDataWithId {
+        if (this.userRepository.findById(ownerId).isPresent() && this.userRepository.findById(ownerId).get().getRole() == Role.OWNER){
+            //todo proveriti jel radi
+
+            boolean canComment = false;
+            List<Reservation> allGuestsReservations = this.reservationRepository.findAllReservationsByGuestId(guestsId);
+            for (Reservation r : allGuestsReservations){
+                LocalDateTime currentTime = LocalDateTime.now();
+                if (r.getCheckOut().isBefore(currentTime) && r.getReservationState() == ReservationState.APPROVED){
+                    canComment = true;
+                }
+            }
+
+            if (!canComment) {
+                throw new RequirementNotSatisfied("Can not report this owner!");
+            }
+
+            //
+
+            User owner = this.userRepository.findById(ownerId).get();
             owner.setReported(true);
             owner.setReportedReason(reason.getReason());
             this.userRepository.save(owner);
@@ -179,5 +239,52 @@ public class UserService implements IUserService {
             throw new UsernameNotFoundException(String.format("No user found with email '%s'.", username));
         }
         return user;
+    }
+
+    @Override
+    public String convertPasswordToStars(String password){
+        int numberOfAsterisks = password.length();
+        StringBuilder passwordStars = new StringBuilder();
+        for (int i = 0; i < numberOfAsterisks; i++) {
+            passwordStars.append("*");
+        }
+        return passwordStars.toString();
+    }
+
+    @Override
+    public List<UserDisplayDTO> getReportedUsers(){
+        List<User> users = this.userRepository.findAll();
+        List<UserDisplayDTO> reportedUserDisplayDTOS = new ArrayList<>();
+        if(!users.isEmpty()){
+            for(User u : users){
+                if(u.isReported()){
+                    reportedUserDisplayDTOS.add(u.parseToDisplay());
+                }
+            }
+        }
+        return reportedUserDisplayDTOS;
+    }
+
+    @Override
+    public void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
+        if(!this.userRepository.findById(userId).isPresent()){
+            throw new NoDataWithId("There is no user with this id!");
+        }
+        User user = this.userRepository.findById(userId).get();
+        if(!user.isReported()){
+            throw new RequirementNotSatisfied("Cant delete unreported comment");
+        }
+        if(user.getRole() == Role.GUEST) {
+            if (approval.isApproval()) {
+                user.setBlocked(true);
+                List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
+                for (Reservation r : pendingReservations) {
+                    r.setReservationState(ReservationState.CANCELED);
+                    this.reservationRepository.save(r);
+                }
+            } else {
+                user.setBlocked(false);
+            }
+        }
     }
 }

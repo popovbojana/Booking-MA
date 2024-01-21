@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/currentInfoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show current accommodation info" />
+
+            <TextView
+                android:id="@+id/accommodationName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Accommodation Name" />
+
+            <TextView
+                android:id="@+id/accommodationDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+
+            <TextView
+                android:id="@+id/accommodationAmenities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Amenities: Wi-Fi, Air Conditioning, TV, etc." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/accommodationMinGuests"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Min Guests: 2" />
+
+                <TextView
+                    android:id="@+id/accommodationMaxGuests"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Max Guests: 4" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/accommodationDateFrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date from:" />
+
+            <TextView
+                android:id="@+id/accommodationDateUntil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date until:" />
+
+            <TextView
+                android:id="@+id/accommodationPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Price:" />
+
+            <TextView
+                android:id="@+id/accommodationAutoApprove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Auto approve:" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnApprove"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Approve"
+                    android:layout_marginEnd="4dp"/>
+
+                <Button
+                    android:id="@+id/btnDisapprove"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Disapprove"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

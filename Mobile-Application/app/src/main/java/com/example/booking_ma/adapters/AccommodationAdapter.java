@@ -69,6 +69,8 @@ public class AccommodationAdapter extends RecyclerView.Adapter<AccommodationAdap
                 intent.putExtra("a_location_lat", item.getLatitude());
                 intent.putExtra("a_location_long", item.getLongitude());
                 intent.putExtra("a_amentites", item.getAmenities());
+                intent.putExtra("a_owner_id", item.getOwnersId());
+                intent.putExtra("a_accommodation_id", item.getId());
 
 
 //                if (item.getRatingComments() != null && !item.getRatingComments().isEmpty()) {

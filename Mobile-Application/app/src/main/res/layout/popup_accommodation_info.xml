@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/accommodationImage"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/item" />
+
+            <TextView
+                android:id="@+id/accommodationName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Accommodation Name"
+                android:textSize="16sp"
+                android:paddingTop="8dp"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/accommodationDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+
+            <TextView
+                android:id="@+id/accommodationAmenities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Amenities: Wi-Fi, Air Conditioning, TV, etc." />
+
+            <TextView
+                android:id="@+id/accommodationMinGuests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Min. guests: 1" />
+
+            <TextView
+                android:id="@+id/accommodationMaxGuests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Max. guests: 3" />
+
+            <TextView
+                android:id="@+id/accommodationType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type: Apartment" />
+
+            <TextView
+                android:id="@+id/accommodationCancellation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancellation: Free cancellation up to 48 hours before check-in" />
+
+            <TextView
+                android:id="@+id/accommodationAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address: 123 Main Street, City, Country" />
+
+            <TextView
+                android:id="@+id/accommodationRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rating: 4.5" />
+
+            <TextView
+                android:id="@+id/accommodationStandardPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Standard Price: $80" />
+
+            <TextView
+                android:id="@+id/accommodationAutoApprove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Auto approve: on" />
+
+            <TextView
+                android:id="@+id/accommodationAvailabilities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Available: " />
+
+            <Button
+                android:id="@+id/btnClose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Close" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

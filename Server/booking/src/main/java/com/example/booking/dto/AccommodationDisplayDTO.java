@@ -30,4 +30,22 @@ public class AccommodationDisplayDTO {
     private double longitude;
     private double finalRating;
     private double standardPrice;
+    private List<ReservationDisplayDTO> reservations;
+    private boolean autoApprove;
+
+    public AccommodationDisplayDTO(String name, String description, int minGuests, int maxGuests, String type, PriceType priceType, int cancellationDeadlineInDays, double standardPrice, String address, String amenities, List<ReservationDisplayDTO> reservations, boolean autoApprove, List<AvailabilityDisplayDTO> availabilities){
+        this.name = name;
+        this.description = description;
+        this.minGuests = minGuests;
+        this.maxGuests = maxGuests;
+        this.type = type;
+        this.priceType = priceType;
+        this.cancellationDeadlineInDays = cancellationDeadlineInDays;
+        this.standardPrice = standardPrice;
+        this.address = address;
+        this.amenities = amenities;
+        this.reservations = reservations;
+        this.autoApprove = autoApprove;
+        this.availabilities = availabilities;
+    }
 }
