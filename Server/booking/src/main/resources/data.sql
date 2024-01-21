@@ -3,11 +3,11 @@ insert into USERS(activated, address, email, name, password, phone_number, role,
 insert into ADMIN(id) values (1)
 
 --guests
-insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Nikole Tesle 123, Novi Sad', 'jovan.jovanovic@gmail.com', 'Jovan','$2a$12$HmWbFvJaNlSSPQEAI0GHNOJkCpojaeN0hJEYRhrmWJZrEkly95MbK', '0654578561', 'GUEST', 'Jovanovic', false, false, 8)
+insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Nikole Tesle 123, Novi Sad', 'jovan.jovanovic@gmail.com', 'Jovan','$2a$12$HmWbFvJaNlSSPQEAI0GHNOJkCpojaeN0hJEYRhrmWJZrEkly95MbK', '0654578561', 'GUEST', 'Jovanovic', true, false, 8)
 insert into GUESTS(id, cancelations_number) values (2, 0)
 
 --owners
-insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Milosa Crnjanskog 45, Novi Sad', 'pera.peric@gmail.com', 'Pera','$2a$12$Htpvzxt7KGIgMG5MCstm1e3fap1sOjw/CKuDHRkUiTbZKNpQH.reS', '0638451268', 'OWNER', 'Peric', false, false, 7)
+insert into USERS(activated, address, email, name, password, phone_number, role, surname, reported, blocked, password_char_number) values (true, 'Milosa Crnjanskog 45, Novi Sad', 'pera.peric@gmail.com', 'Pera','$2a$12$Htpvzxt7KGIgMG5MCstm1e3fap1sOjw/CKuDHRkUiTbZKNpQH.reS', '0638451268', 'OWNER', 'Peric', true, false, 7)
 insert into OWNERS(id) values (3)
 
 --accommodations

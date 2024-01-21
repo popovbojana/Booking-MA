@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textViewGuestApprovedReservationGuestName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guest: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewGuestApprovedReservationAccommodationId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accommodation: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewGuestApprovedReservationGuestsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guests number: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewOwnerApprovedReservationCheckIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check in: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewGuestApprovedReservationCheckOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check out: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewGuestApprovedReservationCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cost: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewGuestApprovedReservationCancelationsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancelations number: "
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnCancelReservation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="cancel"
+                    android:layout_marginStart="4dp"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

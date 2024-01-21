@@ -47,6 +47,9 @@ public class GuestMainScreen extends AppCompatActivity {
     private String selectedBenefit, selectedType;
     private TextView textViewFilterError;
 
+    private EditText editTextSearchByLocation, editTextSearchByGuests, editTextSearchByDateFrom, editTextSearchByDateUntil;
+    private TextView textViewSearchDateError;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -301,41 +304,22 @@ public class GuestMainScreen extends AppCompatActivity {
 
         buttonCancel = dialog.findViewById(R.id.buttonCancel);
         buttonConfirm = dialog.findViewById(R.id.buttonConfirm);
-        spinnerBenefits = dialog.findViewById(R.id.spinnerBenefits);
-        spinnerTypes = dialog.findViewById(R.id.spinnerTypes);
-        editTextMinPrice = dialog.findViewById(R.id.editTextMinPrice);
-        editTextMaxPrice = dialog.findViewById(R.id.editTextMaxPrice);
-        textViewFilterError = dialog.findViewById(R.id.textViewFilterError);
+        editTextSearchByLocation = dialog.findViewById(R.id.editTextSearchByLocation);
+        editTextSearchByGuests = dialog.findViewById(R.id.editTextSearchByGuests);
+        editTextSearchByDateFrom = dialog.findViewById(R.id.editTextSearchByDateFrom);
+        editTextSearchByDateUntil = dialog.findViewById(R.id.editTextSearchByDateUntil);
 
-        String[] benefitsOptions = {"-","Option 1", "Option 2", "Option 3"};
-        ArrayAdapter<String> adapterBenefits = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, benefitsOptions);
-        adapterBenefits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBenefits.setAdapter(adapterBenefits);
-
-        String[] typesOptions = {"-", "Option 1", "Option 2", "Option 3"};
-        ArrayAdapter<String> adapterTypes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typesOptions);
-        adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTypes.setAdapter(adapterBenefits);
-
-        spinnerBenefits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        editTextSearchByDateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                selectedBenefit = (String) spinnerBenefits.getSelectedItem();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
+            public void onClick(View v) {
+                showDateFromDatePickerDialog(dialog);
             }
         });
 
-        spinnerTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        editTextSearchByDateUntil.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                selectedType = (String) spinnerTypes.getSelectedItem();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
+            public void onClick(View v) {
+                showDateUntilDatePickerDialog(dialog);
             }
         });
 
@@ -385,6 +369,76 @@ public class GuestMainScreen extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor spEditor = sharedPreferences.edit();
         spEditor.clear().commit();
+    }
+
+    private void showDateFromDatePickerDialog(Dialog dialog) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, day);
+
+                checkInDate = LocalDate.of(year, month, day);
+                if (selectedDate.compareTo(Calendar.getInstance()) < 0) {
+                    Log.e("DatePicker", "Selected date is in the past.");
+                    textViewSearchDateError = dialog.findViewById(R.id.textViewSearchDateError);
+                    textViewSearchDateError.setText("Incorrect date");
+                    return;
+                }
+
+                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
+
+                editTextSearchByDateFrom = dialog.findViewById(R.id.editTextSearchByDateFrom);
+                if (editTextSearchByDateFrom != null) {
+                    textViewSearchDateError.setText("");
+                    editTextSearchByDateFrom.setText(formattedDate);
+                }
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void showDateUntilDatePickerDialog(Dialog dialog) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, day);
+
+                checkOutDate = LocalDate.of(year, month, day);
+                if (checkInDate == null) {
+                    Log.e("DatePicker", "First select the check in date");
+                    textViewSearchDateError.setText("First select the check in date");
+                    return;
+                }
+
+                if (checkOutDate.isBefore(checkInDate.plusDays(1))) {
+                    Log.e("DatePicker", "Selected date is before check in");
+                    textViewSearchDateError = dialog.findViewById(R.id.textViewSearchError);
+                    textViewSearchDateError.setText("Selected date is before check in");
+                    return;
+                }
+
+                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
+                editTextSearchByDateUntil = dialog.findViewById(R.id.editTextSearchCheckOut);
+                if (editTextSearchByDateUntil != null) {
+                    editTextSearchByDateUntil.setText(formattedDate);
+                }
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
 }

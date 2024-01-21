@@ -44,5 +44,9 @@ public interface IUserService extends UserDetailsService {
 
     List<UserDisplayDTO> getReportedUsers();
 
+    List<UserDisplayDTO> getReportedGuests();
+
+    List<UserDisplayDTO> getReportedOwners();
+
     void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied;
 }

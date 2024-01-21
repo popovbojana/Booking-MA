@@ -266,6 +266,34 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public List<UserDisplayDTO> getReportedGuests(){
+        List<User> users = this.userRepository.findAll();
+        List<UserDisplayDTO> reportedUserDisplayDTOS = new ArrayList<>();
+        if(!users.isEmpty()){
+            for(User u : users){
+                if(u.isReported() && u.getRole() == Role.GUEST){
+                    reportedUserDisplayDTOS.add(u.parseToDisplay());
+                }
+            }
+        }
+        return reportedUserDisplayDTOS;
+    }
+
+    @Override
+    public List<UserDisplayDTO> getReportedOwners(){
+        List<User> users = this.userRepository.findAll();
+        List<UserDisplayDTO> reportedUserDisplayDTOS = new ArrayList<>();
+        if(!users.isEmpty()){
+            for(User u : users){
+                if(u.isReported() && u.getRole() == Role.OWNER){
+                    reportedUserDisplayDTOS.add(u.parseToDisplay());
+                }
+            }
+        }
+        return reportedUserDisplayDTOS;
+    }
+
+    @Override
     public void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
         if(!this.userRepository.findById(userId).isPresent()){
             throw new NoDataWithId("There is no user with this id!");

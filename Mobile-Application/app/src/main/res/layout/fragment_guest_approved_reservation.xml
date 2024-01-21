@@ -2,24 +2,14 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-
-    <TextView
-        android:id="@+id/textViewFilter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="22dp"
-        android:layout_margin="5dp"
-        android:text="Filter by"
-        android:textAlignment="center"
-        android:textColor="@color/black"/>
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="15dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,27 +17,26 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_marginRight="5dp">
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Location"
+                android:text="Name"
                 android:textAlignment="center"
                 android:textSize="20dp">
             </TextView>
 
             <EditText
-                android:id="@+id/editTextSearchByLocation"
+                android:id="@+id/editTextGuestSearchApprovedByName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
-                android:hint=""
                 android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:padding="5dp"
                 android:inputType="text"
                 android:textAlignment="center"/>
-            
+
         </LinearLayout>
 
         <LinearLayout
@@ -60,13 +49,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Guests"
+                android:text="Check in"
                 android:textAlignment="center"
                 android:textSize="20dp">
             </TextView>
 
             <EditText
-                android:id="@+id/editTextSearchByGuests"
+                android:id="@+id/editTextGuestSearchApprovedByCheckIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
@@ -76,6 +65,18 @@
                 android:padding="5dp"
                 android:inputType="text"
                 android:textAlignment="center"/>
+
+            <Button
+                android:id="@+id/btnGuestSearchApproved"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/edit_text_border"
+                android:hint="Search"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:padding="5dp"
+                android:inputType="number"/>
+
 
         </LinearLayout>
 
@@ -89,74 +90,31 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:text="Check out"
                 android:textAlignment="center"
                 android:textSize="20dp">
             </TextView>
 
             <EditText
-                android:id="@+id/editTextSearchByDateFrom"
+                android:id="@+id/editTextGuestSearchApprovedByCheckOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
-                android:hint="Min price"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:padding="5dp"
                 android:inputType="number"/>
-
-
-            <EditText
-                android:id="@+id/editTextSearchByDateUntil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_border"
-                android:hint="Max price"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
-                android:padding="5dp"
-                android:inputType="number"/>
-
-            <TextView
-                android:id="@+id/textViewSearchDateError"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/red"
-                android:layout_marginTop="5dp"
-                android:textSize="11dp"
-                android:paddingLeft="5dp"
-                android:inputType="number"/>
-
-
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <androidx.recyclerview.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recyclerViewGuestApprovedReservation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/buttonConfirm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Confirm" />
-
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="16dp" />
 
 </LinearLayout>
