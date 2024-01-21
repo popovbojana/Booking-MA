@@ -16,6 +16,7 @@ import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.R;
 import com.example.booking_ma.adapters.ReportedGuestsAdapter;
+import com.example.booking_ma.adapters.ReportedOwnersAdapter;
 import com.example.booking_ma.adapters.UnapprovedCommentsAdapter;
 import com.example.booking_ma.service.ServiceUtils;
 
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReportedGuestsFragment extends Fragment {
+public class ReportedOwnersFragment extends Fragment {
 
     private RecyclerView recyclerViewAccommodations;
     private LinearLayoutManager layoutManager;
@@ -45,14 +46,14 @@ public class ReportedGuestsFragment extends Fragment {
         ownersId = sharedPreferences.getLong("pref_id", 0L);
         token = sharedPreferences.getString("pref_accessToken", "");
 
-        getAllReportedGuests(token);
+        getAllReportedOwners(token);
         recyclerViewAccommodations.setAdapter(adapter);
 
         return view;
     }
 
-    private void getAllReportedGuests(String jwtToken) {
-        Call<List<UserDisplayDTO>> call = ServiceUtils.userService(token).getReportedGuests();
+    private void getAllReportedOwners(String jwtToken) {
+        Call<List<UserDisplayDTO>> call = ServiceUtils.userService(token).getReportedOwners();
 
         call.enqueue(new Callback<List<UserDisplayDTO>>() {
             @Override
@@ -60,7 +61,7 @@ public class ReportedGuestsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<UserDisplayDTO> reportedGuests = response.body();
 
-                    ReportedGuestsAdapter adapter = new ReportedGuestsAdapter(getContext(), reportedGuests, token);
+                    ReportedOwnersAdapter adapter = new ReportedOwnersAdapter(getContext(), reportedGuests, token);
                     recyclerViewAccommodations.setAdapter(adapter);
                 } else {
                     Log.e("API Error", "Failed to fetch accommodations: " + response.message());

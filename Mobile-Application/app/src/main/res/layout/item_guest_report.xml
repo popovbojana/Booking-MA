@@ -19,21 +19,21 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewGuestId"
+                android:id="@+id/textViewGuestReportedId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Id: "
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewGuestName"
+                android:id="@+id/textViewGuestReportedName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name: "
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewGuestSurname"
+                android:id="@+id/textViewGuestReportedSurname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Surname: "
@@ -53,7 +53,15 @@
                 android:layout_marginTop="8dp">
 
                 <Button
-                    android:id="@+id/btnBlockGuest"
+                    android:id="@+id/btnGuestReportedCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    android:layout_marginStart="4dp"/>
+
+                <Button
+                    android:id="@+id/btnGuestReportedBlock"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

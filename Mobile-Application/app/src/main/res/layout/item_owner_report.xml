@@ -19,21 +19,21 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewOwnerId"
+                android:id="@+id/textViewOwnerReportedId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Id: "
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewOwnerName"
+                android:id="@+id/textViewOwnerReportedName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name: "
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewOwnerSurname"
+                android:id="@+id/textViewOwnerReportedSurname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Surname: "
@@ -51,15 +51,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
-
-                <Button
-                    android:id="@+id/btnBlockOwner"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Block"
-                    android:layout_marginStart="4dp"/>
-
 
             </LinearLayout>
 

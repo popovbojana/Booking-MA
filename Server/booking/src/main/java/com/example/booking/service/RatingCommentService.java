@@ -173,6 +173,18 @@ public class RatingCommentService implements IRatingCommentService {
     }
 
     @Override
+    public List<RatingCommentDisplayDTO> getReportedOwnersComments() throws NoDataWithId {
+        List<RatingComment> reportedComments = this.ratingCommentRepository.findAllReportedComments();
+        List<RatingCommentDisplayDTO> reportedCommentDisplayDTOS = new ArrayList<>();
+        for(RatingComment r : reportedComments){
+            if(r.getType() == RatingCommentType.FOR_OWNER) {
+                reportedCommentDisplayDTOS.add(r.parseToDisplay());
+            }
+        }
+        return reportedCommentDisplayDTOS;
+    }
+
+    @Override
     public List<RatingCommentDisplayDTO> getReportedComments() throws NoDataWithId {
         List<RatingComment> reportedComments = this.ratingCommentRepository.findAllReportedComments();
         List<RatingCommentDisplayDTO> reportedCommentDisplayDTOS = new ArrayList<>();
@@ -183,7 +195,7 @@ public class RatingCommentService implements IRatingCommentService {
     }
 
     @Override
-    public void handleReportedComment(Long ratingCommentId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
+    public boolean handleReportedComment(Long ratingCommentId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
         if(!this.ratingCommentRepository.findById(ratingCommentId).isPresent()){
             throw new NoDataWithId("There is no rating and comment with this id!");
         }
@@ -197,6 +209,13 @@ public class RatingCommentService implements IRatingCommentService {
         else{
             reportedComment.setReported(false);
             this.ratingCommentRepository.save(reportedComment);
+        }
+
+        if(approval.isApproval()){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

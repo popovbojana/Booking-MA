@@ -32,8 +32,6 @@ public class Guest extends User{
 
     int cancelationsNumber;
 
-    boolean blocked;
-
     public GuestDisplayDTO parseToDisplayGuest() {
         return new GuestDisplayDTO(super.getId(), super.getEmail(), super.getPassword(), super.getName(), super.getSurname(), super.getAddress(), super.getPhoneNumber(), super.getRole(), super.isActivated(), super.getActivationLinkSent(), super.isReported(), super.getReportedReason(), super.isBlocked(), super.getPasswordCharNumber(), cancelationsNumber);
     }

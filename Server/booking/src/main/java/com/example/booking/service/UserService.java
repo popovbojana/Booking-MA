@@ -294,25 +294,28 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
-        if(!this.userRepository.findById(userId).isPresent()){
+    public boolean handleReportedGuest(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
+        if(!this.userRepository.findGuestById(userId).isPresent()){
             throw new NoDataWithId("There is no user with this id!");
         }
-        User user = this.userRepository.findById(userId).get();
-        if(!user.isReported()){
+        Guest guest = this.userRepository.findGuestById(userId).get();
+        if(!guest.isReported()){
             throw new RequirementNotSatisfied("Cant delete unreported comment");
         }
-        if(user.getRole() == Role.GUEST) {
-            if (approval.isApproval()) {
-                user.setBlocked(true);
-                List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
-                for (Reservation r : pendingReservations) {
-                    r.setReservationState(ReservationState.CANCELED);
-                    this.reservationRepository.save(r);
-                }
-            } else {
-                user.setBlocked(false);
+        if (approval.isApproval()) {
+            guest.setBlocked(true);
+            this.userRepository.save(guest);
+            List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
+            for (Reservation r : pendingReservations) {
+                r.setReservationState(ReservationState.CANCELED);
             }
+            return true;
+        } else {
+            guest.setBlocked(false);
+            guest.setReported(false);
+            this.userRepository.save(guest);
+            return false;
         }
     }
 }
+

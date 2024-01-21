@@ -126,12 +126,25 @@ public class RatingCommentController {
         }
     }
 
-    @GetMapping(value = "delete-reported-comments/{ratingCommentId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> handleReportedComment(@PathVariable("id") Long ratingCommentId, @RequestBody ApprovalDTO approvalDTO){
+    @GetMapping(value = "all-reported-owners-comments")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getReportedOwnersComments(){
         try {
-            this.ratingCommentService.handleReportedComment(ratingCommentId, approvalDTO);
-            return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully deleted"), HttpStatus.OK);
+            return new ResponseEntity<>(this.ratingCommentService.getReportedOwnersComments(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "handle-reported-comment/{ratingCommentId}")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> handleReportedComment(@PathVariable("ratingCommentId") Long ratingCommentId, @RequestBody ApprovalDTO approvalDTO){
+        try {
+            boolean deleted = this.ratingCommentService.handleReportedComment(ratingCommentId, approvalDTO);
+            if(deleted){
+                return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully deleted"), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully canceled"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

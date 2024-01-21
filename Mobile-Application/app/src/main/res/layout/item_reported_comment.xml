@@ -22,14 +22,14 @@
                 android:id="@+id/textViewReportCommentGuest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Guest: "
+                android:text="Guest id: "
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewReportCommentAccommodation"
+                android:id="@+id/textViewReportCommentOwner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Accommodation: "
+                android:text="Owner id: "
                 android:textStyle="bold" />
 
             <TextView
@@ -47,7 +47,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewReportCommentCancel"
+                android:id="@+id/textViewReportCommentComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Comment: "
@@ -68,7 +68,7 @@
                     android:layout_marginEnd="4dp"/>
 
                 <Button
-                    android:id="@+id/btnReportComment"
+                    android:id="@+id/btnReportCommentDelete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

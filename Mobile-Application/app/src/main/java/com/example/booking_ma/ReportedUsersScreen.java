@@ -23,6 +23,7 @@ import com.example.booking_ma.fragments.AccommodationChangesFragment;
 import com.example.booking_ma.fragments.AccommodationCommentsFragment;
 import com.example.booking_ma.fragments.NewAccommodationsFragment;
 import com.example.booking_ma.fragments.ReportedGuestsFragment;
+import com.example.booking_ma.fragments.ReportedOwnersFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -31,7 +32,6 @@ public class ReportedUsersScreen extends AppCompatActivity {
     private Toolbar toolbar;
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
-
     private String token;
     private SharedPreferences sharedPreferences;
     private Long myId;
@@ -90,8 +90,7 @@ public class ReportedUsersScreen extends AppCompatActivity {
                 case 0:
                     return new ReportedGuestsFragment();
                 case 1:
-                    //TODO FICA reported comments
-//                    return new ReportedOwnersFragment;
+                    return new ReportedOwnersFragment();
                 default:
                     throw new IllegalArgumentException("Invalid position");
             }

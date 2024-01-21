@@ -1,8 +1,10 @@
 package com.example.booking_ma.service;
 
+import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.LoginDTO;
 import com.example.booking_ma.DTO.NewUserDTO;
+import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ReportedUserReasonDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.TokenDTO;
@@ -57,6 +59,13 @@ public interface IUserService {
 
     @PUT(ServiceUtils.user + "/report-owner/{userId}")
     Call<ResponseMessage> reportOwner(@Path("userId") Long userId, @Body ReportedUserReasonDTO reason);
-    
 
+    @GET(ServiceUtils.user + "/all-reported-guests")
+    Call<List<UserDisplayDTO>> getReportedGuests();
+
+    @GET(ServiceUtils.user + "/all-reported-owners")
+    Call<List<UserDisplayDTO>> getReportedOwners();
+
+    @PUT(ServiceUtils.user + "/handle-reported-user/{userId}")
+    Call<ResponseMessage> handleReportedUser(@Path("userId") Long userId, @Body ApprovalDTO reason);
 }

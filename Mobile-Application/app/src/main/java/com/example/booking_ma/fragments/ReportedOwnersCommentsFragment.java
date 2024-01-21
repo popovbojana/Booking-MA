@@ -16,6 +16,7 @@ import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.R;
 import com.example.booking_ma.adapters.ReportedGuestsAdapter;
+import com.example.booking_ma.adapters.ReportedOwnersCommentsAdapter;
 import com.example.booking_ma.adapters.UnapprovedCommentsAdapter;
 import com.example.booking_ma.service.ServiceUtils;
 
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReportedGuestsFragment extends Fragment {
+public class ReportedOwnersCommentsFragment extends Fragment {
 
     private RecyclerView recyclerViewAccommodations;
     private LinearLayoutManager layoutManager;
@@ -35,9 +36,9 @@ public class ReportedGuestsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_accommodations, container, false);
+        View view = inflater.inflate(R.layout.fragment_users_reports, container, false);
 
-        recyclerViewAccommodations = view.findViewById(R.id.recyclerViewAccommodations);
+        recyclerViewAccommodations = view.findViewById(R.id.recyclerViewUsersReports);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewAccommodations.setLayoutManager(layoutManager);
 
@@ -45,22 +46,22 @@ public class ReportedGuestsFragment extends Fragment {
         ownersId = sharedPreferences.getLong("pref_id", 0L);
         token = sharedPreferences.getString("pref_accessToken", "");
 
-        getAllReportedGuests(token);
+        getAllReportedOwnersComments(token);
         recyclerViewAccommodations.setAdapter(adapter);
 
         return view;
     }
 
-    private void getAllReportedGuests(String jwtToken) {
-        Call<List<UserDisplayDTO>> call = ServiceUtils.userService(token).getReportedGuests();
+    private void getAllReportedOwnersComments(String jwtToken) {
+        Call<List<RatingCommentDisplayDTO>> call = ServiceUtils.ratingCommentService(jwtToken).getReportedOwnersComments();
 
-        call.enqueue(new Callback<List<UserDisplayDTO>>() {
+        call.enqueue(new Callback<List<RatingCommentDisplayDTO>>() {
             @Override
-            public void onResponse(Call<List<UserDisplayDTO>> call, Response<List<UserDisplayDTO>> response) {
+            public void onResponse(Call<List<RatingCommentDisplayDTO>> call, Response<List<RatingCommentDisplayDTO>> response) {
                 if (response.isSuccessful()) {
-                    List<UserDisplayDTO> reportedGuests = response.body();
+                    List<RatingCommentDisplayDTO> reportedOwnersComments = response.body();
 
-                    ReportedGuestsAdapter adapter = new ReportedGuestsAdapter(getContext(), reportedGuests, token);
+                    ReportedOwnersCommentsAdapter adapter = new ReportedOwnersCommentsAdapter(getContext(), reportedOwnersComments, token);
                     recyclerViewAccommodations.setAdapter(adapter);
                 } else {
                     Log.e("API Error", "Failed to fetch accommodations: " + response.message());
@@ -68,7 +69,7 @@ public class ReportedGuestsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<UserDisplayDTO>> call, Throwable t) {
+            public void onFailure(Call<List<RatingCommentDisplayDTO>> call, Throwable t) {
                 Log.e("API Error", "Failed to fetch accommodations", t);
             }
         });
