@@ -31,6 +31,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
     private Context context;
     private String token;
     private List<RatingCommentDisplayDTO> comments;
+    private TextView rating;
 
     public HostAccommodationsAdapter(Context context, List<AccommodationDisplayDTO> accommodations, String token) {
         this.context = context;
@@ -60,8 +61,8 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
         String cancellation = "Free cancellation up to " + item.getCancellationDeadlineInDays() + " days before check-in";
         holder.accommodationCancellation.setText(cancellation);
         holder.accommodationAddress.setText(item.getAddress());
-        String rating = "Rating: " + item.getFinalRating();
-        holder.accommodationRating.setText(rating);
+//        String rating = "Rating: " + item.getFinalRating();
+//        holder.accommodationRating.setText(rating);
         String price;
         if (item.getPriceType() == PriceType.PER_GUEST){
             price = item.getStandardPrice() + " per guest";
@@ -127,7 +128,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             accommodationType = itemView.findViewById(R.id.accommodationType);
             accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
             accommodationAddress = itemView.findViewById(R.id.accommodationAddress);
-            accommodationRating = itemView.findViewById(R.id.accommodationRating);
+//            accommodationRating = itemView.findViewById(R.id.accommodationRating);
             accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
             accommodationAvailabilities = itemView.findViewById(R.id.accommodationAvailabilities);
             accommodationAutoApprove = itemView.findViewById(R.id.accommodationAutoApprove);
@@ -142,6 +143,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
         dialog.setContentView(R.layout.popup_comments);
 
         RecyclerView recyclerViewComments = dialog.findViewById(R.id.recyclerViewComments);
+        rating = dialog.findViewById(R.id.textViewAverageRating);
         RatingCommentAdapter adapter = new RatingCommentAdapter(context, comments, token);
         recyclerViewComments.setAdapter(adapter);
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(context));
@@ -166,7 +168,9 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             @Override
             public void onResponse(Call<AllRatingsDisplay> call, Response<AllRatingsDisplay> response) {
                 if (response.isSuccessful()) {
-                    List<RatingCommentDisplayDTO> updatedComments = response.body().getAllRatingComments();
+                    AllRatingsDisplay allRatingsDisplay = response.body();
+                    List<RatingCommentDisplayDTO> updatedComments = allRatingsDisplay.getAllRatingComments();
+                    rating.setText("Average rating: " + allRatingsDisplay.getAverageRating());
                     adapter.setComments(updatedComments);
                 } else {
                     Log.e("API Error", "Failed to fetch comments: " + response.message());
