@@ -135,6 +135,9 @@ public class AccommodationService implements IAccommodationService {
                 if (changes.getStandardPrice() != -1.0){
                     accommodation.setStandardPrice(changes.getStandardPrice());
                 }
+                if (changes.isAutoApprove() != accommodation.isAutoApprove()){
+                    accommodation.setAutoApprove(changes.isAutoApprove());
+                }
                 accommodation.setAccommodationChange(null);
                 accommodation.setHasChanges(false);
                 this.accommodationRepository.save(accommodation);

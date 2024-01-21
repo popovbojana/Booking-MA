@@ -26,5 +26,6 @@ public class AccommodationChangesDTO {
     private LocalDateTime dateFrom;
     private LocalDateTime dateUntil;
     private double amount;
+    private boolean autoApprove;
 
 }

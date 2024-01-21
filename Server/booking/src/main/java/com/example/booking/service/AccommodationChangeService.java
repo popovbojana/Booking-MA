@@ -32,7 +32,7 @@ public class AccommodationChangeService implements IAccommodationChangeService {
     @Override
     public void addAccommodationChange(Long id, AccommodationChangesDTO changes) {
         Accommodation accommodation = this.accommodationRepository.findById(id).get();
-        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), changes.getCancellationDeadlineInDays(), changes.getStandardPrice(), changes.getDateFrom(), changes.getDateUntil(), changes.getAmount());
+        AccommodationChange accommodationChange = new AccommodationChange(accommodation, changes.getName(), changes.getDescription(), changes.getAmenities(), changes.getMinGuests(), changes.getMaxGuests(), changes.getType(), changes.getPriceType(), changes.getCancellationDeadlineInDays(), changes.getStandardPrice(), changes.getDateFrom(), changes.getDateUntil(), changes.getAmount(), changes.isAutoApprove());
         this.accommodationChangeRepository.save(accommodationChange);
         accommodation.setHasChanges(true);
         accommodation.setAccommodationChange(accommodationChange);

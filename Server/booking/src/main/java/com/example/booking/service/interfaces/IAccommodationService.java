@@ -12,13 +12,13 @@ public interface IAccommodationService {
 
     List<Accommodation> GetAll();
 
-    public void addNewAccommodation(Long ownersId, NewAccommodationDTO newAccommodationDTO);
-    public List<Accommodation> getAllAccommodationsForOwner(Long ownersId);
-    public List<Accommodation> getAllNew();
-    public List<Accommodation> getAllChanges();
-    public boolean approveNewAccommodation(Long id, boolean approval);
-    public boolean approveAccommodationChanges(Long id, boolean approval);
-    public List<Accommodation> getAll();
+    void addNewAccommodation(Long ownersId, NewAccommodationDTO newAccommodationDTO);
+    List<Accommodation> getAllAccommodationsForOwner(Long ownersId);
+    List<Accommodation> getAllNew();
+    List<Accommodation> getAllChanges();
+    boolean approveNewAccommodation(Long id, boolean approval);
+    boolean approveAccommodationChanges(Long id, boolean approval);
+    List<Accommodation> getAll();
     void addToFavorites(FavoriteAccommodationDTO favAccommodation) throws NoDataWithId;
     void removeFromFavorites(FavoriteAccommodationDTO favAccommodation) throws NoDataWithId;
     List<AccommodationDisplayDTO> getAllFavoritesForGuest(Long id) throws NoDataWithId;

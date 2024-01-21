@@ -49,8 +49,9 @@ public class AccommodationChange {
     private LocalDateTime dateFrom;
     private LocalDateTime dateUntil;
     private double amount;
+    private boolean autoApprove;
 
-    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, int cancellationDeadlineInDays, double standardPrice, LocalDateTime dateFrom, LocalDateTime dateUntil, double amount){
+    public AccommodationChange(Accommodation accommodation, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, int cancellationDeadlineInDays, double standardPrice, LocalDateTime dateFrom, LocalDateTime dateUntil, double amount, boolean autoApprove){
         this.accommodation = accommodation;
         this.name = name;
         this.description = description;
@@ -64,6 +65,7 @@ public class AccommodationChange {
         this.dateFrom = dateFrom;
         this.dateUntil = dateUntil;
         this.amount = amount;
+        this.autoApprove = autoApprove;
     }
 
     public AccommodationChangeDisplayDTO parseToDisplay() {
