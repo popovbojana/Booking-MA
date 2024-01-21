@@ -74,6 +74,13 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             availabilities += a.toString();
         }
         holder.accommodationAvailabilities.setText(availabilities);
+        String autoApprove = "Auto approve: ";
+        if (item.isAutoApproved()){
+            autoApprove += "on";
+        } else {
+            autoApprove += "off";
+        }
+        holder.accommodationAutoApprove.setText(autoApprove);
 
         holder.commentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +113,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice, accommodationAvailabilities;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice, accommodationAvailabilities, accommodationAutoApprove;
         Button commentsButton, getReportButton, editButton;
 
         public ViewHolder(View itemView) {
@@ -123,6 +130,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             accommodationRating = itemView.findViewById(R.id.accommodationRating);
             accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
             accommodationAvailabilities = itemView.findViewById(R.id.accommodationAvailabilities);
+            accommodationAutoApprove = itemView.findViewById(R.id.accommodationAutoApprove);
             commentsButton = itemView.findViewById(R.id.commentsButton);
             getReportButton = itemView.findViewById(R.id.getReportButton);
             editButton = itemView.findViewById(R.id.editButton);

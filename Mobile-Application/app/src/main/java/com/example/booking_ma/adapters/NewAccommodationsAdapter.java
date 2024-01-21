@@ -77,6 +77,13 @@ public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodat
             availabilities += a.toString();
         }
         holder.accommodationAvailabilities.setText(availabilities);
+        String autoApprove = "Auto approve: ";
+        if (item.isAutoApproved()) {
+            autoApprove += "on";
+        } else {
+            autoApprove += "off";
+        }
+        holder.accommodationAutoApprove.setText(autoApprove);
 
         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +147,7 @@ public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationStandardPrice, accommodationAvailabilities;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationStandardPrice, accommodationAvailabilities, accommodationAutoApprove;
         Button btnApprove, btnDisapprove;
 
         public ViewHolder(View itemView) {
@@ -156,6 +163,7 @@ public class NewAccommodationsAdapter extends RecyclerView.Adapter<NewAccommodat
             accommodationAddress = itemView.findViewById(R.id.accommodationAddress);
             accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
             accommodationAvailabilities = itemView.findViewById(R.id.accommodationAvailabilities);
+            accommodationAutoApprove = itemView.findViewById(R.id.accommodationAutoApprove);
             btnApprove = itemView.findViewById(R.id.btnApprove);
             btnDisapprove = itemView.findViewById(R.id.btnDisapprove);
         }

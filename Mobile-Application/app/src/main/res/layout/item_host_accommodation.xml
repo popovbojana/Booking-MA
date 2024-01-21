@@ -98,6 +98,12 @@
                 android:text="Standard Price: $80" />
 
             <TextView
+                android:id="@+id/accommodationAutoApprove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Auto approve:" />
+
+            <TextView
                 android:id="@+id/accommodationAvailabilities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

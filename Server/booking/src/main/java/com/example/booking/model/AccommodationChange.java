@@ -70,6 +70,6 @@ public class AccommodationChange {
 
     public AccommodationChangeDisplayDTO parseToDisplay() {
         List<AvailabilityDisplayDTO> availabilityDisplayDTOS = new ArrayList<>();
-        return new AccommodationChangeDisplayDTO(accommodation.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, cancellationDeadlineInDays, standardPrice, dateFrom, dateUntil, amount);
+        return new AccommodationChangeDisplayDTO(accommodation.getId(), name, description, amenities, minGuests, maxGuests, type, priceType, cancellationDeadlineInDays, standardPrice, dateFrom, dateUntil, amount, autoApprove);
     }
 }

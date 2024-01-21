@@ -262,152 +262,47 @@
 
         </LinearLayout>
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_marginBottom="10dp">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
-<!--            <EditText-->
-<!--                android:id="@+id/editTextType"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:hint="Type"-->
-<!--                android:background="#FFF"-->
-<!--                android:layout_weight="1"-->
-<!--                android:padding="8dp" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Auto approve:"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/gray"
+                android:paddingRight="8dp"/>
 
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonEditType"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Edit"-->
-<!--                android:background="@color/blue"-->
-<!--                android:textColor="#FFF" />-->
+            <EditText
+                android:id="@+id/editTextAutoApprove"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#FFF"
+                android:textColor="@color/gray"
+                android:layout_weight="1"
+                android:padding="8dp" />
 
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonSaveType"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Save"-->
-<!--                android:background="@color/green"-->
-<!--                android:textColor="#FFF" />-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonEditAutoApprove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Edit"
+                android:background="@color/blue"
+                android:textColor="#FFF" />
 
-<!--        </LinearLayout>-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonSaveAutoApprove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Save"
+                android:background="@color/green"
+                android:textColor="#FFF" />
+        </LinearLayout>
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_marginBottom="10dp">-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Cancellation:"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:textSize="16sp"-->
-<!--                android:paddingRight="8dp"/>-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/editTextCancellation"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:hint=""-->
-<!--                android:background="#FFF"-->
-<!--                android:layout_weight="1"-->
-<!--                android:padding="8dp"-->
-<!--                android:inputType="number" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonEditCancellation"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Edit"-->
-<!--                android:background="@color/blue"-->
-<!--                android:textColor="#FFF" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonSaveCancellation"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Save"-->
-<!--                android:background="@color/green"-->
-<!--                android:textColor="#FFF" />-->
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_marginBottom="10dp">-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="St. price:"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:textSize="16sp"-->
-<!--                android:paddingRight="8dp"/>-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/editTextStandardPrice"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:hint=""-->
-<!--                android:background="#FFF"-->
-<!--                android:layout_weight="1"-->
-<!--                android:padding="8dp"-->
-<!--                android:inputType="numberDecimal" />-->
-
-
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonEditStandardPrice"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Edit"-->
-<!--                android:background="@color/blue"-->
-<!--                android:textColor="#FFF" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonSaveStandardPrice"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Save"-->
-<!--                android:background="@color/green"-->
-<!--                android:textColor="#FFF" />-->
-<!--        </LinearLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_marginBottom="10dp">-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinnerPriceType"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:background="#FFF"/>-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonEditPriceType"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Edit"-->
-<!--                android:background="@color/blue"-->
-<!--                android:textColor="#FFF" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/buttonSavePriceType"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Save"-->
-<!--                android:background="@color/green"-->
-<!--                android:textColor="#FFF" />-->
-<!--        </LinearLayout>-->
         <Button
             android:id="@+id/buttonEditAvailabilityAndPrice"
             android:layout_width="match_parent"

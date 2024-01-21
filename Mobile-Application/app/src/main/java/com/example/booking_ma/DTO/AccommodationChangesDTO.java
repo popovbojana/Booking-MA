@@ -20,12 +20,13 @@ public class AccommodationChangesDTO {
     private String dateFrom;
     private String dateUntil;
     private double amount;
+    private boolean autoApprove;
 
 
     public AccommodationChangesDTO() {
     }
 
-    public AccommodationChangesDTO(String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType myPriceType, int cancellationDeadlineInDays, double standardPrice) {
+    public AccommodationChangesDTO(String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType myPriceType, int cancellationDeadlineInDays, double standardPrice, boolean autoApprove) {
         this.name = name;
         this.description = description;
         this.amenities = amenities;
@@ -37,9 +38,10 @@ public class AccommodationChangesDTO {
         }
         this.cancellationDeadlineInDays = cancellationDeadlineInDays;
         this.standardPrice = standardPrice;
+        this.autoApprove = autoApprove;
     }
 
-    public AccommodationChangesDTO(String dateFrom, String dateUntil, double amount) {
+    public AccommodationChangesDTO(String dateFrom, String dateUntil, double amount, boolean autoApprove) {
         this.dateFrom = dateFrom;
         this.dateUntil = dateUntil;
         this.amount = amount;
@@ -53,6 +55,7 @@ public class AccommodationChangesDTO {
         this.priceType = null;
         this.standardPrice = -1;
         this.cancellationDeadlineInDays = -1;
+        this.autoApprove = autoApprove;
     }
 
     public String getName() {

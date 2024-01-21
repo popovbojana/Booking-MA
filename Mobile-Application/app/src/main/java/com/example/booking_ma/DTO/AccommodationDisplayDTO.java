@@ -24,11 +24,12 @@ public class AccommodationDisplayDTO {
     private double longitude;
     private double finalRating;
     private double standardPrice;
+    private boolean autoApproved;
 
     public AccommodationDisplayDTO() {
     }
 
-    public AccommodationDisplayDTO(Long id, Long ownersId, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityDisplayDTO> availabilities, int cancellationDeadlineInDays, boolean approved, boolean hasChanges, String address, double latitude, double longitude, double finalRating, double standardPrice) {
+    public AccommodationDisplayDTO(Long id, Long ownersId, String name, String description, String amenities, int minGuests, int maxGuests, String type, PriceType priceType, List<AvailabilityDisplayDTO> availabilities, int cancellationDeadlineInDays, boolean approved, boolean hasChanges, String address, double latitude, double longitude, double finalRating, double standardPrice, boolean autoApproved) {
         this.id = id;
         this.ownersId = ownersId;
         this.name = name;
@@ -47,6 +48,7 @@ public class AccommodationDisplayDTO {
         this.longitude = longitude;
         this.finalRating = finalRating;
         this.standardPrice = standardPrice;
+        this.autoApproved = autoApproved;
     }
 
     public Long getId() {
@@ -191,5 +193,13 @@ public class AccommodationDisplayDTO {
 
     public void setStandardPrice(double standardPrice) {
         this.standardPrice = standardPrice;
+    }
+
+    public boolean isAutoApproved() {
+        return autoApproved;
+    }
+
+    public void setAutoApproved(boolean autoApproved) {
+        this.autoApproved = autoApproved;
     }
 }

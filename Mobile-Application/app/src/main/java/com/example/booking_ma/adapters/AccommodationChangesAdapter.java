@@ -84,24 +84,14 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
         holder.accommodationDateUntil.setText(dateUntil);
         String price = "New price: " + item.getNewAmount();
         holder.accommodationPrice.setText(price);
-//        holder.accommodationType.setText(type);
-//        String cancellation = "New cancellation deadline: ";
-//        if (item.getNewCancellationDeadlineInDays() != -1) {
-//            cancellation += item.getNewCancellationDeadlineInDays();
-//        }
-//        cancellation += " days";
-//        holder.accommodationCancellation.setText(cancellation);
-//        String standardPrice = "New standard price: ";
-//        if (item.getNewStandardPrice() != -1.0){
-//            standardPrice += item.getNewStandardPrice();
-//        }
-//        holder.accommodationStandardPrice.setText(standardPrice);
-//        String priceType = "New price type: ";
-//        if (item.getNewPriceType() == PriceType.PER_GUEST){
-//            priceType += "per guest";
-//        } else if (item.getNewPriceType() == PriceType.PER_UNIT){
-//            priceType += "per unit";
-//        }
+
+        String autoApprove = "Auto approve: ";
+        if (item.isAutoApprove()) {
+            autoApprove += "on";
+        } else {
+            autoApprove += "off";
+        }
+        holder.accommodationAutoApprove.setText(autoApprove);
 
         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,6 +205,16 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
         }
         accommodationAvailabilities.setText(availabilities);
 
+        TextView accommodationAutoApprove = dialog.findViewById(R.id.accommodationAutoApprove);
+        String autoApprove = "Auto approve: ";
+        if (accommodationDisplay.isAutoApproved()) {
+            autoApprove += "on";
+        } else {
+            autoApprove += "off";
+        }
+        accommodationAutoApprove.setText(autoApprove);
+
+
         Button btnClose = dialog.findViewById(R.id.btnClose);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,7 +255,7 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
-        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationStandardPrice, accommodationPriceType, accommodationDateFrom, accommodationDateUntil, accommodationPrice;
+        TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationDateFrom, accommodationDateUntil, accommodationPrice, accommodationAutoApprove;
         Button btnApprove, btnDisapprove, currentInfoButton;
 
         public ViewHolder(View itemView) {
@@ -269,10 +269,7 @@ public class AccommodationChangesAdapter extends RecyclerView.Adapter<Accommodat
             accommodationDateFrom = itemView.findViewById(R.id.accommodationDateFrom);
             accommodationDateUntil = itemView.findViewById(R.id.accommodationDateUntil);
             accommodationPrice = itemView.findViewById(R.id.accommodationPrice);
-//            accommodationType = itemView.findViewById(R.id.accommodationType);
-//            accommodationCancellation = itemView.findViewById(R.id.accommodationCancellation);
-//            accommodationStandardPrice = itemView.findViewById(R.id.accommodationStandardPrice);
-//            accommodationPriceType = itemView.findViewById(R.id.accommodationPriceType);
+            accommodationAutoApprove = itemView.findViewById(R.id.accommodationAutoApprove);
             btnApprove = itemView.findViewById(R.id.btnApprove);
             btnDisapprove = itemView.findViewById(R.id.btnDisapprove);
             currentInfoButton = itemView.findViewById(R.id.currentInfoButton);

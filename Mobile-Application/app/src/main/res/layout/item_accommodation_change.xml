@@ -80,30 +80,12 @@
                 android:layout_height="wrap_content"
                 android:text="Price:" />
 
+            <TextView
+                android:id="@+id/accommodationAutoApprove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Auto approve:" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/accommodationType"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Type: Apartment" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/accommodationCancellation"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Cancellation: Free cancellation up to 48 hours before check-in" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/accommodationStandardPrice"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Standard Price: $80" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/accommodationPriceType"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Price type: per guest" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"

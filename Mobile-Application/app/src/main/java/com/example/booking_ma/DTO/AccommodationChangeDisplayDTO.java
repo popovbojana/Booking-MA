@@ -19,11 +19,12 @@ public class AccommodationChangeDisplayDTO {
     private LocalDateTime newDateFrom;
     private LocalDateTime newDateUntil;
     private double newAmount;
+    private boolean autoApprove;
 
     public AccommodationChangeDisplayDTO() {
     }
 
-    public AccommodationChangeDisplayDTO(Long accommodationId, String newName, String newDescription, String newAmenities, int newMinGuests, int newMaxGuests, String newType, PriceType newPriceType, int newCancellationDeadlineInDays, double newStandardPrice) {
+    public AccommodationChangeDisplayDTO(Long accommodationId, String newName, String newDescription, String newAmenities, int newMinGuests, int newMaxGuests, String newType, PriceType newPriceType, int newCancellationDeadlineInDays, double newStandardPrice, boolean autoApprove) {
         this.accommodationId = accommodationId;
         this.newName = newName;
         this.newDescription = newDescription;
@@ -138,6 +139,14 @@ public class AccommodationChangeDisplayDTO {
 
     public void setNewAmount(double newAmount) {
         this.newAmount = newAmount;
+    }
+
+    public boolean isAutoApprove() {
+        return autoApprove;
+    }
+
+    public void setAutoApprove(boolean autoApprove) {
+        this.autoApprove = autoApprove;
     }
 }
 
