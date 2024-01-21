@@ -34,7 +34,7 @@ public class RatingCommentController {
             this.ratingCommentService.rateComment(rateCommentDTO);
             return new ResponseEntity<>(new MessageDTO("Successfully added new rating and comment!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

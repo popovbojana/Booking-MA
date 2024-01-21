@@ -132,9 +132,15 @@ public class HostMainScreen extends AppCompatActivity {
 //            startActivity(new Intent(this, ReservationsScreen.class));
             return true;
         }
+//
 
         if (itemId == R.id.itemHostNotificationsScreen) {
 //            startActivity(new Intent(this, HostNotificationsScreen.class));
+            return true;
+        }
+
+        if (itemId == R.id.itemHostCommentsScreen) {
+            startActivity(new Intent(this, HostCommentsActivity.class));
             return true;
         }
 

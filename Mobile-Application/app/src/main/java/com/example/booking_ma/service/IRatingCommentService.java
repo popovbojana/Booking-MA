@@ -2,6 +2,7 @@ package com.example.booking_ma.service;
 
 import com.example.booking_ma.DTO.AllRatingsDisplay;
 import com.example.booking_ma.DTO.ApprovalDTO;
+import com.example.booking_ma.DTO.RateCommentDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
@@ -12,6 +13,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -25,6 +27,9 @@ public interface IRatingCommentService {
     @GET(ServiceUtils.ratingComment + "/all-for-accommodation/{id}")
     Call<AllRatingsDisplay> getAllForAccommodation(@Path("id") Long id);
 
+    @GET(ServiceUtils.ratingComment + "/all-for-owner/{id}")
+    Call<AllRatingsDisplay> getAllForOwner(@Path("id") Long id);
+
     @PUT(ServiceUtils.ratingComment + "/report/{id}")
     Call<ResponseMessage> report(@Path("id") Long id);
 
@@ -33,5 +38,8 @@ public interface IRatingCommentService {
 
     @PUT(ServiceUtils.ratingComment + "/approve/{id}")
     Call<ResponseMessage> approve(@Path("id") Long id, @Body ApprovalDTO approvalDTO);
+
+    @POST(ServiceUtils.ratingComment + "/add-new")
+    Call<ResponseMessage> rateComment(@Body RateCommentDTO rateCommentDTO);
 
 }

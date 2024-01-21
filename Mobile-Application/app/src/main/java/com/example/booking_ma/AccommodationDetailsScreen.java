@@ -27,6 +27,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.booking_ma.DTO.RateCommentDTO;
+import com.example.booking_ma.DTO.ReportedUserReasonDTO;
 import com.example.booking_ma.DTO.ReservationDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.adapters.AccommodationAmentiteAdapter;
@@ -36,6 +38,7 @@ import com.example.booking_ma.model.RatingComment;
 import com.example.booking_ma.service.ServiceUtils;
 import com.example.booking_ma.tools.FragmentTransition;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -75,7 +78,8 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private String token;
     private Long myId;
 
-
+    //bojana
+    private Button buttonRateAccommodation, buttonRateOwner, buttonReportOwner;
 
 
     @Override
@@ -104,8 +108,215 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
                 showReservationDialog();
             }
         });
+
+        buttonRateAccommodation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCommentAccommodation();
+            }
+        });
+
+        buttonRateOwner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCommentOwner();
+            }
+        });
+
+        buttonReportOwner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogReportOwner();
+            }
+        });
     
     }
+
+    public void showDialogReportOwner(){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_reason);
+
+        EditText editTextReason = dialog.findViewById(R.id.editTextReason);
+        ReportedUserReasonDTO reason = new ReportedUserReasonDTO(editTextReason.getText().toString());
+
+        Button buttonSave = dialog.findViewById(R.id.buttonSave);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseMessage> call = ServiceUtils.userService(token).reportOwner(aOwnerId, reason);
+                call.enqueue(new Callback<ResponseMessage>() {
+                    @Override
+                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                        if(response.isSuccessful()) {
+                            Log.i("Success", response.body().getMessage());
+                            Toast.makeText(AccommodationDetailsScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                onFailure(call, new Throwable(response.errorBody().string()));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                        Log.i("Fail", t.getMessage());
+                        Toast.makeText(AccommodationDetailsScreen.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+
+        Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    //
+
+    public void showCommentAccommodation(){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_rate_comment);
+
+        EditText editTextRating = dialog.findViewById(R.id.editTextRating);
+        EditText editTextComment = dialog.findViewById(R.id.editTextComment);
+        TextView textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
+
+        Button buttonSave = dialog.findViewById(R.id.buttonSave);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewSearchError.setText("");
+
+                String rating = editTextRating.getText().toString();
+                String comment = editTextComment.getText().toString();
+
+                if (rating.equals("")){
+                    Log.i("Error", "Rating empty");
+                    textViewSearchError.setText("Rating is required!");
+                } else if (comment.equals("")) {
+                    Log.i("Error", "Comment empty");
+                    textViewSearchError.setText("Comment is required!");
+                } else if (Float.parseFloat(rating) > 5.0 || Float.parseFloat(rating) < 0.0) {
+                    Log.i("Error", "Rating not in range");
+                    textViewSearchError.setText("Rating should be between 0 - 5!");
+                } else {
+                    RateCommentDTO rateCommentDTO = new RateCommentDTO(myId, "FOR_ACCOMMODATION", null, aAccommodationId, Float.parseFloat(rating), comment);
+
+                    Call<ResponseMessage> call = ServiceUtils.ratingCommentService(token).rateComment(rateCommentDTO);
+                    call.enqueue(new Callback<ResponseMessage>() {
+                        @Override
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            if(response.isSuccessful()) {
+                                Log.i("Success", response.body().getMessage());
+                                Toast.makeText(AccommodationDetailsScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                try {
+                                    onFailure(call, new Throwable(response.errorBody().string()));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            Log.i("Fail", t.getMessage());
+                            Toast.makeText(AccommodationDetailsScreen.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void showCommentOwner(){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_rate_comment);
+
+        EditText editTextRating = dialog.findViewById(R.id.editTextRating);
+        EditText editTextComment = dialog.findViewById(R.id.editTextComment);
+        TextView textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
+
+        Button buttonSave = dialog.findViewById(R.id.buttonSave);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewSearchError.setText("");
+
+                String rating = editTextRating.getText().toString();
+                String comment = editTextComment.getText().toString();
+
+                if (rating.equals("")){
+                    Log.i("Error", "Rating empty");
+                    textViewSearchError.setText("Rating is required!");
+                } else if (comment.equals("")) {
+                    Log.i("Error", "Comment empty");
+                    textViewSearchError.setText("Comment is required!");
+                } else if (Float.parseFloat(rating) > 5.0 || Float.parseFloat(rating) < 0.0) {
+                    Log.i("Error", "Rating not in range");
+                    textViewSearchError.setText("Rating should be between 0 - 5!");
+                } else {
+                    RateCommentDTO rateCommentDTO = new RateCommentDTO(myId, "FOR_OWNER", aOwnerId, null, Float.parseFloat(rating), comment);
+
+                    Call<ResponseMessage> call = ServiceUtils.ratingCommentService(token).rateComment(rateCommentDTO);
+                    call.enqueue(new Callback<ResponseMessage>() {
+                        @Override
+                        public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                            if(response.isSuccessful()) {
+                                Log.i("Success", response.body().getMessage());
+                                Toast.makeText(AccommodationDetailsScreen.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                try {
+                                    onFailure(call, new Throwable(response.errorBody().string()));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                            Log.i("Fail", t.getMessage());
+                            Toast.makeText(AccommodationDetailsScreen.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    //
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -257,6 +468,12 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         buttonReserveAccommodation = findViewById(R.id.buttonReserveAccomodation);
         recyclerViewAccommodationComments = findViewById(R.id.recyclerViewAccommodationComments);
         recyclerViewAccommodationAmentites = findViewById(R.id.recyclerViewAccommodationComments);
+
+        //bojana
+        buttonRateAccommodation = findViewById(R.id.buttonRateAccommodation);
+        buttonRateOwner = findViewById(R.id.buttonRateOwner);
+        buttonReportOwner = findViewById(R.id.buttonReportOwner);
+
     }
 
     public void getExtras(Intent intent){

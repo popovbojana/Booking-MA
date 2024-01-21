@@ -140,6 +140,11 @@ public class AccommodationsScreen extends AppCompatActivity {
             return true;
         }
 
+        if (itemId == R.id.itemHostCommentsScreen) {
+            startActivity(new Intent(this, HostCommentsActivity.class));
+            return true;
+        }
+
         if (itemId == R.id.itemLogOut) {
             deletePreferences();
             Intent intent = new Intent(this, LoginScreen.class);

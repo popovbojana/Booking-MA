@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
@@ -28,13 +27,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdapter.CommentViewHolder> {
+public class HostCommentsAdapter  extends RecyclerView.Adapter<HostCommentsAdapter.CommentViewHolder> {
 
     private List<RatingCommentDisplayDTO> comments;
     private Context context;
     private String token;
 
-    public RatingCommentAdapter(Context context, List<RatingCommentDisplayDTO> comments, String token) {
+    public HostCommentsAdapter(Context context, List<RatingCommentDisplayDTO> comments, String token) {
         this.context = context;
         this.comments = comments;
         this.token = token;
@@ -47,13 +46,13 @@ public class RatingCommentAdapter extends RecyclerView.Adapter<RatingCommentAdap
 
     @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HostCommentsAdapter.CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_host_comment, parent, false);
-        return new CommentViewHolder(view);
+        return new HostCommentsAdapter.CommentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HostCommentsAdapter.CommentViewHolder holder, int position) {
         if (comments != null) {
             RatingCommentDisplayDTO comment = comments.get(position);
 
