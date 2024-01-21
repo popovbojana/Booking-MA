@@ -7,6 +7,7 @@ import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.FavoriteAccommodationDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
+import com.example.booking_ma.DTO.ReportAccommodationDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 

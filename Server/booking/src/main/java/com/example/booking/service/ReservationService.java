@@ -1,9 +1,6 @@
 package com.example.booking.service;
 
-import com.example.booking.dto.CheckAccommodationAvailabilityDTO;
-import com.example.booking.dto.ReservationDTO;
-import com.example.booking.dto.ReservationDisplayDTO;
-import com.example.booking.dto.SearchDTO;
+import com.example.booking.dto.*;
 import com.example.booking.exceptions.AlreadyChangedState;
 import com.example.booking.exceptions.DeadlineException;
 import com.example.booking.exceptions.NoDataWithId;
@@ -16,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.Month;
+import java.util.*;
 
 @Service
 public class ReservationService implements IReservationService {
@@ -287,5 +283,141 @@ public class ReservationService implements IReservationService {
         }
 
         return true;
+    }
+
+    @Override
+    public ReportAccommodationDTO getReportForAccommodation(Long id) throws NoDataWithId {
+        if (this.accommodationRepository.findById(id).isPresent()){
+
+            List<Reservation> allReservationsForAccommodations = this.reservationRepository.findAllReservationsForAccommodation(id);
+
+            Map<String, Integer> reservationsByMonth = new HashMap<>();
+            Map<String, Float> profitByMonth = new HashMap<>();
+
+            int reservationsInYear = 0;
+            float profitInYear = 0.0F;
+
+            for (Reservation r : allReservationsForAccommodations) {
+                LocalDateTime checkIn = r.getCheckIn();
+                LocalDateTime checkOut = r.getCheckOut();
+
+                if (checkIn.getMonth() == Month.JANUARY && checkOut.getMonth() == Month.JANUARY) {
+                    reservationsByMonth.put("January", reservationsByMonth.getOrDefault("January", 0) + 1);
+                    profitByMonth.put("January", profitByMonth.getOrDefault("January", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.FEBRUARY && checkOut.getMonth() == Month.FEBRUARY) {
+                    reservationsByMonth.put("February", reservationsByMonth.getOrDefault("February", 0) + 1);
+                    profitByMonth.put("February", profitByMonth.getOrDefault("February", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.MARCH && checkOut.getMonth() == Month.MARCH) {
+                    reservationsByMonth.put("March", reservationsByMonth.getOrDefault("March", 0) + 1);
+                    profitByMonth.put("March", profitByMonth.getOrDefault("March", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.APRIL && checkOut.getMonth() == Month.APRIL) {
+                    reservationsByMonth.put("April", reservationsByMonth.getOrDefault("April", 0) + 1);
+                    profitByMonth.put("April", profitByMonth.getOrDefault("April", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.MAY && checkOut.getMonth() == Month.MAY) {
+                    reservationsByMonth.put("May", reservationsByMonth.getOrDefault("May", 0) + 1);
+                    profitByMonth.put("May", profitByMonth.getOrDefault("May", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.JUNE && checkOut.getMonth() == Month.JUNE) {
+                    reservationsByMonth.put("June", reservationsByMonth.getOrDefault("June", 0) + 1);
+                    profitByMonth.put("June", profitByMonth.getOrDefault("June", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.JULY && checkOut.getMonth() == Month.JULY) {
+                    reservationsByMonth.put("July", reservationsByMonth.getOrDefault("July", 0) + 1);
+                    profitByMonth.put("July", profitByMonth.getOrDefault("July", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+                if (checkIn.getMonth() == Month.AUGUST && checkOut.getMonth() == Month.AUGUST) {
+                    reservationsByMonth.put("August", reservationsByMonth.getOrDefault("August", 0) + 1);
+                    profitByMonth.put("August", profitByMonth.getOrDefault("August", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.SEPTEMBER && checkOut.getMonth() == Month.SEPTEMBER) {
+                    reservationsByMonth.put("September", reservationsByMonth.getOrDefault("September", 0) + 1);
+                    profitByMonth.put("September", profitByMonth.getOrDefault("September", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.OCTOBER && checkOut.getMonth() == Month.OCTOBER) {
+                    reservationsByMonth.put("October", reservationsByMonth.getOrDefault("October", 0) + 1);
+                    profitByMonth.put("October", profitByMonth.getOrDefault("October", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.NOVEMBER && checkOut.getMonth() == Month.NOVEMBER) {
+                    reservationsByMonth.put("November", reservationsByMonth.getOrDefault("November", 0) + 1);
+                    profitByMonth.put("November", profitByMonth.getOrDefault("November", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+                if (checkIn.getMonth() == Month.DECEMBER && checkOut.getMonth() == Month.DECEMBER) {
+                    reservationsByMonth.put("December", reservationsByMonth.getOrDefault("December", 0) + 1);
+                    profitByMonth.put("December", profitByMonth.getOrDefault("December", (float) 0.0) + r.getTotalCost());
+                    reservationsInYear += 1;
+                    profitInYear += r.getTotalCost();
+                }
+
+            }
+
+            ReportAccommodationDTO report = new ReportAccommodationDTO(
+                    reservationsInYear,
+                    profitInYear,
+                    reservationsByMonth.getOrDefault("January", 0),
+                    profitByMonth.getOrDefault("January", 0.0f),
+                    reservationsByMonth.getOrDefault("February", 0),
+                    profitByMonth.getOrDefault("February", 0.0f),
+                    reservationsByMonth.getOrDefault("March", 0),
+                    profitByMonth.getOrDefault("March", 0.0f),
+                    reservationsByMonth.getOrDefault("April", 0),
+                    profitByMonth.getOrDefault("April", 0.0f),
+                    reservationsByMonth.getOrDefault("May", 0),
+                    profitByMonth.getOrDefault("May", 0.0f),
+                    reservationsByMonth.getOrDefault("June", 0),
+                    profitByMonth.getOrDefault("June", 0.0f),
+                    reservationsByMonth.getOrDefault("July", 0),
+                    profitByMonth.getOrDefault("July", 0.0f),
+                    reservationsByMonth.getOrDefault("August", 0),
+                    profitByMonth.getOrDefault("August", 0.0f),
+                    reservationsByMonth.getOrDefault("September", 0),
+                    profitByMonth.getOrDefault("September", 0.0f),
+                    reservationsByMonth.getOrDefault("October", 0),
+                    profitByMonth.getOrDefault("October", 0.0f),
+                    reservationsByMonth.getOrDefault("November", 0),
+                    profitByMonth.getOrDefault("November", 0.0f),
+                    reservationsByMonth.getOrDefault("December", 0),
+                    profitByMonth.getOrDefault("December", 0.0f)
+            );
+            return report;
+
+        } else {
+            throw new NoDataWithId("There is no accommodation with this id!");
+        }
     }
 }

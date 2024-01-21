@@ -61,4 +61,7 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     List<Reservation> findPendingReservationsBetweenDates(
             @Param("checkIn") LocalDateTime checkIn,
             @Param("checkOut") LocalDateTime checkOut);
+
+    @Query("SELECT r FROM Reservation r WHERE r.accommodation.id = :id AND r.reservationState = 'APPROVED'")
+    List<Reservation> findAllReservationsForAccommodation(Long id);
 }

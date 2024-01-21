@@ -51,7 +51,6 @@ public class EditAccommodationScreen extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private Long myId;
 
-    private String priceType;
     private Long accommodationId;
 
 

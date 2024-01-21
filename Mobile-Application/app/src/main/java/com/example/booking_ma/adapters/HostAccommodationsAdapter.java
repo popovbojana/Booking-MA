@@ -18,6 +18,7 @@ import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.EditAccommodationScreen;
 import com.example.booking_ma.R;
+import com.example.booking_ma.ReportAccommodationScreen;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 import java.util.List;
@@ -93,7 +94,20 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
         holder.getReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Handle reporting
+                Intent intent = new Intent(context, ReportAccommodationScreen.class);
+                intent.putExtra("accommodationId", item.getId());
+                intent.putExtra("type", "reservations");
+                context.startActivity(intent);
+            }
+        });
+
+        holder.getReportProfitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ReportAccommodationScreen.class);
+                intent.putExtra("accommodationId", item.getId());
+                intent.putExtra("type", "profit");
+                context.startActivity(intent);
             }
         });
 
@@ -115,7 +129,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
         TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice, accommodationAvailabilities, accommodationAutoApprove;
-        Button commentsButton, getReportButton, editButton;
+        Button commentsButton, getReportButton, editButton, getReportProfitButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -134,6 +148,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             accommodationAutoApprove = itemView.findViewById(R.id.accommodationAutoApprove);
             commentsButton = itemView.findViewById(R.id.commentsButton);
             getReportButton = itemView.findViewById(R.id.getReportButton);
+            getReportProfitButton = itemView.findViewById(R.id.getReportProfitButton);
             editButton = itemView.findViewById(R.id.editButton);
         }
     }

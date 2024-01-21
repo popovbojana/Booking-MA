@@ -23,3 +23,4 @@ insert into RATING_COMMENT(approved, comment, rating, reported, time, type, acco
 insert into RATING_COMMENT(approved, comment, rating, reported, time, type, accommodation_id, guest_id, owner_id) values (true, 'TOP', 4.9, false, '2023-10-20T00:00:00', 'FOR_ACCOMMODATION', 1, 2, null)
 insert into RATING_COMMENT(approved, comment, rating, reported, time, type, accommodation_id, guest_id, owner_id) values (true, 'TOP', 4.9, false, '2023-10-20T00:00:00', 'FOR_ACCOMMODATION', 1, 2, null)
 insert into RATING_COMMENT(approved, comment, rating, reported, time, type, accommodation_id, guest_id, owner_id) values (true, 'TOP', 4.9, false, '2023-10-20T00:00:00', 'FOR_ACCOMMODATION', 1, 2, null)
+

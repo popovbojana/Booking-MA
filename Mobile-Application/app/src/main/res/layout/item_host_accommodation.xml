@@ -126,17 +126,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Report"
+                    android:text="Reservations Report"
                     android:layout_marginEnd="4dp"/>
 
                 <Button
-                    android:id="@+id/editButton"
+                    android:id="@+id/getReportProfitButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Edit"
+                    android:text="Profit
+                     report"
                     android:layout_marginStart="4dp"/>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comments" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>

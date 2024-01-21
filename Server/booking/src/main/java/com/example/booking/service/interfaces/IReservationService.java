@@ -1,9 +1,6 @@
 package com.example.booking.service.interfaces;
 
-import com.example.booking.dto.CheckAccommodationAvailabilityDTO;
-import com.example.booking.dto.ReservationDTO;
-import com.example.booking.dto.ReservationDisplayDTO;
-import com.example.booking.dto.SearchDTO;
+import com.example.booking.dto.*;
 import com.example.booking.exceptions.AlreadyChangedState;
 import com.example.booking.exceptions.DeadlineException;
 import com.example.booking.exceptions.NoDataWithId;
@@ -42,4 +39,6 @@ public interface IReservationService {
     List<ReservationDisplayDTO> getOwnerPendingReservations(Long ownerId) throws NoDataWithId;
 
     boolean checkAccommodationInDateInterval(CheckAccommodationAvailabilityDTO checkAccommodationAvailabilityRequest) throws NoDataWithId, RequirementNotSatisfied;
+
+    ReportAccommodationDTO getReportForAccommodation(Long id) throws NoDataWithId;
 }

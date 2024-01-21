@@ -149,4 +149,14 @@ public class ReservationController {
         }
     }
 
+    @GetMapping(value = "report-for-accommodation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<?> getReportForAccommodation(@PathVariable("id") Long id) {
+        try{
+            return new ResponseEntity<>(this.reservationService.getReportForAccommodation(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
