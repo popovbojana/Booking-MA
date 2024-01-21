@@ -46,12 +46,19 @@
                 android:text="Comment: "
                 android:textStyle="bold" />
 
+
             <Button
-                android:id="@+id/buttonReport"
+                android:id="@+id/buttonReportComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Report"
-                android:onClick="onReportButtonClick" />
+                android:text="Report comment" />
+
+            <Button
+                android:id="@+id/buttonReportGuest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Report guest" />
+
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

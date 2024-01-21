@@ -70,7 +70,7 @@ public class UserController {
             this.userService.reportGuest(id, reason);
             return new ResponseEntity<>(new MessageDTO("Successfully reported guest!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -82,7 +82,7 @@ public class UserController {
             this.userService.reportOwner(id, reason, guestId);
             return new ResponseEntity<>(new MessageDTO("Successfully reported owner!"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

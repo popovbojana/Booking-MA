@@ -3,6 +3,7 @@ package com.example.booking_ma.service;
 import com.example.booking_ma.DTO.ChangePasswordDTO;
 import com.example.booking_ma.DTO.LoginDTO;
 import com.example.booking_ma.DTO.NewUserDTO;
+import com.example.booking_ma.DTO.ReportedUserReasonDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.TokenDTO;
 import com.example.booking_ma.DTO.UserDisplayDTO;
@@ -51,7 +52,11 @@ public interface IUserService {
     @DELETE(ServiceUtils.user + "/delete-user/{userId}")
     Call<ResponseMessage> deleteUser(@Path("userId") Long userId);
 
+    @PUT(ServiceUtils.user + "/report-guest/{userId}")
+    Call<ResponseMessage> reportGuest(@Path("userId") Long userId, @Body ReportedUserReasonDTO reason);
 
+    @PUT(ServiceUtils.user + "/report-owner/{userId}")
+    Call<ResponseMessage> reportOwner(@Path("userId") Long userId, @Body ReportedUserReasonDTO reason);
     
 
 }
