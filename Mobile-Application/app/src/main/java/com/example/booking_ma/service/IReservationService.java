@@ -4,6 +4,8 @@ import com.example.booking_ma.DTO.AllRatingsDisplay;
 import com.example.booking_ma.DTO.ApprovalDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ReportAccommodationDTO;
+import com.example.booking_ma.DTO.ReportAllAccommodationsDTO;
+import com.example.booking_ma.DTO.ReportRangeDTO;
 import com.example.booking_ma.DTO.ReservationDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
@@ -14,6 +16,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -29,5 +32,8 @@ public interface IReservationService {
 
     @GET(ServiceUtils.reservations + "/report-for-accommodation/{id}")
     Call<ReportAccommodationDTO> getReportForAccommodation(@Path("id") Long id);
+
+    @POST(ServiceUtils.reservations + "/report-for-all-accommodations/{id}")
+    Call<ReportAllAccommodationsDTO> getReportForAllAccommodations(@Path("id") Long id, @Body ReportRangeDTO range);
 
 }

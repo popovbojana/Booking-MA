@@ -36,6 +36,9 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     @Query("SELECT r FROM Reservation r WHERE r.owner.id = :ownerId")
     List<Reservation> findAllByOwnerId(@Param("ownerId") Long ownerId);
 
+    @Query("SELECT r FROM Reservation r WHERE r.owner.id = :ownerId AND r.reservationState = 'APPROVED'")
+    List<Reservation> findAllApprovedReservationsByOwnerId(@Param("ownerId") Long ownerId);
+
     @Query("SELECT r FROM Reservation r " +
             "WHERE (r.checkIn BETWEEN :dateFrom AND :dateUntil AND r.checkOut BETWEEN :dateFrom AND :dateUntil)" +
             " AND r.owner.id = :ownerId AND r.accommodation.name = :accommodationName")

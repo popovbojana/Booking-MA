@@ -1,9 +1,6 @@
 package com.example.booking.controller;
 
-import com.example.booking.dto.CheckAccommodationAvailabilityDTO;
-import com.example.booking.dto.MessageDTO;
-import com.example.booking.dto.ReservationDTO;
-import com.example.booking.dto.SearchDTO;
+import com.example.booking.dto.*;
 import com.example.booking.service.interfaces.IAccommodationChangeService;
 import com.example.booking.service.interfaces.IAccommodationService;
 import com.example.booking.service.interfaces.IReservationService;
@@ -154,6 +151,16 @@ public class ReservationController {
     public ResponseEntity<?> getReportForAccommodation(@PathVariable("id") Long id) {
         try{
             return new ResponseEntity<>(this.reservationService.getReportForAccommodation(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "report-for-all-accommodations/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<?> getReportForAllAccommodations(@PathVariable("id") Long id, @RequestBody ReportRangeDTO range) {
+        try{
+            return new ResponseEntity<>(this.reservationService.getReportForAllAccommodations(id, range), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

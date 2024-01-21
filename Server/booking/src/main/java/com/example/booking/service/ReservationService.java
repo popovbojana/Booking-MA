@@ -420,4 +420,41 @@ public class ReservationService implements IReservationService {
             throw new NoDataWithId("There is no accommodation with this id!");
         }
     }
+
+    @Override
+    public ReportAllAccommodationsDTO getReportForAllAccommodations(Long id, ReportRangeDTO range) throws NoDataWithId {
+        if (this.userRepository.findById(id).isPresent()){
+            List<Reservation> allOwnerReservations = this.reservationRepository.findAllApprovedReservationsByOwnerId(id);
+            List<Accommodation> allAccommodations = this.accommodationRepository.findAllAccommodationsForOwner(id);
+
+            HashMap<String, Integer> reservationsMap = new HashMap<>();
+            HashMap<String, Float> profitMap = new HashMap<>();
+
+            for (Accommodation accommodation : allAccommodations) {
+                String accommodationName = accommodation.getName();
+                reservationsMap.put(accommodationName, 0);
+                profitMap.put(accommodationName, 0.0f);
+            }
+
+            for (Reservation r : allOwnerReservations) {
+//                if (r.getCheckIn().isAfter(range.getFrom()) && r.getCheckOut().isAfter(range.getFrom()) && r.getCheckIn().isBefore(range.getUntil()) && r.getCheckOut().isBefore(range.getUntil())){
+                if (r.getCheckIn().isAfter(range.getFrom()) && r.getCheckOut().isBefore(range.getUntil())){
+                    String accommodationName = r.getAccommodation().getName();
+
+                    if (reservationsMap.containsKey(accommodationName)) {
+                        int currentReservationCount = reservationsMap.get(accommodationName);
+                        reservationsMap.put(accommodationName, currentReservationCount + 1);
+
+                        float currentProfit = profitMap.get(accommodationName);
+                        float reservationCost = r.getTotalCost();
+                        profitMap.put(accommodationName, currentProfit + reservationCost);
+                    }
+                }
+            }
+            return new ReportAllAccommodationsDTO(reservationsMap, profitMap);
+
+        } else {
+            throw new NoDataWithId("There is no owner with this id!");
+        }
+    }
 }

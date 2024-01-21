@@ -98,10 +98,84 @@ public class AccommodationsScreen extends AppCompatActivity {
         btnGenerateReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
+                showReportDialog();
             }
         });
     }
+
+    private void showReportDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.popup_report_range);
+        dialog.show();
+
+        EditText editTextDateFrom = dialog.findViewById(R.id.editTextDateFrom);
+        EditText editTextDateTo = dialog.findViewById(R.id.editTextDateTo);
+
+        Button buttonAdd = dialog.findViewById(R.id.buttonAdd);
+        Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
+
+        TextView textViewSearchError = dialog.findViewById(R.id.textViewSearchError);
+
+        editTextDateFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(editTextDateFrom);
+            }
+        });
+
+        editTextDateTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(editTextDateTo);
+            }
+        });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewSearchError.setText("");
+
+                String dateFrom = editTextDateFrom.getText().toString();
+                String dateUntil = editTextDateTo.getText().toString();
+
+                if (dateFrom.equals("")) {
+                    Log.i("Error", "Date from empty");
+                    textViewSearchError.setText("Date from required!");
+                } else if (dateUntil.equals("")) {
+                    Log.i("Error", "Date until empty");
+                    textViewSearchError.setText("Date until is required!");
+                }
+                else {
+                    LocalDateTime dateTimeFrom = LocalDateTime.parse(dateFrom + " 00:00", dateTimeFormatter);
+                    LocalDateTime dateTimeTo = LocalDateTime.parse(dateUntil + " 00:00", dateTimeFormatter);
+
+                    if (dateTimeFrom.isAfter(dateTimeTo)) {
+                        Log.i("Error", "Date from is after date until");
+                        textViewSearchError.setText("Date from must be before Date until!");
+                    } else {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        String formattedDateTimeFrom = dateTimeFrom.format(formatter);
+                        String formattedDateTimeTo = dateTimeTo.format(formatter);
+                        Intent intent = new Intent(AccommodationsScreen.this, AllAccommodationsReportScreen.class);
+                        intent.putExtra("ownerId", myId);
+                        intent.putExtra("from", formattedDateTimeFrom);
+                        intent.putExtra("until", formattedDateTimeTo);
+                        startActivity(intent);
+                        // dialog.dismiss();
+                    }
+                }
+            }
+
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

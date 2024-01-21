@@ -41,4 +41,6 @@ public interface IReservationService {
     boolean checkAccommodationInDateInterval(CheckAccommodationAvailabilityDTO checkAccommodationAvailabilityRequest) throws NoDataWithId, RequirementNotSatisfied;
 
     ReportAccommodationDTO getReportForAccommodation(Long id) throws NoDataWithId;
+
+    ReportAllAccommodationsDTO getReportForAllAccommodations(Long id, ReportRangeDTO range) throws NoDataWithId;
 }
