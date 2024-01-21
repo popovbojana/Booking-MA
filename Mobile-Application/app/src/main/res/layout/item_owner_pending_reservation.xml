@@ -19,7 +19,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewOwnerPendingReservationGuestName"
+                android:id="@+id/textViewOwnerPendingReservationGuestId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guest: "
@@ -74,7 +74,7 @@
                 android:layout_marginTop="8dp">
 
                 <Button
-                    android:id="@+id/btnDisapproveReservation"
+                    android:id="@+id/btnOwnerDenyReservation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -82,7 +82,7 @@
                     android:layout_marginStart="4dp"/>
 
                 <Button
-                    android:id="@+id/btnApproveReservation"
+                    android:id="@+id/btnOwnerApproveReservation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

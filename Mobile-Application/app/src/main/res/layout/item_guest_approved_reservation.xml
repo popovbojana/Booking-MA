@@ -19,7 +19,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewGuestApprovedReservationGuestName"
+                android:id="@+id/textViewGuestApprovedReservationGuestId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guest: "
@@ -40,7 +40,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewOwnerApprovedReservationCheckIn"
+                android:id="@+id/textViewGuestApprovedReservationCheckIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check in: "
@@ -74,7 +74,7 @@
                 android:layout_marginTop="8dp">
 
                 <Button
-                    android:id="@+id/btnCancelReservation"
+                    android:id="@+id/btnGuestCancelReservation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

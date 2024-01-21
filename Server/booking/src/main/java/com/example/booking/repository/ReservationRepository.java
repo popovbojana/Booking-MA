@@ -33,6 +33,12 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     @Query("SELECT r FROM Reservation r WHERE r.guest.id = :guestId AND r.reservationState = 'PENDING'")
     List<Reservation> findAllPendingByGuestId(@Param("guestId") Long guestId);
 
+    @Query("SELECT r FROM Reservation r WHERE r.guest.id = :guestId AND r.reservationState = 'APPROVED'")
+    List<Reservation> findAllApprovedByGuestId(@Param("guestId") Long guestId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.guest.id = :guestId AND r.reservationState = 'DENIED'")
+    List<Reservation> findAllDeniedByGuestId(@Param("guestId") Long guestId);
+
     @Query("SELECT r FROM Reservation r WHERE r.owner.id = :ownerId")
     List<Reservation> findAllByOwnerId(@Param("ownerId") Long ownerId);
 
@@ -47,6 +53,12 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
 
     @Query("SELECT r FROM Reservation r WHERE r.owner.id = :ownerId AND r.reservationState = 'PENDING'")
     List<Reservation> findAllPendingByOwnerId(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.owner.id = :ownerId AND r.reservationState = 'APPROVED'")
+    List<Reservation> findAllApprovedByOwnerId(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.owner.id = :ownerId AND r.reservationState = 'DENIED'")
+    List<Reservation> findAllDeniedByOwnerId(@Param("ownerId") Long ownerId);
 
     @Query("SELECT r FROM Reservation r " +
             "WHERE (:checkIn BETWEEN r.checkIn AND r.checkOut OR :checkOut BETWEEN r.checkIn AND r.checkOut)" +

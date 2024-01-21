@@ -68,11 +68,11 @@ public class ReservationController {
         }
     }
 
-    @PutMapping(value = "reservation-delete/{accommodationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "reservation-delete/{reservationId}", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasAuthority('Owner')")
-    public ResponseEntity<?> deleteReservation(@PathVariable("accommodationId") Long accommodationId) {
+    public ResponseEntity<?> deleteReservation(@PathVariable("reservationId") Long reservationId) {
         try{
-            this.reservationService.deleteReservation(accommodationId);
+            this.reservationService.deleteReservation(reservationId);
             return new ResponseEntity<>(new MessageDTO("Successfully deleted reservation"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -100,10 +100,30 @@ public class ReservationController {
     }
 
     @GetMapping(value = "guest-pending-reservations/{guestId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAuthority('Owner')")
+//    @PreAuthorize("hasAuthority('Guest')")
     public ResponseEntity<?> getGuestPendingReservations(@PathVariable("guestId") Long guestId) {
         try{
             return new ResponseEntity<>(this.reservationService.getGuestPendingReservations(guestId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "guest-approved-reservations/{guestId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('Guest')")
+    public ResponseEntity<?> getGuestApprovedReservations(@PathVariable("guestId") Long guestId) {
+        try{
+            return new ResponseEntity<>(this.reservationService.getGuestPendingReservations(guestId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "guest-denied-reservations/{guestId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('Guest')")
+    public ResponseEntity<?> getGuestDeniedReservations(@PathVariable("guestId") Long guestId) {
+        try{
+            return new ResponseEntity<>(this.reservationService.getGuestDeniedReservations(guestId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -134,6 +154,26 @@ public class ReservationController {
     public ResponseEntity<?> getOwnerPendingReservations(@PathVariable("ownerId") Long ownerId) {
         try{
             return new ResponseEntity<>(this.reservationService.getOwnerPendingReservations(ownerId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "owner-approved-reservations/{ownerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('Owner')")
+    public ResponseEntity<?> getOwnerApprovedReservations(@PathVariable("ownerId") Long ownerId) {
+        try{
+            return new ResponseEntity<>(this.reservationService.getOwnerApprovedReservations(ownerId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "owner-denied-reservations/{ownerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('Owner')")
+    public ResponseEntity<?> getOwnerDeniedReservations(@PathVariable("ownerId") Long ownerId) {
+        try{
+            return new ResponseEntity<>(this.reservationService.getOwnerDeniedReservations(ownerId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

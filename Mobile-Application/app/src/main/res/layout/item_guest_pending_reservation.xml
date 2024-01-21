@@ -19,7 +19,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewGuestPendingReservationGuestName"
+                android:id="@+id/textViewGuestPendingReservationGuestId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guest: "
@@ -40,7 +40,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewOwnerPendingReservationCheckIn"
+                android:id="@+id/textViewGuestPendingReservationCheckIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check in: "
