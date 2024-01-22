@@ -184,19 +184,19 @@ public class UserController {
     }
 
     @GetMapping(value = "all-reported-guests", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getReportedGuests() {
         return new ResponseEntity<>(this.userService.getReportedGuests(), HttpStatus.OK);
     }
 
     @GetMapping(value = "all-reported-owners", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> getReportedOwers() {
         return new ResponseEntity<>(this.userService.getReportedOwners(), HttpStatus.OK);
     }
 
     @PutMapping(value = "handle-reported-guest/{guestId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> handleReportedGuest(@PathVariable("guestId") Long guestId, @RequestBody ApprovalDTO approvalDTO) {
         try {
             boolean blocked = this.userService.handleReportedGuest(guestId, approvalDTO);

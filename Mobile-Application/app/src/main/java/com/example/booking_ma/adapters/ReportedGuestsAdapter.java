@@ -22,6 +22,7 @@ import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
 import com.example.booking_ma.R;
+import com.example.booking_ma.ReportedUsersScreen;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
 
@@ -62,7 +63,7 @@ public class ReportedGuestsAdapter  extends RecyclerView.Adapter<ReportedGuestsA
             @Override
             public void onClick(View view) {
                 ApprovalDTO approvalDTO = new ApprovalDTO(false);
-                Call<ResponseMessage> call = ServiceUtils.userService(token).handleReportedUser(item.getId(), approvalDTO);
+                Call<ResponseMessage> call = ServiceUtils.userService(token).handleReportedGuest(item.getId(), approvalDTO);
                 call.enqueue(new Callback<ResponseMessage>() {
                     @Override
                     public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -79,7 +80,7 @@ public class ReportedGuestsAdapter  extends RecyclerView.Adapter<ReportedGuestsA
                         Log.i("Fail", t.getMessage());
                     }
                 });
-                Intent intent = new Intent(context, AccommodationsApprovalScreen.class);
+                Intent intent = new Intent(context, ReportedUsersScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -89,7 +90,7 @@ public class ReportedGuestsAdapter  extends RecyclerView.Adapter<ReportedGuestsA
             @Override
             public void onClick(View view) {
                 ApprovalDTO approvalDTO = new ApprovalDTO(true);
-                Call<ResponseMessage> call = ServiceUtils.userService(token).handleReportedUser(item.getId(), approvalDTO);
+                Call<ResponseMessage> call = ServiceUtils.userService(token).handleReportedGuest(item.getId(), approvalDTO);
                 call.enqueue(new Callback<ResponseMessage>() {
                     @Override
                     public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -106,7 +107,7 @@ public class ReportedGuestsAdapter  extends RecyclerView.Adapter<ReportedGuestsA
                         Log.i("Fail", t.getMessage());
                     }
                 });
-                Intent intent = new Intent(context, AccommodationsApprovalScreen.class);
+                Intent intent = new Intent(context, ReportedUsersScreen .class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

@@ -17,13 +17,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.example.booking_ma.DTO.NotificationDisplayDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
-import com.example.uberapp_tim22.DTO.ChatMessagesDTO;
-import com.example.uberapp_tim22.DTO.DriverVehicleDTO;
-import com.example.uberapp_tim22.DTO.HopInInboxReturnedDTO;
-import com.example.uberapp_tim22.DTO.HopInMessageDTO;
-import com.example.uberapp_tim22.DTO.HopInMessageReturnedDTO;
-import com.example.uberapp_tim22.DTO.MessDTO;
-import com.example.uberapp_tim22.DTO.ResponseChatDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +42,20 @@ public class NotificationService extends Service {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                if (method.equals("getMessage")) {
-                    Long myId = (Long) extras.get("myId");
-                    Long otherId = (Long) extras.get("otherId");
-                    getMessages(myId, otherId);
-                }
+//                if (method.equals("getMessage")) {
+//                    Long myId = (Long) extras.get("myId");
+//                    Long otherId = (Long) extras.get("otherId");
+//                    getMessages(myId, otherId);
+//                }
                 if (method.equals("getNotification")) {
                     Long receiverId = (Long) extras.get("receiverId");
-                    Long senderId = (Long) extras.get("senderId");
-                    getNotification(receiverId, senderId);
+                    getNotification(receiverId, token);
                 }
 
-                else if (method.equals("sendMessage")) {
-                    ChatMessagesDTO message = (ChatMessagesDTO) extras.get("message");
-                    sendMessage(message);
-                }
+//                else if (method.equals("sendMessage")) {
+//                    ChatMessagesDTO message = (ChatMessagesDTO) extras.get("message");
+//                    sendMessage(message);
+//                }
             }
         });
         stopSelf();
@@ -101,7 +93,7 @@ public class NotificationService extends Service {
                     NotificationDisplayDTO notification = response.body();
 
                     Log.i("Notification", notification.getMessage().toString());
-                    getNotificationsBroadcast(chat);
+                    getNotificationsBroadcast(notification);
 
                 }
                 else {
@@ -155,10 +147,13 @@ public class NotificationService extends Service {
 //        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 //    }
 
--
+
     private void getNotificationsBroadcast(NotificationDisplayDTO dto){
-        Intent intent = new Intent("chatActivity");
-        intent.putExtra("messages", dto);
+        Intent intent = new Intent("notificationActivity");
+        intent.putExtra("receiveReceiverId", dto.getReceiverId());
+        intent.putExtra("receiveSenderId", dto.getSenderId());
+        intent.putExtra("receiveMessage", dto.getMessage());
+        intent.putExtra("receiveNotificationType", dto.getMessage());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

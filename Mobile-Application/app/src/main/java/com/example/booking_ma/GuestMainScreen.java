@@ -129,8 +129,8 @@ public class GuestMainScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemGuestReservationsScreen) {
-/*            Intent intent = new Intent(this, GuestReservationsScreen.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(this, GuestReservationsScreen.class);
+            startActivity(intent);
             return true;
         }
 

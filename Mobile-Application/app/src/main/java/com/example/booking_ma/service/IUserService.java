@@ -66,6 +66,6 @@ public interface IUserService {
     @GET(ServiceUtils.user + "/all-reported-owners")
     Call<List<UserDisplayDTO>> getReportedOwners();
 
-    @PUT(ServiceUtils.user + "/handle-reported-user/{userId}")
-    Call<ResponseMessage> handleReportedUser(@Path("userId") Long userId, @Body ApprovalDTO reason);
+    @PUT(ServiceUtils.user + "/handle-reported-guest/{guestId}")
+    Call<ResponseMessage> handleReportedGuest(@Path("guestId") Long guestId, @Body ApprovalDTO reason);
 }

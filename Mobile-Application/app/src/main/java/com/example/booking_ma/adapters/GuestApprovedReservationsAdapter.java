@@ -22,6 +22,7 @@ import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ReservationDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
+import com.example.booking_ma.GuestReservationsScreen;
 import com.example.booking_ma.R;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
@@ -46,7 +47,7 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
 
     @Override
     public GuestApprovedReservationsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_guest_pending_reservation, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_guest_approved_reservation, parent, false);
         return new GuestApprovedReservationsAdapter.ViewHolder(view);
     }
 
@@ -55,12 +56,12 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
         ReservationDisplayDTO item = guestPendingReservations.get(position);
 
         holder.textViewGuestApprovedReservationGuestId.setText("Guest id: "+ item.getId());
-        holder.textViewGuestApprovedReservationAccommodationId.setText("Accommodation id: "+ item.getId());
-        holder.textViewGuestApprovedReservationGuestsNumber.setText("Guests number: "+ item.getId());
-        holder.textViewGuestApprovedReservationCheckIn.setText("Check in: "+ item.getId());
-        holder.textViewGuestApprovedReservationCheckOut.setText("Check out: "+ item.getId());
-        holder.textViewGuestApprovedReservationCost.setText("Cost: "+ item.getId());
-        holder.textViewGuestApprovedReservationCancelationsNumber.setText("Cancelations number: "+ item.getId());
+        holder.textViewGuestApprovedReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
+        holder.textViewGuestApprovedReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
+        holder.textViewGuestApprovedReservationCheckIn.setText("Check in: "+ item.getCheckIn());
+        holder.textViewGuestApprovedReservationCheckOut.setText("Check out: "+ item.getCheckOut());
+        holder.textViewGuestApprovedReservationCost.setText("Cost: "+ item.getTotalCost());
+        holder.textViewGuestApprovedReservationCancelationsNumber.setText("Cancelations number: "+ item.getGuestCancelationsNumber());
 
         holder.btnGuestCancelReservation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +83,7 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
                         Log.i("Fail", t.getMessage());
                     }
                 });
-                Intent intent = new Intent(context, AccommodationsApprovalScreen.class);
+                Intent intent = new Intent(context, GuestReservationsScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

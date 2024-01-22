@@ -22,6 +22,7 @@ import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ReservationDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
+import com.example.booking_ma.OwnerReservationsScreen;
 import com.example.booking_ma.R;
 import com.example.booking_ma.model.enums.PriceType;
 import com.example.booking_ma.service.ServiceUtils;
@@ -55,12 +56,12 @@ public class OwnerPendingReservationsAdapter  extends RecyclerView.Adapter<Owner
         ReservationDisplayDTO item = ownerPendingReservations.get(position);
 
         holder.textViewOwnerPendingReservationGuestId.setText("Guest id: "+ item.getId());
-        holder.textViewOwnerPendingReservationAccommodationId.setText("Accommodation id: "+ item.getId());
-        holder.textViewOwnerPendingReservationGuestsNumber.setText("Guests number: "+ item.getId());
-        holder.textViewOwnerPendingReservationCheckIn.setText("Check in: "+ item.getId());
-        holder.textViewOwnerPendingReservationCheckOut.setText("Check out: "+ item.getId());
-        holder.textViewOwnerPendingReservationCost.setText("Cost: "+ item.getId());
-        holder.textViewOwnerPendingReservationCancelationsNumber.setText("Cancelations number: "+ item.getId());
+        holder.textViewOwnerPendingReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
+        holder.textViewOwnerPendingReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
+        holder.textViewOwnerPendingReservationCheckIn.setText("Check in: "+ item.getCheckIn());
+        holder.textViewOwnerPendingReservationCheckOut.setText("Check out: "+ item.getCheckOut());
+        holder.textViewOwnerPendingReservationCost.setText("Cost: "+ item.getTotalCost());
+        holder.textViewOwnerPendingReservationCancelationsNumber.setText("Cancelations number: "+ item.getGuestCancelationsNumber());
 
         holder.btnOwnerDenyReservation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +83,7 @@ public class OwnerPendingReservationsAdapter  extends RecyclerView.Adapter<Owner
                         Log.i("Fail", t.getMessage());
                     }
                 });
-                Intent intent = new Intent(context, AccommodationsApprovalScreen.class);
+                Intent intent = new Intent(context, OwnerReservationsScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -108,7 +109,7 @@ public class OwnerPendingReservationsAdapter  extends RecyclerView.Adapter<Owner
                         Log.i("Fail", t.getMessage());
                     }
                 });
-                Intent intent = new Intent(context, AccommodationsApprovalScreen.class);
+                Intent intent = new Intent(context, OwnerReservationsScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

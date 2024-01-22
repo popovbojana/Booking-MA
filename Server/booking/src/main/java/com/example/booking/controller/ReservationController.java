@@ -113,7 +113,7 @@ public class ReservationController {
 //    @PreAuthorize("hasAuthority('Guest')")
     public ResponseEntity<?> getGuestApprovedReservations(@PathVariable("guestId") Long guestId) {
         try{
-            return new ResponseEntity<>(this.reservationService.getGuestPendingReservations(guestId), HttpStatus.OK);
+            return new ResponseEntity<>(this.reservationService.getGuestApprovedReservations(guestId), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

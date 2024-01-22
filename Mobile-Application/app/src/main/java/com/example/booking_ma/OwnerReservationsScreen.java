@@ -18,6 +18,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.booking_ma.fragments.GuestApprovedReservationsFragment;
 import com.example.booking_ma.fragments.GuestDeniedReservationsFragment;
 import com.example.booking_ma.fragments.GuestPendingReservationsFragment;
+import com.example.booking_ma.fragments.OwnerApprovedReservationsFragment;
+import com.example.booking_ma.fragments.OwnerDeniedReservationsFragment;
+import com.example.booking_ma.fragments.OwnerPendingReservationsFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -84,11 +87,11 @@ public class OwnerReservationsScreen extends AppCompatActivity {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return new GuestPendingReservationsFragment();
+                    return new OwnerPendingReservationsFragment();
                 case 1:
-                    return new GuestApprovedReservationsFragment();
+                    return new OwnerApprovedReservationsFragment();
                 case 2:
-                    return new GuestDeniedReservationsFragment();
+                    return new OwnerDeniedReservationsFragment();
                 default:
                     throw new IllegalArgumentException("Invalid position");
             }
@@ -96,7 +99,7 @@ public class OwnerReservationsScreen extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 2;
+            return 3;
         }
     }
 

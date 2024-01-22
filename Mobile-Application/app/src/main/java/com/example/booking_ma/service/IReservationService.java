@@ -12,6 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PUT;
@@ -42,10 +43,10 @@ public interface IReservationService {
     @GET(ServiceUtils.reservations + "/owner-approved-reservations/{ownerId}")
     Call<List<ReservationDisplayDTO>> getOwnerApprovedReservations(@Path("ownerId") Long ownerId);
 
-    @GET(ServiceUtils.reservations + "/owner-denied-reservations/{guestId}")
+    @GET(ServiceUtils.reservations + "/owner-denied-reservations/{ownerId}")
     Call<List<ReservationDisplayDTO>> getOwnerDeniedReservations(@Path("ownerId") Long ownerId);
 
-    @PUT(ServiceUtils.reservations + "/reservation-delete/{reservationId}")
+    @DELETE(ServiceUtils.reservations + "/reservation-delete/{reservationId}")
     Call<ResponseMessage> deleteReservation(@Path("reservationId") Long reservationId);
 
     @PUT(ServiceUtils.reservations + "/reservation-cancel/{reservationId}")

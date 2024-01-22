@@ -47,12 +47,12 @@ public class GuestDeniedReservationsAdapter  extends RecyclerView.Adapter<GuestD
         ReservationDisplayDTO item = guestDeniedReservations.get(position);
 
         holder.textViewReservationGuestId.setText("Guest id: "+ item.getId());
-        holder.textViewReservationAccommodationId.setText("Accommodation id: "+ item.getId());
-        holder.textViewReservationGuestsNumber.setText("Guests number: "+ item.getId());
-        holder.textViewReservationCheckIn.setText("Check in: "+ item.getId());
-        holder.textViewReservationCheckOut.setText("Check out: "+ item.getId());
-        holder.textViewReservationCost.setText("Cost: "+ item.getId());
-        holder.textViewReservationCancelationsNumber.setText("Cancelations number: "+ item.getId());
+        holder.textViewReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
+        holder.textViewReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
+        holder.textViewReservationCheckIn.setText("Check in: "+ item.getCheckIn());
+        holder.textViewReservationCheckOut.setText("Check out: "+ item.getCheckOut());
+        holder.textViewReservationCost.setText("Cost: "+ item.getTotalCost());
+        holder.textViewReservationCancelationsNumber.setText("Cancelations number: "+ item.getGuestCancelationsNumber());
 
     }
 

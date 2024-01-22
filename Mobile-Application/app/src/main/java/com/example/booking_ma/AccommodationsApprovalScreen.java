@@ -124,7 +124,7 @@ public class AccommodationsApprovalScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemAdminReportedUsersScreen) {
-//            startActivity(new Intent(this, ReportedUsersScreen.class));
+            startActivity(new Intent(this, ReportedUsersScreen.class));
             return true;
         }
 

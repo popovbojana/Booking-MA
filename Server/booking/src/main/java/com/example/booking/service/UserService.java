@@ -304,6 +304,7 @@ public class UserService implements IUserService {
         }
         if (approval.isApproval()) {
             guest.setBlocked(true);
+            guest.setReported(false);
             this.userRepository.save(guest);
             List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
             for (Reservation r : pendingReservations) {
