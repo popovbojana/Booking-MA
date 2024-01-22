@@ -11,6 +11,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -42,4 +43,9 @@ public interface IRatingCommentService {
     @POST(ServiceUtils.ratingComment + "/add-new")
     Call<ResponseMessage> rateComment(@Body RateCommentDTO rateCommentDTO);
 
+    @GET(ServiceUtils.user + "/all-reported-owners-comments")
+    Call<List<RatingCommentDisplayDTO>> getReportedOwnersComments();
+
+    @PUT(ServiceUtils.user + "/handle-reported-comment/{ratingCommentId}")
+    Call<ResponseMessage> handleReportedComment(@Path("id") Long id, @Body ApprovalDTO approvalDTO);
 }

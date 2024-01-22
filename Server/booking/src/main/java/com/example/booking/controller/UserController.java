@@ -3,14 +3,9 @@ package com.example.booking.controller;
 import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.exceptions.PasswordNotMatchingException;
-import com.example.booking.model.Accommodation;
 import com.example.booking.model.Guest;
-import com.example.booking.model.Owner;
 import com.example.booking.model.User;
-import com.example.booking.model.enums.Role;
 import com.example.booking.service.interfaces.IUserService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -188,12 +183,29 @@ public class UserController {
         return new ResponseEntity<>(this.userService.getReportedUsers(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "handle-reported-user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> handleReportedUser(@PathVariable("id") Long userId, @RequestBody ApprovalDTO approvalDTO) {
+    @GetMapping(value = "all-reported-guests", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getReportedGuests() {
+        return new ResponseEntity<>(this.userService.getReportedGuests(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "all-reported-owners", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getReportedOwers() {
+        return new ResponseEntity<>(this.userService.getReportedOwners(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "handle-reported-guest/{guestId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> handleReportedGuest(@PathVariable("guestId") Long guestId, @RequestBody ApprovalDTO approvalDTO) {
         try {
-            this.userService.handleReportedUser(userId, approvalDTO);
-            return new ResponseEntity<>(new MessageDTO("Rating comment report is successfully deleted"), HttpStatus.OK);
+            boolean blocked = this.userService.handleReportedGuest(guestId, approvalDTO);
+            if(blocked){
+                return new ResponseEntity<>(new MessageDTO("User is successfully blocked"), HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(new MessageDTO("User is successfully unreported"), HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }

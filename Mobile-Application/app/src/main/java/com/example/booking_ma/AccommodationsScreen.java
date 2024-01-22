@@ -204,7 +204,7 @@ public class AccommodationsScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostReservationsScreen) {
-//            startActivity(new Intent(this, ReservationsScreen.class));
+            startActivity(new Intent(this, OwnerReservationsScreen.class));
             return true;
         }
 

@@ -22,9 +22,11 @@ public interface IRatingCommentService {
 
     void report(Long id) throws NoDataWithId;
 
+    List<RatingCommentDisplayDTO> getReportedOwnersComments() throws NoDataWithId;
+
     List<RatingCommentDisplayDTO> getReportedComments() throws NoDataWithId;
 
-    void handleReportedComment(Long ratingCommentId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied;
+    boolean handleReportedComment(Long ratingCommentId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied;
 
     float calculateAverageRating(List<RatingComment> allRatings);
 

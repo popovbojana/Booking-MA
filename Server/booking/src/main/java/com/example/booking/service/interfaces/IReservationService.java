@@ -32,11 +32,19 @@ public interface IReservationService {
 
     List<ReservationDisplayDTO> getGuestPendingReservations(Long guestId) throws NoDataWithId;
 
+    List<ReservationDisplayDTO> getGuestApprovedReservations(Long guestId) throws NoDataWithId;
+
+    List<ReservationDisplayDTO> getGuestDeniedReservations(Long guestId) throws NoDataWithId;
+
     List<ReservationDisplayDTO> getOwnerReservations(Long ownerId) throws NoDataWithId;
 
     List<ReservationDisplayDTO> getOwnerReservationsBySearch(Long ownerId, SearchDTO searchRequest) throws NoDataWithId;
 
     List<ReservationDisplayDTO> getOwnerPendingReservations(Long ownerId) throws NoDataWithId;
+
+    List<ReservationDisplayDTO> getOwnerApprovedReservations(Long ownerId) throws NoDataWithId;
+
+    List<ReservationDisplayDTO> getOwnerDeniedReservations(Long ownerId) throws NoDataWithId;
 
     boolean checkAccommodationInDateInterval(CheckAccommodationAvailabilityDTO checkAccommodationAvailabilityRequest) throws NoDataWithId, RequirementNotSatisfied;
 

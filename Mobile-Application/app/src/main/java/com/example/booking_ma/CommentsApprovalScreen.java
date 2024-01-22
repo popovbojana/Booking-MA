@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.booking_ma.fragments.AccommodationChangesFragment;
 import com.example.booking_ma.fragments.AccommodationCommentsFragment;
 import com.example.booking_ma.fragments.NewAccommodationsFragment;
+import com.example.booking_ma.fragments.ReportedOwnersCommentsFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -85,8 +86,7 @@ public class CommentsApprovalScreen extends AppCompatActivity {
                 case 0:
                     return new AccommodationCommentsFragment();
                 case 1:
-                    //TODO FICA reported comments
-//                    return new AccommodationChangesFragment();
+                    return new ReportedOwnersCommentsFragment();
                 default:
                     throw new IllegalArgumentException("Invalid position");
             }
@@ -126,7 +126,7 @@ public class CommentsApprovalScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemAdminReportedUsersScreen) {
-//            startActivity(new Intent(this, ReportedUsersScreen.class));
+            startActivity(new Intent(this, ReportedUsersScreen.class));
             return true;
         }
 

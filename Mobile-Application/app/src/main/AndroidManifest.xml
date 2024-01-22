@@ -134,7 +134,7 @@
         </activity>
 
         <activity
-            android:name=".FavoriteAccommodationsScreen"
+            android:name=".ReportedUsersScreen"
             android:exported="true">
 
             <meta-data
@@ -142,6 +142,15 @@
                 android:value="" />
         </activity>
 
+
+        <activity
+            android:name=".FavoriteAccommodationsScreen"
+            android:exported="true">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <activity
             android:name=".ReportAccommodationScreen"
@@ -153,7 +162,7 @@
         </activity>
 
         <activity
-            android:name=".AllAccommodationsReportScreen"
+            android:name=".GuestReservationsScreen"
             android:exported="true">
 
             <meta-data
@@ -162,6 +171,23 @@
         </activity>
 
 
+        <activity
+        android:name=".AllAccommodationsReportScreen"
+        android:exported="true">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+        android:name=".OwnerReservationsScreen"
+        android:exported="true">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>

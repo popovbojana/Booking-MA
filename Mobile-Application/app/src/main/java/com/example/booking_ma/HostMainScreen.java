@@ -82,7 +82,7 @@ public class HostMainScreen extends AppCompatActivity {
         filterIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showFilterDialog();
+//                showFilterDialog();
             }
         });
     }
@@ -129,7 +129,7 @@ public class HostMainScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostReservationsScreen) {
-//            startActivity(new Intent(this, ReservationsScreen.class));
+            startActivity(new Intent(this, OwnerReservationsScreen.class));
             return true;
         }
 //
@@ -302,7 +302,7 @@ public class HostMainScreen extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void showFilterDialog() {
+/*    private void showFilterDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.popup_filter_by);
 
@@ -386,7 +386,7 @@ public class HostMainScreen extends AppCompatActivity {
             Log.e("Error:", "Fill out the filter");
             textViewFilterError.setText("Fill you the filter");
         }
-    }
+    }*/
 
     private void deletePreferences(){
         SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);

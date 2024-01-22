@@ -223,6 +223,34 @@ public class ReservationService implements IReservationService {
     }
 
     @Override
+    public List<ReservationDisplayDTO> getGuestApprovedReservations(Long guestId) throws NoDataWithId {
+        if (!this.userRepository.findGuestById(guestId).isPresent()){
+            throw new NoDataWithId("There is no guest with this id!");
+        }
+        List<Reservation> guestReservations = this.reservationRepository.findAllApprovedByGuestId(guestId);
+
+        List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+        for (Reservation r : guestReservations){
+            reservationDisplayDTOS.add(r.parseToDisplay());
+        }
+        return reservationDisplayDTOS;
+    }
+
+    @Override
+    public List<ReservationDisplayDTO> getGuestDeniedReservations(Long guestId) throws NoDataWithId {
+        if (!this.userRepository.findGuestById(guestId).isPresent()){
+            throw new NoDataWithId("There is no guest with this id!");
+        }
+        List<Reservation> guestReservations = this.reservationRepository.findAllDeniedByGuestId(guestId);
+
+        List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+        for (Reservation r : guestReservations){
+            reservationDisplayDTOS.add(r.parseToDisplay());
+        }
+        return reservationDisplayDTOS;
+    }
+
+    @Override
     public List<ReservationDisplayDTO> getOwnerReservations(Long ownerId) throws NoDataWithId {
         if (!this.userRepository.findOwnerById(ownerId).isPresent()){
             throw new NoDataWithId("There is no owner with this id!");
@@ -256,6 +284,34 @@ public class ReservationService implements IReservationService {
             throw new NoDataWithId("There is no owner with this id!");
         }
         List<Reservation> ownerReservations = this.reservationRepository.findAllPendingByOwnerId(ownerId);
+
+        List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+        for (Reservation r : ownerReservations){
+            reservationDisplayDTOS.add(r.parseToDisplay());
+        }
+        return reservationDisplayDTOS;
+    }
+
+    @Override
+    public List<ReservationDisplayDTO> getOwnerApprovedReservations(Long ownerId) throws NoDataWithId {
+        if (!this.userRepository.findOwnerById(ownerId).isPresent()){
+            throw new NoDataWithId("There is no owner with this id!");
+        }
+        List<Reservation> ownerReservations = this.reservationRepository.findAllApprovedByOwnerId(ownerId);
+
+        List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
+        for (Reservation r : ownerReservations){
+            reservationDisplayDTOS.add(r.parseToDisplay());
+        }
+        return reservationDisplayDTOS;
+    }
+
+    @Override
+    public List<ReservationDisplayDTO> getOwnerDeniedReservations(Long ownerId) throws NoDataWithId {
+        if (!this.userRepository.findOwnerById(ownerId).isPresent()){
+            throw new NoDataWithId("There is no owner with this id!");
+        }
+        List<Reservation> ownerReservations = this.reservationRepository.findAllDeniedByOwnerId(ownerId);
 
         List<ReservationDisplayDTO> reservationDisplayDTOS = new ArrayList<>();
         for (Reservation r : ownerReservations){

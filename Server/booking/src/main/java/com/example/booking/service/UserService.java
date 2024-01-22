@@ -266,25 +266,57 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void handleReportedUser(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
-        if(!this.userRepository.findById(userId).isPresent()){
+    public List<UserDisplayDTO> getReportedGuests(){
+        List<User> users = this.userRepository.findAll();
+        List<UserDisplayDTO> reportedUserDisplayDTOS = new ArrayList<>();
+        if(!users.isEmpty()){
+            for(User u : users){
+                if(u.isReported() && u.getRole() == Role.GUEST){
+                    reportedUserDisplayDTOS.add(u.parseToDisplay());
+                }
+            }
+        }
+        return reportedUserDisplayDTOS;
+    }
+
+    @Override
+    public List<UserDisplayDTO> getReportedOwners(){
+        List<User> users = this.userRepository.findAll();
+        List<UserDisplayDTO> reportedUserDisplayDTOS = new ArrayList<>();
+        if(!users.isEmpty()){
+            for(User u : users){
+                if(u.isReported() && u.getRole() == Role.OWNER){
+                    reportedUserDisplayDTOS.add(u.parseToDisplay());
+                }
+            }
+        }
+        return reportedUserDisplayDTOS;
+    }
+
+    @Override
+    public boolean handleReportedGuest(Long userId, ApprovalDTO approval) throws NoDataWithId, RequirementNotSatisfied {
+        if(!this.userRepository.findGuestById(userId).isPresent()){
             throw new NoDataWithId("There is no user with this id!");
         }
-        User user = this.userRepository.findById(userId).get();
-        if(!user.isReported()){
+        Guest guest = this.userRepository.findGuestById(userId).get();
+        if(!guest.isReported()){
             throw new RequirementNotSatisfied("Cant delete unreported comment");
         }
-        if(user.getRole() == Role.GUEST) {
-            if (approval.isApproval()) {
-                user.setBlocked(true);
-                List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
-                for (Reservation r : pendingReservations) {
-                    r.setReservationState(ReservationState.CANCELED);
-                    this.reservationRepository.save(r);
-                }
-            } else {
-                user.setBlocked(false);
+        if (approval.isApproval()) {
+            guest.setBlocked(true);
+            guest.setReported(false);
+            this.userRepository.save(guest);
+            List<Reservation> pendingReservations = this.reservationRepository.findAllPendingByGuestId(userId);
+            for (Reservation r : pendingReservations) {
+                r.setReservationState(ReservationState.CANCELED);
             }
+            return true;
+        } else {
+            guest.setBlocked(false);
+            guest.setReported(false);
+            this.userRepository.save(guest);
+            return false;
         }
     }
 }
+

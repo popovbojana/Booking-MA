@@ -25,13 +25,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceUtils {
 
-    private static final String SERVICE_API_PATH = "http://192.168.1.8:8081/api/";
-//    private static final String SERVICE_API_PATH = "http://192.168.1.13:8081/api/";
+//    private static final String SERVICE_API_PATH = "http://192.168.1.8:8081/api/";
+    private static final String SERVICE_API_PATH = "http://192.168.1.14:8081/api/";
 
     protected static final String accommodation = "accommodation";
     protected static final String user = "user";
     protected static final String ratingComment = "rating-comment";
     protected static final String reservations = "reservations";
+    protected static final String notifications = "notifications";
+
 
     public static OkHttpClient.Builder httpClientBuilder(String authToken) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -77,5 +79,9 @@ public class ServiceUtils {
 
     public static IReservationService reservationService(String authToken) {
         return retrofit(authToken).create(IReservationService.class);
+    }
+
+    public static INotificationService notificationService(String authToken) {
+        return retrofit(authToken).create(INotificationService.class);
     }
 }

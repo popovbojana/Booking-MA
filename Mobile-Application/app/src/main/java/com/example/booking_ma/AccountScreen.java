@@ -220,7 +220,7 @@ public class AccountScreen extends AppCompatActivity {
             }
 
             if (itemId == R.id.itemHostReservationsScreen) {
-//            startActivity(new Intent(this, ReservationsScreen.class));
+                startActivity(new Intent(this, OwnerReservationsScreen.class));
                 return true;
             }
 
@@ -253,7 +253,8 @@ public class AccountScreen extends AppCompatActivity {
             }
 
             if (itemId == R.id.itemGuestReservationsScreen) {
-//                startActivity(new Intent(this, GuestReservationsScreen.class));
+                Intent intent = new Intent(this, GuestReservationsScreen.class);
+                startActivity(intent);
                 return true;
             }
 
@@ -287,7 +288,7 @@ public class AccountScreen extends AppCompatActivity {
             }
 
             if (itemId == R.id.itemAdminReportedUsersScreen) {
-//                startActivity(new Intent(this, ReportedUsersScreen.class));
+                startActivity(new Intent(this, ReportedUsersScreen.class));
                 return true;
             }
 

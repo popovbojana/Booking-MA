@@ -31,19 +31,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Benefits"
+                android:text="Location"
                 android:textAlignment="center"
                 android:textSize="20dp">
             </TextView>
 
-            <Spinner
-                android:id="@+id/spinnerBenefits"
+            <EditText
+                android:id="@+id/editTextSearchByLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
+                android:hint=""
                 android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:padding="5dp"
+                android:inputType="text"
                 android:textAlignment="center"/>
             
         </LinearLayout>
@@ -58,19 +60,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Type"
+                android:text="Guests"
                 android:textAlignment="center"
                 android:textSize="20dp">
             </TextView>
 
-            <Spinner
-                android:id="@+id/spinnerTypes"
+            <EditText
+                android:id="@+id/editTextSearchByGuests"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
+                android:hint=""
                 android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:padding="5dp"
+                android:inputType="text"
                 android:textAlignment="center"/>
 
         </LinearLayout>
@@ -85,13 +89,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Price"
+                android:text="Date"
                 android:textAlignment="center"
                 android:textSize="20dp">
             </TextView>
 
             <EditText
-                android:id="@+id/editTextMinPrice"
+                android:id="@+id/editTextSearchByDateFrom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
@@ -103,7 +107,7 @@
 
 
             <EditText
-                android:id="@+id/editTextMaxPrice"
+                android:id="@+id/editTextSearchByDateUntil"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
@@ -114,7 +118,7 @@
                 android:inputType="number"/>
 
             <TextView
-                android:id="@+id/textViewFilterError"
+                android:id="@+id/textViewSearchDateError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/red"
@@ -122,6 +126,8 @@
                 android:textSize="11dp"
                 android:paddingLeft="5dp"
                 android:inputType="number"/>
+
+
 
         </LinearLayout>
 
