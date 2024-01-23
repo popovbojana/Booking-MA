@@ -1,13 +1,11 @@
 package com.example.booking_ma;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -163,8 +161,8 @@ public class GuestMainScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemGuestNotificationsScreen) {
-/*            Intent intent = new Intent(this, GuestNotificationsScreen.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(this, NotificationsScreen.class);
+            startActivity(intent);
             return true;
         }
 
@@ -200,30 +198,6 @@ public class GuestMainScreen extends AppCompatActivity {
                 Bundle extras = intent.getExtras();
                 NotificationDisplayDTO dto = (NotificationDisplayDTO) extras.get("notifications");
 
-                if (dto.getId() != 0L) {
-                    Log.i("USAO1","USAO1");
-
-                    // Kreiranje i prikazivanje dijaloga
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Naslov dijaloga")
-                            .setMessage("Poruka dijaloga")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // Kod koji želite izvršiti kada korisnik pritisne OK
-                                    dialog.dismiss(); // Zatvara dijalog
-                                }
-                            });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                    new Timer().schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            cancelNotification(context, dto);
-                        }
-                    }, 10000);
-                }
                 t.schedule(new TimerTask() {
 
                     public void run() {
@@ -236,28 +210,27 @@ public class GuestMainScreen extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("notificationActivity"));
     }
 
-    private void createAndShowNotification(Context context, String title, String content, NotificationDisplayDTO dto) {
+    private void createAndShowNotification(Context context, String title, String content) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Log.i("USAO2","USAO2");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(String.valueOf(dto.getId()), "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("channel_id", "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(dto.getId()))
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
                 .setSmallIcon(R.drawable.filter_icon)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // Show the notification
-        notificationManager.notify(dto.getId() != null ? (dto.getId()).intValue() : 0, builder.build());
+        notificationManager.notify(1, builder.build());
     }
 
-    private void cancelNotification(Context context, NotificationDisplayDTO dto) {
-        Log.i("USAO3","USAO3");
+    private void cancelNotification(Context context) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(dto.getId() != null ? (dto.getId()).intValue() : 0); // Assuming the notification has ID 1
+        notificationManager.cancel(1); // Assuming the notification has ID 1
     }
 
     private void search(String search) {

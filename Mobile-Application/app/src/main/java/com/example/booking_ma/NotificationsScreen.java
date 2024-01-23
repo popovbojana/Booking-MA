@@ -25,12 +25,13 @@ import com.example.booking_ma.fragments.GuestApprovedReservationsFragment;
 import com.example.booking_ma.fragments.GuestDeniedReservationsFragment;
 import com.example.booking_ma.fragments.GuestPendingReservationsFragment;
 import com.example.booking_ma.fragments.NewAccommodationsFragment;
+import com.example.booking_ma.fragments.NotificationsFragment;
 import com.example.booking_ma.fragments.ReportedGuestsFragment;
 import com.example.booking_ma.fragments.ReportedOwnersFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class GuestReservationsScreen extends AppCompatActivity {
+public class NotificationsScreen extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ViewPager2 viewPager;
@@ -42,7 +43,7 @@ public class GuestReservationsScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notifications_screen);
+        setContentView(R.layout.activity_guest_reservations_screen);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,7 +54,7 @@ public class GuestReservationsScreen extends AppCompatActivity {
         token = sharedPreferences.getString("pref_accessToken", "");
 
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(new com.example.booking_ma.GuestReservationsScreen.ViewPagerAdapter(this));
+        viewPager.setAdapter(new com.example.booking_ma.NotificationsScreen.ViewPagerAdapter(this));
 
         tabLayout = findViewById(R.id.tabLayout);
 
@@ -72,11 +73,7 @@ public class GuestReservationsScreen extends AppCompatActivity {
     private String getTabTitle(int position) {
         switch (position) {
             case 0:
-                return "Pending reservations";
-            case 1:
-                return "Approved reservations";
-            case 2:
-                return "Denied reservations";
+                return "Notifications";
             default:
                 return "";
         }
@@ -93,11 +90,7 @@ public class GuestReservationsScreen extends AppCompatActivity {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return new GuestPendingReservationsFragment();
-                case 1:
-                    return new GuestApprovedReservationsFragment();
-                case 2:
-                    return new GuestDeniedReservationsFragment();
+                    return new NotificationsFragment();
                 default:
                     throw new IllegalArgumentException("Invalid position");
             }
@@ -105,7 +98,7 @@ public class GuestReservationsScreen extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 2;
+            return 1;
         }
     }
 
@@ -126,33 +119,23 @@ public class GuestReservationsScreen extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if (itemId == R.id.itemGuestMainScreen) {
-            Intent intent = new Intent(this, GuestMainScreen.class);
-            startActivity(intent);
+        if (itemId == R.id.itemAdminMainScreen) {
+//            startActivity(new Intent(this, AdministratorMainScreen.class));
             return true;
         }
 
-        if (itemId == R.id.itemGuestAccountScreen) {
-            Intent intent = new Intent(this, AccountScreen.class);
-            startActivity(intent);
+        if (itemId == R.id.itemAdminAccountScreen) {
+            startActivity(new Intent(this, AccountScreen.class));
             return true;
         }
 
-        if (itemId == R.id.itemGuestReservationsScreen) {
-            Intent intent = new Intent(this, GuestReservationsScreen.class);
-            startActivity(intent);
+        if (itemId == R.id.itemAdminReportedCommentsScreen) {
+            startActivity(new Intent(this, com.example.booking_ma.CommentsApprovalScreen.class));
             return true;
         }
 
-        if (itemId == R.id.itemGuestNotificationsScreen) {
-            Intent intent = new Intent(this, NotificationsScreen.class);
-            startActivity(intent);
-            return true;
-        }
-
-        if (itemId == R.id.itemGuestFavoriteAccommodations) {
-            Intent intent = new Intent(this, FavoriteAccommodationsScreen.class);
-            startActivity(intent);
+        if (itemId == R.id.itemAdminAccommodationsApprovalScreen) {
+            startActivity(new Intent(this, AccommodationsApprovalScreen.class));
             return true;
         }
 

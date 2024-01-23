@@ -189,6 +189,15 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".NotificationsScreen"
+            android:exported="true">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <service
             android:name=".service.NotificationService"
             android:enabled="true"

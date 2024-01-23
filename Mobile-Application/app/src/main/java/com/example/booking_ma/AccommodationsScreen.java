@@ -209,7 +209,8 @@ public class AccommodationsScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostNotificationsScreen) {
-//            startActivity(new Intent(this, HostNotificationsScreen.class));
+            Intent intent = new Intent(this, NotificationsScreen.class);
+            startActivity(intent);
             return true;
         }
 

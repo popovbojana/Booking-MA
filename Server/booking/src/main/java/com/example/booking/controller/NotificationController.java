@@ -40,4 +40,15 @@ public class NotificationController {
         this.notificationService.createNotification(notification);
         return new ResponseEntity<>(new MessageDTO("Created new notification"), HttpStatus.OK);
     }
+
+    @GetMapping(value = "all/{receiverId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('OWNER','GUEST')")
+    public ResponseEntity<?> getAllByReceiverId(@PathVariable("receiverId") Long receiverId) {
+        try {
+            return new ResponseEntity<>(this.notificationService.getAllByReceiverId(receiverId), HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

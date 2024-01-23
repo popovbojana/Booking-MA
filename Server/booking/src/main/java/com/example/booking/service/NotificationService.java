@@ -1,6 +1,7 @@
 package com.example.booking.service;
 
 import com.example.booking.dto.NotificationDTO;
+import com.example.booking.dto.NotificationDisplayDTO;
 import com.example.booking.model.Notification;
 import com.example.booking.repository.*;
 import com.example.booking.service.interfaces.INotificationService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +36,17 @@ public class NotificationService implements INotificationService {
         not.setReceived(true);
         this.notificationRepository.save(not);
         return notification;
+    }
+
+    @Override
+    public List<NotificationDisplayDTO> getAllByReceiverId(Long receiverId){
+        List<Notification> notifications = this.notificationRepository.findAllByReceiverId(receiverId);
+        List<NotificationDisplayDTO> notificationDisplayDTOS = new ArrayList<>();
+        for(Notification n : notifications){
+            notificationDisplayDTOS.add(n.parseToDisplay());
+        }
+
+        return notificationDisplayDTOS;
     }
 
     @Override

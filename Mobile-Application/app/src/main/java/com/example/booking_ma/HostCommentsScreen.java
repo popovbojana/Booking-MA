@@ -70,12 +70,12 @@ public class HostCommentsScreen extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemHostReservationsScreen) {
-//            startActivity(new Intent(this, ReservationsScreen.class));
+            startActivity(new Intent(this, OwnerReservationsScreen.class));
             return true;
         }
 
         if (itemId == R.id.itemHostNotificationsScreen) {
-//            startActivity(new Intent(this, HostNotificationsScreen.class));
+            startActivity(new Intent(this, NotificationsScreen.class));
             return true;
         }
 

@@ -225,7 +225,8 @@ public class AccountScreen extends AppCompatActivity {
             }
 
             if (itemId == R.id.itemHostNotificationsScreen) {
-//            startActivity(new Intent(this, HostNotificationsScreen.class));
+                Intent intent = new Intent(this, NotificationsScreen.class);
+                startActivity(intent);
                 return true;
             }
 
@@ -259,7 +260,8 @@ public class AccountScreen extends AppCompatActivity {
             }
 
             if (itemId == R.id.itemGuestNotificationsScreen) {
-//                startActivity(new Intent(this, GuestNotificationsScreen.class));
+                Intent intent = new Intent(this, NotificationsScreen.class);
+                startActivity(intent);
                 return true;
             }
 

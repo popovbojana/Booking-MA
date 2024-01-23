@@ -80,8 +80,8 @@ public class FavoriteAccommodationsScreen  extends AppCompatActivity {
         }
 
         if (itemId == R.id.itemGuestNotificationsScreen) {
-/*            Intent intent = new Intent(this, GuestNotificationsScreen.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(this, NotificationsScreen.class);
+            startActivity(intent);
             return true;
         }
 

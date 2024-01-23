@@ -120,23 +120,35 @@ public class OwnerReservationsScreen extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if (itemId == R.id.itemAdminMainScreen) {
-//            startActivity(new Intent(this, AdministratorMainScreen.class));
+        if (itemId == R.id.itemHostMainScreen) {
+            startActivity(new Intent(this, HostMainScreen.class));
             return true;
         }
 
-        if (itemId == R.id.itemAdminAccountScreen) {
+        if (itemId == R.id.itemHostAccountScreen) {
             startActivity(new Intent(this, AccountScreen.class));
             return true;
         }
 
-        if (itemId == R.id.itemAdminReportedCommentsScreen) {
-            startActivity(new Intent(this, com.example.booking_ma.CommentsApprovalScreen.class));
+        if (itemId == R.id.itemHostAccommodationsScreen) {
+            startActivity(new Intent(this, AccommodationsScreen.class));
             return true;
         }
 
-        if (itemId == R.id.itemAdminAccommodationsApprovalScreen) {
-            startActivity(new Intent(this, AccommodationsApprovalScreen.class));
+        if (itemId == R.id.itemHostReservationsScreen) {
+            startActivity(new Intent(this, OwnerReservationsScreen.class));
+            return true;
+        }
+//
+
+        if (itemId == R.id.itemHostNotificationsScreen) {
+            Intent intent = new Intent(this, NotificationsScreen.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (itemId == R.id.itemHostCommentsScreen) {
+            startActivity(new Intent(this, HostCommentsScreen.class));
             return true;
         }
 

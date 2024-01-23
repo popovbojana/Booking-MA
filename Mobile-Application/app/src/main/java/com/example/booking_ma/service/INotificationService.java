@@ -22,4 +22,6 @@ public interface INotificationService {
     @GET(ServiceUtils.notifications + "/{receiverId}")
     Call<NotificationDisplayDTO> getLastUnreceivedByReceiverId(@Path("receiverId") Long receiverId);
 
+    @GET(ServiceUtils.notifications + "/all/{receiverId}")
+    Call<List<NotificationDisplayDTO>> getAllByReceiverId(@Path("receiverId") Long receiverId);
 }
