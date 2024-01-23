@@ -1,16 +1,16 @@
 package com.example.booking.controller;
 
-import com.example.booking.dto.ApprovalDTO;
-import com.example.booking.dto.MessageDTO;
-import com.example.booking.model.Notification;
-import com.example.booking.service.interfaces.IAccommodationService;
-import com.example.booking.service.interfaces.INotificationService;
-import com.example.booking.service.interfaces.IRatingCommentService;
-import com.example.booking.service.interfaces.IUserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+        import com.example.booking.dto.*;
+        import com.example.booking.model.Notification;
+        import com.example.booking.service.interfaces.IAccommodationService;
+        import com.example.booking.service.interfaces.INotificationService;
+        import com.example.booking.service.interfaces.IRatingCommentService;
+        import com.example.booking.service.interfaces.IUserService;
+        import org.springframework.http.HttpStatus;
+        import org.springframework.http.MediaType;
+        import org.springframework.http.ResponseEntity;
+        import org.springframework.security.access.prepost.PreAuthorize;
+        import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/notifications/")
@@ -32,6 +32,12 @@ public class NotificationController {
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notification){
+        this.notificationService.createNotification(notification);
+        return new ResponseEntity<>(new MessageDTO("Created new notification"), HttpStatus.OK);
     }
 }

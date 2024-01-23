@@ -18,5 +18,5 @@ public interface NotificationRepository extends CrudRepository<Notification, Lon
     @Query("SELECT n FROM Notification n " +
             "WHERE n.receiverId = :receiverId AND n.received = false " +
             "ORDER BY n.timestamp DESC")
-    Optional<Notification> findLastUnreceivedByReceiverId(@Param("receiverId") Long receiverId);
+    List<Notification> findUnreceivedByReceiverId(@Param("receiverId") Long receiverId);
 }

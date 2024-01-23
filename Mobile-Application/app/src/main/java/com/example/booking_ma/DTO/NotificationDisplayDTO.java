@@ -2,19 +2,20 @@ package com.example.booking_ma.DTO;
 
 import com.example.booking_ma.model.enums.NotificationType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class NotificationDisplayDTO {
+public class NotificationDisplayDTO implements Serializable {
 
     private Long id;
     private Long receiverId;
     private Long senderId;
-    private Long message;
+    private String message;
     private NotificationType notificationType;
     private LocalDateTime timestamp;
     private boolean received;
 
-    public NotificationDisplayDTO(Long id, Long receiverId, Long senderId, Long message, NotificationType notificationType, LocalDateTime timestamp, boolean received) {
+    public NotificationDisplayDTO(Long id, Long receiverId, Long senderId, String message, NotificationType notificationType, LocalDateTime timestamp, boolean received) {
         this.id = id;
         this.receiverId = receiverId;
         this.senderId = senderId;
@@ -48,11 +49,11 @@ public class NotificationDisplayDTO {
         this.senderId = senderId;
     }
 
-    public Long getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(Long message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 

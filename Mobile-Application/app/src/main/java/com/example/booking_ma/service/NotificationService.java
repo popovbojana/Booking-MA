@@ -17,7 +17,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.example.booking_ma.DTO.NotificationDisplayDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
+import com.example.booking_ma.model.enums.NotificationType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -47,9 +49,9 @@ public class NotificationService extends Service {
 //                    Long otherId = (Long) extras.get("otherId");
 //                    getMessages(myId, otherId);
 //                }
-                if (method.equals("getNotification")) {
+                if (method.equals("getNotifications")) {
                     Long receiverId = (Long) extras.get("receiverId");
-                    getNotification(receiverId, token);
+                    getNotifications(receiverId, token);
                 }
 
 //                else if (method.equals("sendMessage")) {
@@ -83,8 +85,11 @@ public class NotificationService extends Service {
 //        });
 //    }
 
-    private void getNotification(Long receiverId, String jwtToken) {
+    private void getNotifications(Long receiverId, String jwtToken) {
         Call<NotificationDisplayDTO> call = ServiceUtils.notificationService(jwtToken).getLastUnreceivedByReceiverId(receiverId);
+//        getNotificationsBroadcast(new NotificationDisplayDTO(1L, 1L, 1L, "a", NotificationType.CANCELED_RESERVATION, LocalDateTime.now(), false));
+
+
         call.enqueue(new Callback<NotificationDisplayDTO>() {
 
             @Override
@@ -98,6 +103,7 @@ public class NotificationService extends Service {
                 }
                 else {
                     Log.d("MESS", "SENDING ERROR");
+                    getNotificationsBroadcast(new NotificationDisplayDTO(0L, 0L, 0L, "", NotificationType.CANCELED_RESERVATION, LocalDateTime.now(), false));
                 }
             }
 
@@ -108,52 +114,10 @@ public class NotificationService extends Service {
         });
     }
 
-//    private void getMessages(Long receiverId) {
-//        Call<List<ResponseChatDTO>> call = ServiceUtils.chatService.getChatsOfUser(myId);
-//        call.enqueue(new Callback<List<ResponseChatDTO>>() {
-//
-//            @Override
-//            public void onResponse(Call<List<ResponseChatDTO>> call, Response<List<ResponseChatDTO>> response){
-//                if (response.body() != null) {
-//                    List<ResponseChatDTO> responseChats = response.body();
-//
-//                    ResponseChatDTO chat = new ResponseChatDTO();
-//                    for(ResponseChatDTO responseChat: responseChats){
-//                        if(otherId == responseChat.getOtherId()){
-//                            chat = responseChat;
-//                        }
-//                    }
-//
-//                    getMessagesBroadcast(chat);
-//                }
-//                else {
-//                    Log.d("MESS", "SENDING ERROR");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<ResponseChatDTO>> call, Throwable t) {
-//                Log.d("EMAIL_REZ", t.getMessage() != null ? t.getMessage() : "error");
-//            }
-//        });
-//    }
-
-//    private void getDriverLocationBroadcast(Double latitude, Double longitude, String address){
-//        Intent intent = new Intent("mapActivity");
-//        intent.putExtra("latitudeBroadcast", latitude);
-//        intent.putExtra("longitudeBroadcast", longitude);
-//        intent.putExtra("addressBroadcast", address);
-//
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-//    }
-
 
     private void getNotificationsBroadcast(NotificationDisplayDTO dto){
         Intent intent = new Intent("notificationActivity");
-        intent.putExtra("receiveReceiverId", dto.getReceiverId());
-        intent.putExtra("receiveSenderId", dto.getSenderId());
-        intent.putExtra("receiveMessage", dto.getMessage());
-        intent.putExtra("receiveNotificationType", dto.getMessage());
+        intent.putExtra("notifications", dto);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

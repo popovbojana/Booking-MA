@@ -10,13 +10,12 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationDisplayDTO {
+public class NotificationDTO {
 
-    private Long id;
     private Long receiverId;
     private Long senderId;
     private String message;
     private NotificationType notificationType;
-    private String timestamp;
+    private LocalDateTime timestamp;
     private boolean received;
 }

@@ -19,7 +19,7 @@ public interface INotificationService {
                     "Content-Type:application/json"}
     )
 
-    @GET(ServiceUtils.reservations + "/{receiverId}")
+    @GET(ServiceUtils.notifications + "/{receiverId}")
     Call<NotificationDisplayDTO> getLastUnreceivedByReceiverId(@Path("receiverId") Long receiverId);
 
 }

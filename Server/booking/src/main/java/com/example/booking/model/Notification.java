@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Setter
@@ -24,13 +25,22 @@ public class Notification {
     private Long id;
     private Long receiverId;
     private Long senderId;
-    private Long message;
+    private String message;
     private NotificationType notificationType;
     private LocalDateTime timestamp;
     private boolean received;
 
-    public Notification(Long id, Long receiverId, Long senderId, Long message, NotificationType notificationType, LocalDateTime timestamp, boolean received) {
+    public Notification(Long id, Long receiverId, Long senderId, String message, NotificationType notificationType, LocalDateTime timestamp, boolean received) {
         this.id = id;
+        this.receiverId = receiverId;
+        this.senderId = senderId;
+        this.message = message;
+        this.notificationType = notificationType;
+        this.timestamp = timestamp;
+        this.received = received;
+    }
+
+    public Notification(Long receiverId, Long senderId, String message, NotificationType notificationType, LocalDateTime timestamp, boolean received) {
         this.receiverId = receiverId;
         this.senderId = senderId;
         this.message = message;
@@ -63,11 +73,11 @@ public class Notification {
         this.senderId = senderId;
     }
 
-    public Long getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(Long message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
@@ -96,7 +106,14 @@ public class Notification {
     }
 
     public NotificationDisplayDTO parseToDisplay() {
-        return new NotificationDisplayDTO(id, receiverId, senderId, message, notificationType, timestamp, received);
+        LocalDateTime currentDateTime = timestamp;
+
+        // Define the desired format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+        // Format LocalDateTime to String
+        String formattedDateTime = currentDateTime.format(formatter);
+        return new NotificationDisplayDTO(id, receiverId, senderId, message, notificationType, formattedDateTime, received);
     }
 
 }
