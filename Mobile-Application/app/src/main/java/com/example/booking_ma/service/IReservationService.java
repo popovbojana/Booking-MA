@@ -7,6 +7,7 @@ import com.example.booking_ma.DTO.ReportAccommodationDTO;
 import com.example.booking_ma.DTO.ReportAllAccommodationsDTO;
 import com.example.booking_ma.DTO.ReportRangeDTO;
 import com.example.booking_ma.DTO.ReservationDTO;
+import com.example.booking_ma.DTO.ReservationDateStringDTO;
 import com.example.booking_ma.DTO.ReservationDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.DTO.UserDisplayDTO;
@@ -29,9 +30,10 @@ public interface IReservationService {
                     "Content-Type:application/json"}
     )
 
-    @GET(ServiceUtils.reservations + "/reservation")
-    Call<ResponseMessage> createReservation(@Body ReservationDTO reservation);
+    @POST(ServiceUtils.reservations + "/reservation")
+    Call<ResponseMessage> createReservation(@Body ReservationDateStringDTO reservation);
 
+    @GET(ServiceUtils.reservations + "/report-for-accommodation/{id}")
     Call<ReportAccommodationDTO> getReportForAccommodation(@Path("id") Long id);
 
     @POST(ServiceUtils.reservations + "/report-for-all-accommodations/{id}")

@@ -10,13 +10,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.booking_ma.AccommodationsScreen;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.AllRatingsDisplay;
 import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.RatingCommentDisplayDTO;
+import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.EditAccommodationScreen;
+import com.example.booking_ma.GuestReservationsScreen;
 import com.example.booking_ma.R;
 import com.example.booking_ma.ReportAccommodationScreen;
 import com.example.booking_ma.model.enums.PriceType;
@@ -57,13 +63,23 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
         holder.accommodationMinGuests.setText(minGuests);
         String maxGuests = "Max. guests: " + item.getMaxGuests();
         holder.accommodationMaxGuests.setText(maxGuests);
-        String type = "Accommodation type: " + item.getType();
+        String type = "Accommodation type: " + item.isAutoApproved();
         holder.accommodationType.setText(type);
         String cancellation = "Free cancellation up to " + item.getCancellationDeadlineInDays() + " days before check-in";
         holder.accommodationCancellation.setText(cancellation);
         holder.accommodationAddress.setText(item.getAddress());
 //        String rating = "Rating: " + item.getFinalRating();
 //        holder.accommodationRating.setText(rating);
+
+        if (item.isAutoApproved()){
+            Log.i("AAAAAAAAAAAAAAAAAAaaaa", "AAAAAAAAAAA");
+            holder.autoApprovedButton.setText("Enabled auto approve");
+        }
+        if (!item.isAutoApproved()) {
+            Log.i("BBBBBBBBbbbbbbbbbbbb", "BBBBBBBBBBB");
+            holder.autoApprovedButton.setText("Disabled auto approved");
+        }
+
         String price;
         if (item.getPriceType() == PriceType.PER_GUEST){
             price = item.getStandardPrice() + " per guest";
@@ -119,6 +135,34 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
                 context.startActivity(intent);
             }
         });
+
+
+        holder.autoApprovedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Call<ResponseMessage> call = ServiceUtils.accommodationService(token).handleAutoApprove(item.getId());
+                call.enqueue(new Callback<ResponseMessage>() {
+                    @Override
+                    public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
+                        if(response.isSuccessful()) {
+                            Log.i("Success", response.body().getMessage());
+                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseMessage> call, Throwable t) {
+                        Log.i("Fail", t.getMessage());
+                    }
+                });
+                Intent intent = new Intent(context, AccommodationsScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -129,7 +173,7 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView accommodationImage;
         TextView accommodationName, accommodationDescription, accommodationAmenities, accommodationMinGuests, accommodationMaxGuests, accommodationType, accommodationCancellation, accommodationAddress, accommodationRating, accommodationStandardPrice, accommodationAvailabilities, accommodationAutoApprove;
-        Button commentsButton, getReportButton, editButton, getReportProfitButton;
+        Button commentsButton, getReportButton, editButton, getReportProfitButton, autoApprovedButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -150,6 +194,8 @@ public class HostAccommodationsAdapter extends RecyclerView.Adapter<HostAccommod
             getReportButton = itemView.findViewById(R.id.getReportButton);
             getReportProfitButton = itemView.findViewById(R.id.getReportProfitButton);
             editButton = itemView.findViewById(R.id.editButton);
+            autoApprovedButton = itemView.findViewById(R.id.autoApproveButton);
+
         }
     }
 

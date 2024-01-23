@@ -61,7 +61,9 @@ public class HostAccommodationsFragment extends Fragment {
             public void onResponse(Call<List<AccommodationDisplayDTO>> call, Response<List<AccommodationDisplayDTO>> response) {
                 if (response.isSuccessful()) {
                     List<AccommodationDisplayDTO> accommodations = response.body();
-
+                    for(AccommodationDisplayDTO a : accommodations){
+                        Log.i("accc", String.valueOf(a.isAutoApproved()));
+                    }
                     HostAccommodationsAdapter adapter = new HostAccommodationsAdapter(getContext(), accommodations, token);
                     recyclerViewAccommodations.setAdapter(adapter);
                 } else {

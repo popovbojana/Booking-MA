@@ -55,7 +55,7 @@ public class GuestPendingReservationsAdapter  extends RecyclerView.Adapter<Guest
     public void onBindViewHolder(GuestPendingReservationsAdapter.ViewHolder holder, int position) {
         ReservationDisplayDTO item = guestPendingReservations.get(position);
 
-        holder.textViewGuestPendingReservationGuestId.setText("Guest id: "+ item.getId());
+        holder.textViewGuestPendingReservationGuestId.setText("Guest id: "+ item.getGuestId());
         holder.textViewGuestPendingReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
         holder.textViewGuestPendingReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
         holder.textViewGuestPendingReservationCheckIn.setText("Check in: "+ item.getCheckIn());

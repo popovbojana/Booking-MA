@@ -34,7 +34,7 @@ public class AccommodationController {
     }
 
     @GetMapping(value = "all-accommodation/{ownersId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('OWNER')")
+//    @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<?> getAllAccommodationForOwner(@PathVariable("ownersId") Long ownersId){
         List<Accommodation> accommodations = this.accommodationService.getAllAccommodationsForOwner(ownersId);
         List<AccommodationDisplayDTO> accommodationDisplay = new ArrayList<>();
@@ -148,6 +148,27 @@ public class AccommodationController {
             return new ResponseEntity<>(this.accommodationService.getAccommodationById(id), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "availabilities-prices/{accommodatioId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('OWNER', 'ADMIN')")
+    public ResponseEntity<?> getAvailabilitiesPricesBuAccommodatioId(@PathVariable("accommodatioId") Long accommodatioId) {
+        try{
+            return new ResponseEntity<>(this.accommodationService.getAvailabilitiesPricesByAccommodatioId(accommodatioId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "handle-auto-approve/{accommodatioId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize("hasAnyAuthority('OWNER')")
+    public ResponseEntity<?> handleAutoApprove(@PathVariable("accommodatioId") Long accommodatioId) {
+        try{
+            this.accommodationService.handleAutoApprove(accommodatioId);
+            return new ResponseEntity<>(new MessageDTO("Handled auto aproved"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 

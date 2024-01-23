@@ -46,7 +46,7 @@ public class GuestDeniedReservationsAdapter  extends RecyclerView.Adapter<GuestD
     public void onBindViewHolder(GuestDeniedReservationsAdapter.ViewHolder holder, int position) {
         ReservationDisplayDTO item = guestDeniedReservations.get(position);
 
-        holder.textViewReservationGuestId.setText("Guest id: "+ item.getId());
+        holder.textViewReservationGuestId.setText("Guest id: "+ item.getGuestId());
         holder.textViewReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
         holder.textViewReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
         holder.textViewReservationCheckIn.setText("Check in: "+ item.getCheckIn());

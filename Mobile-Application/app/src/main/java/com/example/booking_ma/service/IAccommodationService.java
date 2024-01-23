@@ -4,6 +4,7 @@ import com.example.booking_ma.DTO.AccommodationChangeDisplayDTO;
 import com.example.booking_ma.DTO.AccommodationChangesDTO;
 import com.example.booking_ma.DTO.AccommodationDisplayDTO;
 import com.example.booking_ma.DTO.ApprovalDTO;
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.FavoriteAccommodationDTO;
 import com.example.booking_ma.DTO.NewAccommodationDTO;
 import com.example.booking_ma.DTO.NewAvailabilityPriceDTO;
@@ -67,5 +68,11 @@ public interface IAccommodationService {
 
     @GET(ServiceUtils.accommodation + "/all-favorites/{id}")
     Call<List<AccommodationDisplayDTO>> getAllFavoritesForGuest(@Path("id") Long id);
+
+    @GET(ServiceUtils.accommodation + "/availabilities-prices/{accommodatioId}")
+    Call<List<AvailabilityDisplayDTO>> getAvailabilitiesPricesBuAccommodatioId(@Path("accommodatioId") Long accommodatioId);
+
+    @PUT(ServiceUtils.accommodation + "/handle-auto-approve/{accommodatioId}")
+    Call<ResponseMessage> handleAutoApprove(@Path("accommodatioId") Long accommodatioId);
 
 }

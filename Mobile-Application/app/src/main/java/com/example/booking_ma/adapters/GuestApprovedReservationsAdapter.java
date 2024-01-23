@@ -55,7 +55,7 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
     public void onBindViewHolder(GuestApprovedReservationsAdapter.ViewHolder holder, int position) {
         ReservationDisplayDTO item = guestPendingReservations.get(position);
 
-        holder.textViewGuestApprovedReservationGuestId.setText("Guest id: "+ item.getId());
+        holder.textViewGuestApprovedReservationGuestId.setText("Guest id: "+ item.getGuestId());
         holder.textViewGuestApprovedReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
         holder.textViewGuestApprovedReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
         holder.textViewGuestApprovedReservationCheckIn.setText("Check in: "+ item.getCheckIn());
@@ -71,10 +71,16 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
                     @Override
                     public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
                         if(response.isSuccessful()) {
+
                             Log.i("Success", response.body().getMessage());
                             Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, GuestReservationsScreen.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+
                         } else {
                             onFailure(call, new Throwable("API call failed with status code: " + response.code()));
+                            holder.textViewGuestApprovedReservationError.setText("Cant cancel, you passed the deadline");
                         }
                     }
 
@@ -83,9 +89,6 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
                         Log.i("Fail", t.getMessage());
                     }
                 });
-                Intent intent = new Intent(context, GuestReservationsScreen.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
             }
         });
 
@@ -98,7 +101,8 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewGuestApprovedReservationGuestId, textViewGuestApprovedReservationAccommodationId, textViewGuestApprovedReservationGuestsNumber,
-                textViewGuestApprovedReservationCheckIn, textViewGuestApprovedReservationCheckOut, textViewGuestApprovedReservationCost, textViewGuestApprovedReservationCancelationsNumber;
+                textViewGuestApprovedReservationCheckIn, textViewGuestApprovedReservationCheckOut, textViewGuestApprovedReservationCost,
+                textViewGuestApprovedReservationCancelationsNumber, textViewGuestApprovedReservationError;
 
         Button btnGuestCancelReservation;
 
@@ -111,6 +115,8 @@ public class GuestApprovedReservationsAdapter  extends RecyclerView.Adapter<Gues
             textViewGuestApprovedReservationCheckOut = itemView.findViewById(R.id.textViewGuestApprovedReservationCheckOut);
             textViewGuestApprovedReservationCost = itemView.findViewById(R.id.textViewGuestApprovedReservationCost);
             textViewGuestApprovedReservationCancelationsNumber = itemView.findViewById(R.id.textViewGuestApprovedReservationCancelationsNumber);
+            textViewGuestApprovedReservationError = itemView.findViewById(R.id.textViewGuestApprovedReservationError);
+
             btnGuestCancelReservation = itemView.findViewById(R.id.btnGuestCancelReservation);
 
         }

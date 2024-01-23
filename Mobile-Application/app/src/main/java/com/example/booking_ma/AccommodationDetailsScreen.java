@@ -27,14 +27,18 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.booking_ma.DTO.AvailabilityDisplayDTO;
 import com.example.booking_ma.DTO.FavoriteAccommodationDTO;
 import com.example.booking_ma.DTO.RateCommentDTO;
 import com.example.booking_ma.DTO.ReportedUserReasonDTO;
 import com.example.booking_ma.DTO.ReservationDTO;
+import com.example.booking_ma.DTO.ReservationDateStringDTO;
+import com.example.booking_ma.DTO.ReservationDisplayDTO;
 import com.example.booking_ma.DTO.ResponseMessage;
 import com.example.booking_ma.adapters.AccommodationAmentiteAdapter;
 import com.example.booking_ma.adapters.AccommodationRatingCommentAdapter;
 import com.example.booking_ma.adapters.FavoriteAccommodationsAdapter;
+import com.example.booking_ma.adapters.GuestPendingReservationsAdapter;
 import com.example.booking_ma.fragments.MapFragment;
 import com.example.booking_ma.model.RatingComment;
 import com.example.booking_ma.service.ServiceUtils;
@@ -43,8 +47,11 @@ import com.example.booking_ma.tools.FragmentTransition;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -59,7 +66,8 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private MapFragment mapFragment;
     private String aName, aImg, aDescription, aLocationName, aLocationLat, aLocationLong, aReservedDates, aFreeDates, aAmentities;
     private ArrayList<RatingComment> aComments;
-    private double aPrice, aStars;
+    private double aStars;
+    private float aPrice;
     private Long aOwnerId, aAccommodationId;
     private ImageView imageViewAccommodationPic;
     private TextView textViewAccommodationName, textViewAccommodationDesc, textViewAccommodationPrice, textViewAccommodationAmenities;
@@ -69,12 +77,14 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private AccommodationRatingCommentAdapter commentAdapter;
     private AccommodationAmentiteAdapter amentiteAdapter;
+    private String textError = "";
 
     private ImageView imageViewReserveCheckIn, imageViewReserveCheckOut;
     private EditText editTextReserveGuests, editTextReserveCheckIn, editTextReserveCheckOut;
     private Button buttonReservationDialogCancel, buttonReservationDialogReserve;
-    private TextView textViewReservationError;
+    private TextView textViewReservationError, textViewReservationAvailabilities;
     private LocalDate checkInDate, checkOutDate;
+    private LocalDateTime checkInLocalDateTime, checkOutLocalDateTime;
 
     private String myRole;
     private String token;
@@ -573,6 +583,7 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         editTextReserveCheckOut = dialog.findViewById(R.id.editTextReserveCheckOut);
         buttonReservationDialogCancel = dialog.findViewById(R.id.buttonReservationDialogCancel);
         buttonReservationDialogReserve = dialog.findViewById(R.id.buttonReservationDialogReserve);
+        textViewReservationAvailabilities = dialog.findViewById(R.id.textViewReservationAvailabilities);
         textViewReservationError = dialog.findViewById(R.id.textViewReservationError);
 
         imageViewReserveCheckIn.setOnClickListener(new View.OnClickListener() {
@@ -596,10 +607,37 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
             }
         });
 
-/*        buttonReservationDialogReserve.setOnClickListener(new View.OnClickListener() {
+        Call<List<AvailabilityDisplayDTO>> call = ServiceUtils.accommodationService(token).getAvailabilitiesPricesBuAccommodatioId(aAccommodationId);
+
+        call.enqueue(new Callback<List<AvailabilityDisplayDTO>>() {
+            @Override
+            public void onResponse(Call<List<AvailabilityDisplayDTO>> call, Response<List<AvailabilityDisplayDTO>> response) {
+                if (response.isSuccessful()) {
+                    List<AvailabilityDisplayDTO> availabilitiesPrices = response.body();
+                    String availabilityPricesString = "Availabilites: \n";
+                    for(AvailabilityDisplayDTO a : availabilitiesPrices){
+                        availabilityPricesString += ("Amount: " + String.valueOf(a.getAmount()) + "\n" +
+                                "From: " + a.getDateFrom().toString() + "\n" +
+                                "Until: "+ a.getDateUntil().toString() + "\n\n  ");
+                    }
+                    textViewReservationAvailabilities.setText(availabilityPricesString);
+
+                } else {
+                    Log.e("API Error", "Failed to fetch accommodations: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AvailabilityDisplayDTO>> call, Throwable t) {
+                Log.e("API Error", "Failed to fetch accommodations", t);
+            }
+        });
+
+
+       buttonReservationDialogReserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<ResponseMessage> call = ServiceUtils.reservationService(token).createReservation(new ReservationDTO(myId, aOwnerId, aAccommodationId, checkInDate, checkOutDate, Integer.parseInt(editTextReserveGuests.getText().toString()), 0));
+                Call<ResponseMessage> call = ServiceUtils.reservationService(token).createReservation(new ReservationDateStringDTO(myId, aOwnerId, aAccommodationId, editTextReserveCheckIn.getText().toString(), editTextReserveCheckOut.getText().toString(), Integer.parseInt(editTextReserveGuests.getText().toString()), aPrice*Integer.parseInt(editTextReserveGuests.getText().toString())));
                 call.enqueue(new Callback<ResponseMessage>() {
                     @Override
                     public void onResponse(Call<ResponseMessage> call, Response<ResponseMessage> response) {
@@ -615,32 +653,8 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
                         Log.i("Fail", t.getMessage());
                     }
                 });
-//                if(textViewReservationError.getText().toString().equals("")){
-//                    Log.e("Invalid:", "Location input");
-//                    textViewSearchError.setText("Invalid location input");
-//                    return;
-//                }
-//                else if(editTextGuests.getText().toString().equals("") || editTextGuests.getText().toString().equals("0")){
-//                    Log.e("Invalid:", "Guests input");
-//                    textViewSearchError.setText("Invalid guests input");
-//                    return;
-//                }
-//                else if(editTextCheckIn.getText().toString().equals("")){
-//                    Log.e("Invalid:", "Check in input");
-//                    textViewSearchError.setText("Invalid check in input");
-//                    return;
-//                }
-//                else if(editTextCheckOut.getText().toString().equals("")){
-//                    Log.e("Invalid:", "Check out input");
-//                    textViewSearchError.setText("Invalid check out input");
-//                    return;
-//                }
-//                else{
-//                    textViewSearchBar.setText(editTextLocation.getText().toString());
-//                    dialog.dismiss();
-//                }
             }
-        });*/
+        });
 
         dialog.show();
     }
@@ -650,27 +664,41 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 Calendar selectedDate = Calendar.getInstance();
                 selectedDate.set(year, month, day);
 
+                month = month + 1;
+
+
                 checkInDate = LocalDate.of(year, month, day);
                 if (selectedDate.compareTo(Calendar.getInstance()) < 0) {
                     Log.e("DatePicker", "Selected date is in the past.");
-                    textViewReservationError = dialog.findViewById(R.id.textViewSearchError);
+                    textViewReservationError = dialog.findViewById(R.id.textViewReservationError);
                     textViewReservationError.setText("Incorrect date");
+                    editTextReserveCheckIn.setText("");
+                    textError = "Incorrect date";
+                    buttonReservationDialogReserve.setClickable(false);
+
                     return;
                 }
 
-                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                String formattedDate = checkInDate.atStartOfDay().format(formatter);
+//                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
 
-                editTextReserveCheckIn = dialog.findViewById(R.id.editTextSearchCheckIn);
+
+                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                checkInLocalDateTime = LocalDateTime.parse(formattedDate, inputFormatter);
+
+                editTextReserveCheckIn = dialog.findViewById(R.id.editTextReserveCheckIn);
                 if (editTextReserveCheckIn != null) {
                     textViewReservationError.setText("");
                     editTextReserveCheckIn.setText(formattedDate);
+                    textError = "";
+                    buttonReservationDialogReserve.setClickable(true);
                 }
             }
         }, year, month, day);
@@ -690,24 +718,47 @@ public class AccommodationDetailsScreen extends AppCompatActivity {
                 Calendar selectedDate = Calendar.getInstance();
                 selectedDate.set(year, month, day);
 
+                month = month + 1;
+
+
                 checkOutDate = LocalDate.of(year, month, day);
                 if (checkInDate == null) {
                     Log.e("DatePicker", "First select the check in date");
                     textViewReservationError.setText("First select the check in date");
+                    editTextReserveCheckOut.setText("");
+                    textError = "First select the check in date";
+                    buttonReservationDialogReserve.setClickable(false);
+
+
                     return;
                 }
 
                 if (checkOutDate.isBefore(checkInDate.plusDays(1))) {
                     Log.e("DatePicker", "Selected date is before check in");
-                    textViewReservationError = dialog.findViewById(R.id.textViewSearchError);
+                    textViewReservationError = dialog.findViewById(R.id.textViewReservationError);
                     textViewReservationError.setText("Selected date is before check in");
+                    editTextReserveCheckOut.setText("");
+                    textError = "Selected date is before check in";
+                    buttonReservationDialogReserve.setClickable(false);
+
+
                     return;
                 }
 
-                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
-                editTextReserveCheckOut = dialog.findViewById(R.id.editTextSearchCheckOut);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+                String formattedDate = checkOutDate.atStartOfDay().format(formatter);
+
+                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                checkOutLocalDateTime = LocalDateTime.parse(formattedDate, inputFormatter);
+
+//                String formattedDate = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(selectedDate.getTime());
+                editTextReserveCheckOut = dialog.findViewById(R.id.editTextReserveCheckOut);
                 if (editTextReserveCheckOut != null) {
+                    textViewReservationError.setText("");
                     editTextReserveCheckOut.setText(formattedDate);
+                    textError = "";
+                    buttonReservationDialogReserve.setClickable(true);
                 }
             }
         }, year, month, day);

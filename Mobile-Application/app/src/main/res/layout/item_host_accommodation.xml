@@ -110,6 +110,11 @@
                 android:text="Availabilities" />
 
             <Button
+                android:id="@+id/autoApproveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
                 android:id="@+id/commentsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +148,7 @@
                 android:id="@+id/editButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Comments" />
+                android:text="Edit" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

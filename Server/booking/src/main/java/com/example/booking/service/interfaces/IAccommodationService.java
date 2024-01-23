@@ -1,11 +1,9 @@
 package com.example.booking.service.interfaces;
 
-import com.example.booking.dto.AccommodationDisplayDTO;
-import com.example.booking.dto.NewAccommodationDTO;
-import com.example.booking.dto.FavoriteAccommodationDTO;
-import com.example.booking.dto.ReportAccommodationDTO;
+import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.model.Accommodation;
+import com.example.booking.model.AvailabilityPrice;
 
 import java.util.List;
 
@@ -25,4 +23,7 @@ public interface IAccommodationService {
     List<AccommodationDisplayDTO> getAllFavoritesForGuest(Long id) throws NoDataWithId;
     AccommodationDisplayDTO getAccommodationById(Long id) throws NoDataWithId;
 
+    List<AvailabilityDisplayDTO> getAvailabilitiesPricesByAccommodatioId(Long accommodationId) throws NoDataWithId;
+
+    void handleAutoApprove(Long accommodationId) throws NoDataWithId;
 }

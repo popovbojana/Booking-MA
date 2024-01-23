@@ -4,7 +4,6 @@ import com.example.booking.dto.*;
 import com.example.booking.exceptions.NoDataWithId;
 import com.example.booking.model.*;
 import com.example.booking.model.enums.PriceType;
-import com.example.booking.model.enums.ReservationState;
 import com.example.booking.model.enums.Role;
 import com.example.booking.repository.*;
 import com.example.booking.service.interfaces.IAccommodationService;
@@ -237,5 +236,29 @@ public class AccommodationService implements IAccommodationService {
         } else {
             throw new NoDataWithId("There is no guests with this id!");
         }
+    }
+
+    @Override
+    public List<AvailabilityDisplayDTO> getAvailabilitiesPricesByAccommodatioId(Long accommodationId) throws NoDataWithId {
+        List<AvailabilityPrice> availabilitiesPrices = this.availabilityPriceRepository.findAvailabilityPricesByAccommodationId(accommodationId);
+        List<AvailabilityDisplayDTO> availabilitiesDisplayDTOS = new ArrayList<>();
+        for(AvailabilityPrice a : availabilitiesPrices){
+            availabilitiesDisplayDTOS.add(a.parseToDisplay());
+        }
+        return availabilitiesDisplayDTOS;
+    }
+
+    @Override
+    public void handleAutoApprove(Long accommodationId) throws NoDataWithId {
+        Accommodation accommodation = this.accommodationRepository.findById(accommodationId).get();
+
+        if(accommodation.isAutoApprove()){
+            accommodation.setAutoApprove(false);
+        }
+        else{
+            accommodation.setAutoApprove(true);
+        }
+
+        this.accommodationRepository.save(accommodation);
     }
 }

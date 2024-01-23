@@ -54,7 +54,7 @@ public class OwnerApprovedReservationsAdapter  extends RecyclerView.Adapter<Owne
     public void onBindViewHolder(OwnerApprovedReservationsAdapter.ViewHolder holder, int position) {
         ReservationDisplayDTO item = ownerApprovedReservations.get(position);
 
-        holder.textViewReservationGuestId.setText("Guest id: "+ item.getId());
+        holder.textViewReservationGuestId.setText("Guest id: "+ item.getGuestId());
         holder.textViewReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
         holder.textViewReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
         holder.textViewReservationCheckIn.setText("Check in: "+ item.getCheckIn());

@@ -55,7 +55,7 @@ public class OwnerPendingReservationsAdapter  extends RecyclerView.Adapter<Owner
     public void onBindViewHolder(OwnerPendingReservationsAdapter.ViewHolder holder, int position) {
         ReservationDisplayDTO item = ownerPendingReservations.get(position);
 
-        holder.textViewOwnerPendingReservationGuestId.setText("Guest id: "+ item.getId());
+        holder.textViewOwnerPendingReservationGuestId.setText("Guest id: "+ item.getGuestId());
         holder.textViewOwnerPendingReservationAccommodationId.setText("Accommodation id: "+ item.getAccommodationId());
         holder.textViewOwnerPendingReservationGuestsNumber.setText("Guests number: "+ item.getGuestsNumber());
         holder.textViewOwnerPendingReservationCheckIn.setText("Check in: "+ item.getCheckIn());

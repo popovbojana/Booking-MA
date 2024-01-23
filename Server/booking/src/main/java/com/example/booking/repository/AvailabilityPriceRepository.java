@@ -19,4 +19,9 @@ public interface AvailabilityPriceRepository extends CrudRepository<Availability
             @Param("accommodationId") Long accommodationId,
             @Param("checkIn") LocalDateTime checkIn,
             @Param("checkOut") LocalDateTime checkOut);
+
+    @Query("SELECT ap FROM AvailabilityPrice ap " +
+            "WHERE (ap.accommodation.id = :accommodationId)")
+    List<AvailabilityPrice> findAvailabilityPricesByAccommodationId(
+            @Param("accommodationId") Long accommodationId);
 }
